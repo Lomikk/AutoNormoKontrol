@@ -35,22 +35,25 @@ $content = @(
     'content/99-appendix.md'
 )
 
-# STO-AI-GATE: bind a semantic review to the exact Markdown and metadata that
-# affect document meaning.  A changed source cannot reuse a stale approval.
-$hashFiles = @($content) + @('metadata.yaml', 'bibliography.bib')
-$hashText = foreach ($relative in $hashFiles) {
-    $absolute = Join-Path $root $relative
-    $relative
-    [System.IO.File]::ReadAllText($absolute, [System.Text.Encoding]::UTF8)
-}
-$hashBytes = [System.Text.Encoding]::UTF8.GetBytes(($hashText -join "`n"))
-$sha256 = [System.Security.Cryptography.SHA256]::Create()
-try {
-    $contentHash = ([System.BitConverter]::ToString($sha256.ComputeHash($hashBytes))).Replace('-', '').ToLowerInvariant()
-}
-finally {
-    $sha256.Dispose()
-}
+# R1.1: build only manifest-declared assets through the fixed generator
+# whitelist. fixtures/ remain test data and never participate in this path.
+& (Join-Path $PSScriptRoot 'build-assets.ps1') `
+    -ManifestPath 'assets/manifest.json' `
+    -ReportPath 'build/asset-report.json'
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+# STO-AI-GATE, R1.1: bind semantic review to the complete verifiable document
+# snapshot: Markdown, metadata, bibliography, asset manifest, source data,
+# TeX plot source and generated PDF. Any one of them invalidates stale review.
+& (Join-Path $PSScriptRoot 'write-document-snapshot.ps1') `
+    -AssetReportPath 'build/asset-report.json' `
+    -OutputPath 'build/document-snapshot.json' `
+    -ContentPaths (@($content) + @('metadata.yaml', 'bibliography.bib'))
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+$snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath 'build/document-snapshot.json' | ConvertFrom-Json
+$assetReport = Get-Content -Raw -Encoding UTF8 -LiteralPath 'build/asset-report.json' | ConvertFrom-Json
+$contentHash = [string]$snapshot.content_hash
 $modeValue = $Mode.ToLowerInvariant()
 
 $oldTexInputs = $env:TEXINPUTS
@@ -68,10 +71,6 @@ try {
     $env:TEXMFVAR = $texCache
     $env:TEXMFCACHE = $texCache
     $env:TEXINPUTS = "$root;$root\styles;"
-
-    & latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error `
-        "-outdir=$assetBuild" 'fixtures/architecture.tex'
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     $pandocArguments = @($content) + @(
         '--from=markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute',
@@ -118,8 +117,39 @@ finally {
 Write-Host ''
 $pdfRelative = 'build/coursework.pdf'
 $pdf = Get-Item -LiteralPath $pdfRelative
+$pdfHash = (Get-FileHash -LiteralPath $pdf.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+$buildReport = [pscustomobject][ordered]@{
+    version = 1
+    profile_id = 'susu-hsem-ceit-coursework-v1'
+    mode = $modeValue
+    content_hash = $contentHash
+    document_snapshot = 'build/document-snapshot.json'
+    asset_manifest = $assetReport.manifest
+    used_assets = @($assetReport.assets)
+    output = [pscustomobject][ordered]@{
+        path = $pdfRelative
+        sha256 = $pdfHash
+        bytes = $pdf.Length
+    }
+}
+[System.IO.File]::WriteAllText(
+    (Join-Path $root 'build/build-report.json'),
+    ($buildReport | ConvertTo-Json -Depth 12),
+    (New-Object System.Text.UTF8Encoding($false))
+)
+
 Write-Host ("Ready: {0}" -f $pdf.FullName)
 & pdfinfo -enc UTF-8 $pdfRelative | Select-String 'Pages|Page size'
 Write-Host ("File size:       {0} bytes" -f $pdf.Length)
 Write-Host ("Mode:            {0}" -f $Mode)
 Write-Host ("Content hash:    {0}" -f $contentHash)
+Write-Host ("Asset manifest:  {0}" -f $assetReport.manifest.sha256)
+Write-Host 'Used assets:'
+foreach ($asset in @($assetReport.assets)) {
+    Write-Host ("  {0} [{1}]" -f $asset.id, $asset.generator)
+    foreach ($source in @($asset.sources)) {
+        Write-Host ("    source {0}: {1}" -f $source.path, $source.sha256)
+    }
+    Write-Host ("    output {0}: {1}" -f $asset.output.path, $asset.output.sha256)
+}
+Write-Host 'Build report:    build/build-report.json'

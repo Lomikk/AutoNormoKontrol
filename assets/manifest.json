@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "id": "extraction",
+      "type": "plot",
+      "sources": [
+        "assets/plots/extraction.tex",
+        "assets/data/extraction.csv"
+      ],
+      "generator": "tex-pgfplots",
+      "output": "build/assets/extraction.pdf",
+      "tex-source": "assets/plots/extraction.tex",
+      "data-source": "assets/data/extraction.csv",
+      "provenance": "Synthetic demonstration dataset maintained in this repository for the R1.1 asset-pipeline example.",
+      "license": "project-internal-demo"
+    }
+  ]
+}

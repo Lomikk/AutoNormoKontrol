@@ -98,7 +98,38 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-compliance.ps
 
 - `build/coursework.pdf` — канонический PDF;
 - `build/coursework.tex` — промежуточный LaTeX для диагностики;
+- `build/build-report.json` — снимок сборки и использованные ассеты;
+- `build/asset-report.json` — хэши manifest, исходников и PDF-ассетов;
+- `build/document-snapshot.json` — полный набор файлов, связанный с
+  `content-hash`;
 - `build/compliance-report.json` — результаты физической проверки PDF.
+
+## Воспроизводимые ассеты
+
+Каталог `assets/` содержит только версионируемые исходники конкретной работы:
+
+- `assets/data/` — CSV с входными данными;
+- `assets/plots/` — доверенные TeX/pgfplots-исходники графиков;
+- `assets/images/` — статические пользовательские изображения;
+- `assets/manifest.json` — белый список ассетов и их происхождение.
+
+`build/assets/` является полностью производным каталогом. Его PDF нельзя
+редактировать вручную или считать единственным исходником. Обычная команда
+`draft` сначала проверяет manifest, затем собирает объявленные графики без
+`shell-escape`, вычисляет хэши и только после этого запускает Pandoc.
+
+Минимальный сценарий изменения графика:
+
+1. Измени значения в `assets/data/extraction.csv`.
+2. При необходимости измени способ отображения в
+   `assets/plots/extraction.tex`, не копируя туда значения CSV.
+3. Выполни `.\AutoNormoKontrol.cmd draft`.
+4. Проверь `build/assets/extraction.pdf` и секцию `used_assets` в
+   `build/build-report.json`.
+
+Изменение manifest, CSV, TeX-исходника или готового PDF меняет
+`content-hash`. Поэтому прежний `semantic-review.status: pass`, если он был
+выдан для другого снимка, больше не может открыть Strict-сборку.
 
 ## Как отслеживается каждый пункт СТО
 
@@ -163,9 +194,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-traceability.
 Рисунок:
 
 ```markdown
-Схема показана на рисунке [@fig:pipeline].
+Данные представлены на рисунке [@fig:extraction].
 
-![Схема обработки документа](build/assets/architecture.pdf){#fig:pipeline width=80%}
+![Динамика извлечения](build/assets/extraction.pdf){#fig:extraction kind=graph x-axis="Номер этапа" y-axis="Извлечённые элементы, %" width=80%}
 ```
 
 Формула с расшифровкой:
