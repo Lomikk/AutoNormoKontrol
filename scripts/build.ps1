@@ -7,6 +7,7 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
+. (Join-Path $PSScriptRoot 'utf8-native.ps1')
 
 & (Join-Path $PSScriptRoot 'check-coverage.ps1')
 if (-not $?) { exit 1 }
@@ -72,24 +73,31 @@ try {
         "-outdir=$assetBuild" 'fixtures/architecture.tex'
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-    & pandoc @content `
-        --from='markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute' `
-        --to=latex `
-        --standalone `
-        --number-sections `
-        --top-level-division=section `
-        --metadata-file='metadata.yaml' `
-        --metadata-file='compliance/semantic-review.yaml' `
-        --metadata-file='compliance/external-acceptance.yaml' `
-        "--metadata=compliance-mode:$modeValue" `
-        "--metadata=content-hash:$contentHash" `
-        --template='templates/susu-coursework.tex' `
-        --lua-filter='filters/sto-validate.lua' `
-        --lua-filter='filters/susu.lua' `
-        --biblatex `
-        --resource-path="$root;$build" `
-        --output='build/coursework.tex'
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    $pandocArguments = @($content) + @(
+        '--from=markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute',
+        '--to=latex',
+        '--standalone',
+        '--number-sections',
+        '--top-level-division=section',
+        '--metadata-file=metadata.yaml',
+        '--metadata-file=compliance/semantic-review.yaml',
+        '--metadata-file=compliance/external-acceptance.yaml',
+        "--metadata=compliance-mode:$modeValue",
+        "--metadata=content-hash:$contentHash",
+        '--template=templates/susu-coursework.tex',
+        '--lua-filter=filters/sto-validate.lua',
+        '--lua-filter=filters/susu.lua',
+        '--biblatex',
+        "--resource-path=$root;$build",
+        '--output=build/coursework.tex'
+    )
+    $pandocPath = Resolve-PandocExecutable
+    $pandocResult = Invoke-Utf8NativeCommand `
+        -FilePath $pandocPath `
+        -Arguments $pandocArguments `
+        -WorkingDirectory $root
+    Write-NativeCommandResult $pandocResult
+    if ($pandocResult.ExitCode -ne 0) { exit $pandocResult.ExitCode }
 
     & latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error `
         "-outdir=$build" 'build/coursework.tex'

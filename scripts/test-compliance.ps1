@@ -7,17 +7,19 @@ $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
+. (Join-Path $PSScriptRoot 'utf8-native.ps1')
 
 if (-not $SkipCoverage) {
     & (Join-Path $PSScriptRoot 'check-coverage.ps1')
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 
-$pandoc = Get-Command pandoc -ErrorAction SilentlyContinue
-if ($null -eq $pandoc) {
-    Write-Error 'pandoc was not found in PATH.'
+$pandocPath = try { Resolve-PandocExecutable } catch { $null }
+if ($null -eq $pandocPath) {
+    Write-Error 'pandoc was not found in PATH or a standard Windows installation directory.'
     exit 1
 }
+$pandoc = [pscustomobject]@{ Source = $pandocPath }
 
 $basePath = Join-Path $root 'tests/valid/minimal.md'
 $invalidDirectory = Join-Path $root 'tests/invalid'
@@ -45,20 +47,13 @@ function Invoke-Validator {
         "--output=$OutputPath"
     )
     $arguments += $ExtraArguments
-    # Windows PowerShell 5.1 wraps native stderr as NativeCommandError when
-    # ErrorActionPreference is Stop. Pandoc diagnostics are expected test data.
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Continue'
-    try {
-        $messages = @(& $pandoc.Source @arguments 2>&1)
-        $exitCode = $LASTEXITCODE
-    }
-    finally {
-        $ErrorActionPreference = $previousErrorActionPreference
-    }
+    $result = Invoke-Utf8NativeCommand `
+        -FilePath $pandoc.Source `
+        -Arguments $arguments `
+        -WorkingDirectory $root
     return [pscustomobject]@{
-        ExitCode = $exitCode
-        Text = ($messages | Out-String)
+        ExitCode = $result.ExitCode
+        Text = $result.StandardOutput + $result.StandardError
     }
 }
 
@@ -77,18 +72,13 @@ function Invoke-Renderer {
         "--lua-filter=$rendererPath",
         "--output=$OutputPath"
     )
-    $previousErrorActionPreference = $ErrorActionPreference
-    $ErrorActionPreference = 'Continue'
-    try {
-        $messages = @(& $pandoc.Source @arguments 2>&1)
-        $exitCode = $LASTEXITCODE
-    }
-    finally {
-        $ErrorActionPreference = $previousErrorActionPreference
-    }
+    $result = Invoke-Utf8NativeCommand `
+        -FilePath $pandoc.Source `
+        -Arguments $arguments `
+        -WorkingDirectory $root
     return [pscustomobject]@{
-        ExitCode = $exitCode
-        Text = ($messages | Out-String)
+        ExitCode = $result.ExitCode
+        Text = $result.StandardOutput + $result.StandardError
     }
 }
 
@@ -542,6 +532,115 @@ foreach ($caseFile in (Get-ChildItem -LiteralPath (Join-Path $root 'tests/warnin
         continue
     }
     Write-Host ("PASS {0} -> warning {1}" -f $caseFile.Name, $expectedClause)
+}
+
+# The CLI is the public entry point for users who should not need to know the
+# internal PowerShell scripts. Keep a small smoke contract in the normal suite.
+$cliPath = Join-Path $root 'scripts/autonormokontrol.ps1'
+$launcherPath = Join-Path $root 'AutoNormoKontrol.cmd'
+if (-not (Test-Path -LiteralPath $cliPath -PathType Leaf)) {
+    $failures.Add('CLI smoke contract: scripts/autonormokontrol.ps1 is missing')
+}
+if (-not (Test-Path -LiteralPath $launcherPath -PathType Leaf)) {
+    $failures.Add('CLI smoke contract: AutoNormoKontrol.cmd is missing')
+}
+
+if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
+    (Test-Path -LiteralPath $launcherPath -PathType Leaf)) {
+    $tokens = $null
+    $parseErrors = $null
+    [void][System.Management.Automation.Language.Parser]::ParseFile(
+        $cliPath,
+        [ref]$tokens,
+        [ref]$parseErrors
+    )
+    if ($parseErrors.Count -gt 0) {
+        $failures.Add(('CLI smoke contract: parser errors: {0}' -f
+            (($parseErrors | ForEach-Object Message) -join '; ')))
+    }
+
+    $launcherText = [System.IO.File]::ReadAllText($launcherPath, [System.Text.Encoding]::UTF8)
+    foreach ($literal in @('-ExecutionPolicy Bypass', 'scripts\autonormokontrol.ps1')) {
+        if (-not $launcherText.Contains($literal)) {
+            $failures.Add("CLI smoke contract: launcher is missing $literal")
+        }
+    }
+    if ($launcherText -match '(?i)\bchcp\b') {
+        $failures.Add('CLI smoke contract: launcher must not change the global console code page')
+    }
+
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $helpOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+            -File $cliPath help 2>&1)
+        $helpExitCode = $LASTEXITCODE
+        $invalidOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+            -File $cliPath does-not-exist 2>&1)
+        $invalidExitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
+
+    $helpText = $helpOutput | Out-String
+    if ($helpExitCode -ne 0 -or $helpText -notmatch '(?m)^\s+check\s+' -or
+        $helpText -notmatch '(?m)^\s+draft\s+' -or
+        $helpText -notmatch '(?m)^\s+install\s+') {
+        $failures.Add("CLI smoke contract: help failed or commands are missing`n$helpText")
+    }
+    if ($invalidExitCode -ne 2) {
+        $failures.Add(('CLI smoke contract: unknown command returned {0}, expected 2' -f
+            $invalidExitCode))
+    }
+
+    if ($helpExitCode -eq 0 -and $invalidExitCode -eq 2 -and $parseErrors.Count -eq 0) {
+        Write-Host 'PASS AutoNormoKontrol CLI smoke contract'
+    }
+
+    $cliText = [System.IO.File]::ReadAllText($cliPath, [System.Text.Encoding]::UTF8)
+    foreach ($literal in @(
+        'JohnMacFarlane.Pandoc',
+        '--exact',
+        '--source winget',
+        'https://tug.org/texlive/windows.html'
+    )) {
+        if (-not $cliText.Contains($literal)) {
+            $failures.Add("CLI dependency installer contract: missing $literal")
+        }
+    }
+}
+
+# Native stderr decoding must not depend on the active Windows console code
+# page. This reproduces the exact Pandoc/Lua path used by the normal build.
+$utf8ProbeFilter = Join-Path $root 'tests/utf8/emit-stderr.lua'
+$utf8ProbeOutput = Join-Path $testBuild 'utf8-probe.native'
+if (-not (Test-Path -LiteralPath $utf8ProbeFilter -PathType Leaf)) {
+    $failures.Add('UTF-8 native stderr contract: probe filter is missing')
+}
+else {
+    $utf8ProbeResult = Invoke-Utf8NativeCommand `
+        -FilePath $pandoc.Source `
+        -Arguments @(
+            $basePath,
+            '--from=markdown',
+            '--to=native',
+            "--lua-filter=$utf8ProbeFilter",
+            "--output=$utf8ProbeOutput"
+        ) `
+        -WorkingDirectory $root
+    $probeSource = [System.IO.File]::ReadAllText($utf8ProbeFilter, [System.Text.Encoding]::UTF8)
+    $expectedProbeMatch = [regex]::Match($probeSource, "io\.stderr:write\('([^']+)\\n'\)")
+    $expectedProbe = if ($expectedProbeMatch.Success) { $expectedProbeMatch.Groups[1].Value } else { '' }
+    if ($utf8ProbeResult.ExitCode -ne 0 -or
+        [string]::IsNullOrEmpty($expectedProbe) -or
+        -not $utf8ProbeResult.StandardError.Contains($expectedProbe)) {
+        $failures.Add(("UTF-8 native stderr contract failed:`n{0}" -f
+            $utf8ProbeResult.StandardError))
+    }
+    else {
+        Write-Host 'PASS Pandoc UTF-8 stderr decoding contract'
+    }
 }
 
 if ($failures.Count -gt 0) {
