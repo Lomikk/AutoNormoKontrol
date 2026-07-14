@@ -1,0 +1,18 @@
+\documentclass[tikz,border=4mm]{standalone}
+\usetikzlibrary{arrows.meta,positioning}
+\begin{document}
+\begin{tikzpicture}[
+  node distance=13mm,
+  box/.style={draw,rounded corners,minimum width=29mm,minimum height=11mm,align=center},
+  arrow/.style={-{Latex[length=3mm]},thick}
+]
+\node[box] (content) {Markdown\\content};
+\node[box,right=of content] (pandoc) {Pandoc\\AST};
+\node[box,right=of pandoc] (latex) {LaTeX\\profile};
+\node[box,right=of latex] (pdf) {PDF};
+\draw[arrow] (content) -- (pandoc);
+\draw[arrow] (pandoc) -- (latex);
+\draw[arrow] (latex) -- (pdf);
+\end{tikzpicture}
+\end{document}
+

@@ -1,0 +1,248 @@
+\documentclass[a4paper,14pt]{extarticle}
+
+\usepackage{susu-coursework}
+$if(susu-single-figure)$
+% STO-8.5.10: the validator proved that the main text has one figure.
+\SUSUSingleFigureNumbering
+$endif$
+$if(susu-single-table)$
+% STO-8.6.3: the validator proved that the main text has one table.
+\SUSUSingleTableNumbering
+$endif$
+$if(susu-single-equation)$
+% STO-8.7.5: the validator proved that the main text has one formula.
+\SUSUSingleEquationNumbering
+$endif$
+
+\usepackage{calc}
+\usepackage{hyperref}
+\hypersetup{
+  unicode=true,
+  hidelinks,
+  pdfauthor={$student.name$},
+  pdftitle={$title$}
+}
+\urlstyle{same}
+
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>0.85\textheight 0.85\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=gost-numeric,
+  sorting=none,
+  language=auto,
+  autolang=other
+]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+
+% STO-7.11.3: Arabic labels have no trailing point and start at the ordinary
+% paragraph indent; sources remain in order of their first citation.
+\DeclareFieldFormat{labelnumberwidth}{#1}
+\defbibenvironment{bibliography}
+  {\list
+     {\printtext[labelnumberwidth]{\printfield{labelprefix}\printfield{labelnumber}}}
+     {\setlength{\labelwidth}{\labelnumberwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \setlength{\leftmargin}{\parindent}%
+      \addtolength{\leftmargin}{\labelwidth}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+   \renewcommand*{\makelabel}[1]{\hss##1}}
+  {\endlist}
+  {\item}
+
+% STO-8.4.9: handwritten date lines and supplied digital dates are kept as
+% indivisible units; the validator separately enforces dd.mm.yyyy metadata.
+\newcommand{\SUSUDateLine}{\mbox{«\rule{8mm}{0.4pt}» \rule{25mm}{0.4pt} $year$ г.}}
+\newcommand{\SUSUSignLine}[1]{\rule{30mm}{0.4pt}\hspace{0.5em}#1}
+
+\begin{document}
+\pagenumbering{arabic}
+\SUSUFrontMatter
+
+% STO-7.1.1, STO-7.1.3, STO-A1: mandatory coursework title page.  Unknown
+% official data remain visible blanks/placeholders and are rejected in strict mode.
+\thispagestyle{empty}
+\begin{center}
+$parent-organization$
+
+\vspace{0.35\baselineskip}
+$university$
+
+\vspace{0.35\baselineskip}
+$faculty-label$ «$school$»
+
+Кафедра «$department$»
+\end{center}
+
+\vfill
+
+\begin{center}
+$title$
+
+\vspace{2\baselineskip}
+\textbf{ПОЯСНИТЕЛЬНАЯ ЗАПИСКА К КУРСОВОЙ РАБОТЕ}
+
+$if(discipline)$
+по дисциплине «$discipline$»
+$else$
+по дисциплине «\rule{75mm}{0.4pt}»
+$endif$
+
+$document-code$
+\end{center}
+
+\vfill
+
+\noindent
+\begin{minipage}[t]{0.47\textwidth}
+Нормоконтролер, $normal-controller.position$\\
+\SUSUSignLine{$normal-controller.name$}\\
+\SUSUDateLine
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+Руководитель, $supervisor.position$\\
+\SUSUSignLine{$supervisor.name$}\\
+\SUSUDateLine
+
+\vspace{\baselineskip}
+Автор работы\\
+Студент группы $student.group$\\
+\SUSUSignLine{$student.name$}\\
+\SUSUDateLine
+
+\vspace{\baselineskip}
+Работа защищена\\
+с оценкой (прописью, цифрой)\\
+\rule{65mm}{0.4pt}\\
+\SUSUDateLine
+\end{minipage}
+
+\vfill
+\begin{center}
+$city$ $year$
+\end{center}
+\clearpage
+
+$if(include-assignment)$
+% STO-6, STO-7.2.1, STO-V: the assignment is mandatory; Appendix V supplies
+% the recommended two-page form.  Strict mode rejects every unconfirmed field.
+\thispagestyle{empty}
+\begin{center}
+$parent-organization$
+
+\vspace{0.25\baselineskip}
+$university$
+
+\vspace{0.25\baselineskip}
+$faculty-label$ «$school$»\\
+Кафедра «$department$»\\
+Направление «$direction-code$ $direction$»
+\end{center}
+
+\begin{flushright}
+\begin{minipage}{0.48\textwidth}
+\textbf{УТВЕРЖДАЮ}\\
+Заведующий кафедрой\\
+\SUSUSignLine{$assignment.head-of-department$}\\
+\mbox{$assignment.approval-date$}
+\end{minipage}
+\end{flushright}
+
+\begin{center}
+\textbf{ЗАДАНИЕ}\\
+на курсовую работу студента
+\end{center}
+
+\noindent $assignment.student-full-name$\\
+\rule{\linewidth}{0.4pt}\\[-0.45\baselineskip]
+\begin{center}\small (фамилия, имя, отчество полностью)\end{center}
+\noindent Группа $student.group$
+
+\vspace{0.5\baselineskip}
+\noindent 1 Дисциплина $discipline$\\
+\rule{\linewidth}{0.4pt}
+
+\vspace{0.5\baselineskip}
+\noindent 2 Тема работы\\
+$title$\\
+\rule{\linewidth}{0.4pt}
+
+\vspace{0.5\baselineskip}
+\noindent 3 Срок сдачи студентом законченной работы \mbox{$assignment.due-date$}
+
+\vspace{0.5\baselineskip}
+\noindent 4 Перечень вопросов, подлежащих разработке
+
+$for(assignment.questions)$
+\noindent $assignment.questions$\\
+$endfor$
+\vfill
+\clearpage
+
+\thispagestyle{empty}
+\begin{flushright}
+Продолжение задания на курсовую работу
+\end{flushright}
+
+\noindent\textbf{5 Календарный план}
+
+\noindent\begin{tblr}{
+  colspec={|X[2,l]|X[l]|X[l]|},
+  width=\linewidth,
+  hlines,vlines,
+  row{1}={font=\bfseries},
+  rows={font=\fontsize{12pt}{14pt}\selectfont}
+}
+Наименование разделов курсовой работы & Срок выполнения & \shortstack{Отметка\\руководителя} \\
+$for(assignment.calendar)$
+$assignment.calendar.section$ & \mbox{$assignment.calendar.due$} & $assignment.calendar.status$ \\
+$endfor$
+\end{tblr}
+
+\vfill
+\noindent
+\begin{minipage}[t]{0.35\linewidth}
+Руководитель работы\par
+\vspace{0.2\baselineskip}
+\noindent Студент
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.60\linewidth}
+\raggedleft\SUSUSignLine{$supervisor.name$}\par
+\vspace{0.2\baselineskip}
+\noindent\SUSUSignLine{$student.name$}
+\end{minipage}
+% STO-8.1.4, STO-V: reserve the prescribed bottom field on the fixed
+% assignment form; this moves both signature rows as one semantic block.
+\vspace*{6mm}
+\clearpage
+$endif$
+
+$if(abstract)$
+% STO-6, STO-7.3.1, STO-7.3.2, STO-7.3.4, STO-D.
+\section*{АННОТАЦИЯ}
+
+$abstract$
+\clearpage
+$endif$
+
+% STO-6, STO-7.4.1, STO-7.4.2, STO-Zh.
+\renewcommand{\contentsname}{\protect\makebox[\linewidth][c]{ОГЛАВЛЕНИЕ}}
+\tableofcontents
+\SUSUMainMatter
+
+$body$
+
+\end{document}

@@ -1,0 +1,269 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{susu-coursework}[2026/07/13 SUSU coursework profile]
+
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+
+\RequirePackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\setmonofont{Courier New}
+\newfontfamily\cyrillicfonttt{Courier New}
+
+\RequirePackage[
+  a4paper,
+  top=20mm,
+  bottom=26mm,
+  left=25mm,
+  right=10mm,
+  headheight=17pt,
+  headsep=0pt,
+  footskip=6mm
+]{geometry}
+
+\RequirePackage{setspace}
+% STO-8.1.3: without a documented department decision the normative defaults
+% are single spacing and a 0.7 cm paragraph indent.
+\singlespacing
+\AtBeginDocument{\fontsize{14pt}{17pt}\selectfont}
+\setlength{\parindent}{0.7cm}
+\setlength{\parskip}{0pt}
+\RequirePackage{microtype}
+% STO-8.1.4: optical protrusion must not move glyphs beyond measured margins.
+\microtypesetup{protrusion=false}
+\setlength{\emergencystretch}{2em}
+
+\RequirePackage{fancyhdr}
+\fancypagestyle{susu}{%
+  \fancyhf{}%
+  % STO-8.3.3: extend the footer over both unequal margins so C means the
+  % physical centre of the A4 sheet, not the centre of the text block.
+  \fancyfootoffset[L]{25mm}%
+  \fancyfootoffset[R]{10mm}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\newcommand{\SUSUCurrentAppendix}{}
+\fancypagestyle{susuappendixcontinuation}{%
+  \fancyhf{}%
+  \fancyfootoffset[L]{25mm}%
+  \fancyfootoffset[R]{10mm}%
+  \fancyhead[R]{Продолжение приложения \SUSUCurrentAppendix}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\makeatletter
+\newcommand{\SUSUFrontMatter}{%
+  \pagestyle{empty}%
+  \let\ps@plain\ps@empty
+}
+\newcommand{\SUSUMainMatter}{%
+  \clearpage
+  \let\ps@plain\ps@susu
+  \pagestyle{susu}%
+}
+% STO-7.12.4: keep the appendix letter as the value returned by \ref.
+% The helper is defined while @ is a letter and is safe to call later.
+\newcommand{\SUSUSetCurrentLabel}[1]{\def\@currentlabel{#1}}
+\makeatother
+
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+
+\RequirePackage{titlesec}
+\RequirePackage{needspace}
+\RequirePackage{etoolbox}
+
+\titleformat{\section}[block]
+  {\normalfont\bfseries\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {\thesection}{0.6em}{\MakeUppercase}
+\titleformat{name=\section,numberless}[block]
+  {\normalfont\bfseries\filcenter\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {}{0pt}{\MakeUppercase}
+\titleformat{\subsection}[block]
+  {\normalfont\bfseries\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {\thesubsection}{0.6em}{}
+\titleformat{name=\subsection,numberless}[block]
+  {\normalfont\bfseries\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {}{0pt}{}
+\titleformat{\subsubsection}[block]
+  {\normalfont\itshape\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {\thesubsubsection}{0.6em}{}
+\titleformat{\paragraph}[block]
+  {\normalfont\itshape\hyphenpenalty=10000\exhyphenpenalty=10000\fontsize{14pt}{17pt}\selectfont}
+  {\theparagraph}{0.6em}{}
+
+\titlespacing*{\section}{\parindent}{\baselineskip}{\baselineskip}
+\titlespacing*{\subsection}{\parindent}{\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsubsection}{\parindent}{0.5\baselineskip}{0.25\baselineskip}
+\titlespacing*{\paragraph}{\parindent}{0.5\baselineskip}{0.25\baselineskip}
+% STO-8.2.8, STO-8.2.9: keep the heading and at least three following text
+% lines on the same page (extra baselines account for heading spacing).
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{8\baselineskip}}{}{}
+\pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
+\pretocmd{\paragraph}{\Needspace{8\baselineskip}}{}{}
+
+% STO-8.2.2, STO-8.2.3: support section.subsection.point.subpoint.
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+\RequirePackage{tocloft}
+% Polyglossia localizes \contentsname at begin-document time. The template
+% therefore fixes the STO term immediately before \tableofcontents.
+\renewcommand{\cfttoctitlefont}{\bfseries\fontsize{14pt}{17pt}\selectfont}
+\renewcommand{\cftaftertoctitle}{}
+% STO-7.4.2 and Appendix Zh: the trusted renderer uppercases ordinary
+% first-level headings before they reach the .toc file.  Appendix titles stay
+% sentence case, exactly as prescribed by STO-7.12.3.
+\renewcommand{\cftsecfont}{\normalfont}
+\renewcommand{\cftsecpagefont}{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforesecskip}{0pt}
+
+\RequirePackage{enumitem}
+\setlist{nosep,leftmargin=\parindent,labelsep=0.5em}
+\setlist[itemize,1]{label=\textendash}
+% STO-8.2.11: Arabic enumeration markers end with a closing parenthesis.
+\setlist[enumerate,1]{label=\arabic*)}
+
+\RequirePackage{graphicx}
+\RequirePackage{float}
+% STO-8.5.3: the trusted renderer also writes [H]; this default prevents an
+% accidentally introduced figure environment from floating before its callout.
+\floatplacement{figure}{H}
+\RequirePackage{caption}
+\RequirePackage{chngcntr}
+% STO-8.5.1: every illustration category is emitted as a Figure and receives
+% section-local numbering.  A single figure is the explicit exception below.
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\captionsetup[figure]{
+  name=Рисунок,
+  labelsep=endash,
+  justification=centering,
+  singlelinecheck=false,
+  position=bottom,
+  font=normalsize
+}
+\captionsetup[table]{
+  name=Таблица,
+  labelsep=endash,
+  justification=raggedright,
+  singlelinecheck=false,
+  position=top,
+  font=normalsize
+}
+
+\RequirePackage{amsmath}
+\RequirePackage{unicode-math}
+\setmathfont{Latin Modern Math}
+\numberwithin{equation}{section}
+% STO-8.7.2: leave at least one full text line above and below displays.
+\setlength{\abovedisplayskip}{\baselineskip}
+\setlength{\belowdisplayskip}{\baselineskip}
+\setlength{\abovedisplayshortskip}{\baselineskip}
+\setlength{\belowdisplayshortskip}{\baselineskip}
+% STO-8.7.15, STO-8.7.17: controlled notation macros for scalar/vector
+% typography; authors must not simulate these roles manually.
+\newcommand{\scalar}[1]{\symit{#1}}
+\newcommand{\greekscalar}[1]{\symup{#1}}
+\newcommand{\vect}[1]{\vec{\symit{#1}}}
+\newcommand{\scalarproduct}[2]{\left(\vect{#1},\vect{#2}\right)}
+\newcommand{\vectorproduct}[2]{\left[\vect{#1},\vect{#2}\right]}
+
+\RequirePackage{siunitx}
+% STO-8.4.3, STO-8.4.5, STO-8.4.7, STO-8.6.12, STO-8.6.15.
+\sisetup{
+  output-decimal-marker={,},
+  group-separator={\,},
+  group-minimum-digits=5,
+  per-mode=symbol
+}
+
+\RequirePackage{tabularray}
+% STO-8.6.3, STO-8.6.7, STO-8.6.8 and Appendix M.
+\NewTblrTheme{susu}{%
+  % STO-8.6.3, STO-8.6.5: even a short table caption starts at the left,
+  % rather than using tabularray's default centred short-caption template.
+  \SetTblrTemplate{caption}{simple}%
+  \SetTblrTemplate{capcont}{simple}%
+  \DefTblrTemplate{caption-tag}{default}{\tablename\hspace{0.25em}\thetable}%
+  \DefTblrTemplate{caption-sep}{default}{\hspace{0.25em}--\hspace{0.25em}}%
+  \DefTblrTemplate{middlehead}{default}{%
+    \noindent Продолжение таблицы \thetable\par}%
+  \DefTblrTemplate{lasthead}{default}{%
+    \noindent Окончание таблицы \thetable\par}%
+  \DefTblrTemplate{contfoot}{default}{}%
+}
+
+% STO-8.5.10, STO-8.6.3, STO-8.7.5: one object uses global number 1.
+\newcommand{\SUSUSingleFigureNumbering}{%
+  \counterwithout{figure}{section}\renewcommand{\thefigure}{\arabic{figure}}}
+\newcommand{\SUSUSingleTableNumbering}{%
+  \counterwithout{table}{section}\renewcommand{\thetable}{\arabic{table}}}
+\newcommand{\SUSUSingleEquationNumbering}{%
+  \counterwithout{equation}{section}\renewcommand{\theequation}{\arabic{equation}}}
+
+% STO-8.7.4, STO-8.7.7: explanation column starts at the left edge with
+% "где", has no colon/paragraph indent and one definition per line.
+\newenvironment{SUSUWhere}{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{1.5cm}%
+    \setlength{\labelwidth}{1.3cm}%
+    \setlength{\labelsep}{0.2cm}%
+    \setlength{\itemindent}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{0pt}%
+  }%
+  \renewcommand*{\makelabel}[1]{\makebox[\labelwidth][l]{##1}}%
+}{\end{list}}
+
+\RequirePackage{xparse}
+\NewDocumentEnvironment{SUSUAppendix}{m m m m}{%
+  \clearpage
+  \begingroup
+  % STO-7.12.3, STO-7.12.7, STO-7.12.8, STO-8.5.11: local appendix hierarchy and
+  % independent object counters with the appendix-letter prefix.
+  \counterwithout{figure}{section}%
+  \counterwithout{table}{section}%
+  \counterwithout{equation}{section}%
+  \setcounter{section}{0}%
+  \renewcommand{\thesection}{#1.\arabic{section}}%
+  \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}%
+  \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}%
+  \renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}%
+  \setcounter{figure}{0}%
+  \setcounter{table}{0}%
+  \setcounter{equation}{0}%
+  \renewcommand{\thefigure}{#1.\arabic{figure}}%
+  \renewcommand{\thetable}{#1.\arabic{table}}%
+  \renewcommand{\theequation}{#1.\arabic{equation}}%
+  \renewcommand{\theHfigure}{appendix.#1.\arabic{figure}}%
+  \renewcommand{\theHtable}{appendix.#1.\arabic{table}}%
+  \renewcommand{\theHequation}{appendix.#1.\arabic{equation}}%
+  \renewcommand{\SUSUCurrentAppendix}{#1}%
+  \pagestyle{susuappendixcontinuation}%
+  \thispagestyle{susu}%
+  \phantomsection
+  \SUSUSetCurrentLabel{#1}%
+  \label{#3}%
+  \addcontentsline{toc}{section}{ПРИЛОЖЕНИЕ #1. #2}%
+  \begin{center}
+    \textbf{ПРИЛОЖЕНИЕ #1}\\
+    \ifstrempty{#4}{}{(#4)\\}%
+    #2
+  \end{center}
+}{%
+  \par\clearpage\endgroup
+  \pagestyle{susu}%
+}
