@@ -19,6 +19,7 @@
 .\AutoNormoKontrol.cmd trace
 .\AutoNormoKontrol.cmd status
 .\AutoNormoKontrol.cmd open
+.\AutoNormoKontrol.cmd context <capability> <content-file>
 .\AutoNormoKontrol.cmd help
 ```
 
@@ -33,6 +34,8 @@
 - `trace` строит отчёт трассировки требований.
 - `status` показывает состояния аудитов, PDF postflight и последнего PDF.
 - `open` открывает последний PDF из `build/`.
+- `context` строит проверенный `context-plan-v1` и Aider `/load`-файлы для
+  выбранного capability и content-файла активного профиля.
 - `help` показывает справку CLI.
 
 Команды `new`, `export` и `archive` пока не реализованы. Не следует
@@ -56,17 +59,71 @@
 `AGENTS.md`, `README.md`, этот справочник и файлы активного профиля могут быть
 read-only контекстом для агента. Они не являются содержанием курсовой.
 
-## Минимальная матрица контекста Aider
+## Capability-модель AI-контекста
 
-| Тип задачи | Editable | Read-only | Excluded |
-|---|---|---|---|
-| Написание или правка главы | Конкретный явно названный файл из `content/*.md` | Контракт, активный профиль, `metadata.yaml`, связанные главы и `bibliography.bib` по необходимости | `engine`, `profile`, `sources`, `tests`, `build`, журналы приёмки |
-| Метаданные | `metadata.yaml` | Контракт, профиль, затронутые главы | Остальные каталоги и generated-файлы |
-| Библиография | `bibliography.bib` | Глава с цитированием и контракт | Остальные каталоги и generated-файлы |
-| Исправление Draft | Только файлы, названные ошибкой или её source suggestion | Точный вывод Draft, соответствующий фрагмент и контракт | Все не названные файлы; нельзя выбирать `content/02-main.md` по умолчанию |
-| Semantic review | Только файл аудита при отдельной явно поставленной задаче | Полный неизменяемый снимок содержания и Draft `content-hash` | Внешняя приёмка и любые неподтверждённые факты |
+`R1.4a/context-plan-v1` не угадывает смысл пользовательского запроса. Пользователь
+или ИИ выбирает только небольшой capability и content-target; активный профиль
+определяет реальные пути:
 
-Пока Draft не выдаёт `source suggestion`, файл выбирается только по точному
-пути и фрагменту из сообщения ошибки; пользователь не должен угадывать главу.
-`external-acceptance.yaml` изменяется только при наличии реального внешнего
-решения или явно переданного пользователем доказательства.
+```text
+capability + target + active profile -> context-plan-v1 -> Aider adapter
+```
+
+| Capability | Editable | Дополнительный read-only контекст |
+|---|---|---|
+| `edit-content` | выбранный content-target | `metadata.yaml` |
+| `edit-references` | выбранный content-target и активный `bibliography.bib` | `metadata.yaml` |
+| `edit-metadata` | активный `metadata.yaml` | профильный контракт |
+| `design-structure` | выбранный content-target | metadata и остальные content-входы активного профиля |
+| `review-content` | нет | выбранный target и metadata |
+
+Во всех режимах read-only добавляются `AGENTS.md`, `README.md`, указатель и
+manifest активного профиля, системная инструкция, нормативный реестр и инструкция
+текущего capability. Пути не сканируются и не подбираются по похожему имени.
+Target обязан в точности присутствовать в `inputs.content` активного manifest.
+
+Минимальный запуск:
+
+```powershell
+.\AutoNormoKontrol.cmd context edit-content content/00-introduction.md
+```
+
+Команда создаёт:
+
+- `build/ai/context-plan.json` — текущий provider-neutral план;
+- `build/ai/plans/*.json` — канонические планы допустимых переходов для того же
+  target;
+- `build/ai/aider-context.txt` — копируемое представление текущего плана;
+- `build/ai/switch/*.aider` — готовые переключатели для `/load`;
+- `build/ai/capabilities/*.md` — отдельную правдивую инструкцию каждого режима.
+
+В Aider достаточно выполнить показанную команду, например:
+
+```text
+/load build/ai/switch/edit-content.aider
+```
+
+Фактический ввод `/load` пользователем является подтверждением перехода. ИИ
+может объяснить нехватку доступа и рекомендовать один из уже подготовленных
+переходов, но не может сам выдать себе дополнительные права. Один общий
+`capabilities.md` не переиспользуется всеми switch-файлами: после перехода он
+мог бы сообщать устаревший текущий режим, поэтому каждый switch загружает свою
+capability-инструкцию.
+
+Одинаковые profile digest, policy digest, capability и target дают одинаковый
+JSON. План применим, пока digest профиля и политики совпадают, а target остаётся
+в active profile. После изменения контракта нужно заново выполнить `context`.
+Обычные ненужные файлы в план не включаются; `excluded` отдельно перечисляет
+защищённые области. Исключения `build/ai/capabilities/*.md` разрешены только как
+точные generated read-only инструкции: весь `build/**` по-прежнему никогда не
+становится editable.
+
+`excluded` означает запрет на editable-доступ, а не запрет любой загрузки:
+точные manifest/prompt/requirements активного профиля и capability-инструкция
+могут входить как read-only исключения. Для `edit-metadata` content-target служит
+якорем цепочки переходов и сам в контекст не загружается.
+
+Пока Draft не выдаёт `source suggestion`, target выбирается только по точному
+пути и фрагменту из сообщения ошибки; нельзя выбирать `content/02-main.md` по
+умолчанию. `semantic-review.yaml` и `external-acceptance.yaml` изменяются только
+в отдельных процессах с реальным основанием, а не через capability написания.

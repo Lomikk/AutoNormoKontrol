@@ -376,6 +376,7 @@ function Show-Help {
     Write-Host '  doctor   проверить Pandoc, TeX Live и PDF-инструменты'
     Write-Host '  install  установить доступные зависимости через WinGet'
     Write-Host '  open     открыть последний собранный PDF'
+    Write-Host '  context  подготовить безопасный AI-контекст: context <capability> <content-file>'
     Write-Host '  help     показать эту справку'
     Write-Host ''
     Write-Host 'CLI не меняет semantic-review или external-acceptance и не обходит Strict-gate.'
@@ -417,6 +418,22 @@ function Invoke-CliCommand {
             Write-Title 'Трассировка требований СТО'
             Invoke-ProjectScript 'report-traceability.ps1' `
                 -Arguments @('-ProfilePath', $script:ActiveProfilePath) -ExitCode $ExitCode
+            break
+        }
+        'context' {
+            Write-Title 'AI context plan'
+            if ($Arguments.Count -ne 2) {
+                Write-Failure 'Использование: AutoNormoKontrol.cmd context <capability> <content-file>'
+                Write-Host 'Пример: AutoNormoKontrol.cmd context edit-content content/00-introduction.md'
+                $ExitCode.Value = 2
+                break
+            }
+            Invoke-ProjectScript 'context-plan.ps1' `
+                -Arguments @(
+                    '-Capability', [string]$Arguments[0],
+                    '-Target', [string]$Arguments[1],
+                    '-ProfilePath', $script:ActiveProfilePath
+                ) -ExitCode $ExitCode
             break
         }
         'test' {
@@ -528,7 +545,7 @@ try {
         Show-InteractiveMenu
     }
     else {
-        if ($CommandArguments.Count -gt 0 -and $Command -ne 'install') {
+        if ($CommandArguments.Count -gt 0 -and $Command -notin @('install', 'context')) {
             Write-Host ("Примечание: дополнительные аргументы пока не используются: {0}" -f
                 ($CommandArguments -join ' ')) -ForegroundColor DarkYellow
         }

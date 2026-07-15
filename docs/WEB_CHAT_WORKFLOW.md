@@ -119,34 +119,41 @@ Aider удобнее ручного копирования, потому что 
 применяет ответ браузерной модели к локальным файлам. Это не даёт браузерному ИИ
 доступ к компьютеру и не отменяет локальные тесты.
 
-Рекомендуемая схема:
+Рекомендуемая схема `R1.4a/context-plan-v1`:
 
-1. добавить обязательные документы как read-only context;
-2. добавить только изменяемые файлы как editable;
-3. скопировать подготовленный Aider контекст в браузерный чат;
-4. скопировать ответ браузерного ИИ обратно в Aider;
-5. просмотреть diff;
-6. запустить локальную проверку AutoNormoKontrol.
+1. из корня проекта один раз подготовить разрешённый контекст, например:
 
-Пример команд внутри Aider:
+   ```powershell
+   .\AutoNormoKontrol.cmd context edit-content content/00-introduction.md
+   ```
 
-```text
-/read-only AGENTS.md profiles/active-profile.txt
-/read-only profiles/susu-hsem-ceit-coursework-v1/profile.yaml README.md
-/read-only profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md
-/read-only profiles/susu-hsem-ceit-coursework-v1/compliance/requirements.json
-/read-only metadata.yaml bibliography.bib
-/add content/02-main.md
-/copy-context Измени только content/02-main.md по приложенным фактам. Не трогай журналы приёмки.
-```
+2. внутри Aider выполнить ровно показанную CLI команду:
 
-Этот пример показывает только одну задачу, а не обязательный файл для каждой
-правки. Для Aider действует матрица из
-[`docs/PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md): editable — только явно
-названный файл текущей задачи; read-only — контракт, активный профиль и
-связанные исходники; excluded — engine, profile, sources, tests, fixtures,
-build и журналы приёмки. Если Draft позже выдаёт source suggestion, следует
-использовать его точный путь. До этого нельзя угадывать главу по имени вроде
+   ```text
+   /load build/ai/switch/edit-content.aider
+   ```
+
+3. сформулировать обычную смысловую задачу, просмотреть diff и запустить Draft;
+4. если ИИ обоснованно сообщает о нехватке прав, выполнить предложенный им
+   готовый переход, например:
+
+   ```text
+   /load build/ai/switch/edit-references.aider
+   ```
+
+Ввод `/load` пользователем является подтверждением перехода. Aider исполняет из
+файла `/drop`, `/read-only` и `/add`; AutoNormoKontrol не управляет процессом
+Aider и не выбирает capability по естественному языку. Канонический JSON и
+правила режимов описаны в
+[`docs/PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md#capability-модель-ai-контекста).
+
+Запускай Aider без произвольного стартового набора файлов: его `/drop` сохраняет
+файлы, переданные как read-only при самом запуске процесса. Generated switch
+гарантирует точность контекста, созданного AutoNormoKontrol, но не может отозвать
+дополнительные полномочия, которые пользователь заранее выдал Aider вне проекта.
+
+Если Draft позже выдаёт source suggestion, следует использовать его точный путь
+как target нового плана. До этого нельзя угадывать главу по имени вроде
 `content/02-main.md`.
 
 После ответа браузерной модели её текст вставляется через `/paste`, затем
@@ -159,6 +166,7 @@ build и журналы приёмки. Если Draft позже выдаёт s
 Официальные справочные страницы:
 
 - <https://aider.chat/docs/usage/copypaste.html>;
+- <https://aider.chat/docs/usage/commands.html>;
 - <https://aider.chat/docs/usage/modes.html>;
 - <https://aider.chat/docs/more/edit-formats.html>.
 

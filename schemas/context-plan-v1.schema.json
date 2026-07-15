@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonormokontrol.local/schemas/context-plan-v1.schema.json",
+  "title": "AutoNormoKontrol context-plan-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile",
+    "policy",
+    "capability",
+    "target",
+    "editable",
+    "read_only",
+    "excluded",
+    "transitions"
+  ],
+  "properties": {
+    "schema": { "const": "context-plan-v1" },
+    "profile": { "$ref": "#/$defs/profile" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "capability": {
+      "enum": [
+        "edit-content",
+        "edit-references",
+        "edit-metadata",
+        "design-structure",
+        "review-content"
+      ]
+    },
+    "target": { "$ref": "#/$defs/projectPath" },
+    "editable": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resource" },
+      "uniqueItems": true
+    },
+    "read_only": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/resource" },
+      "uniqueItems": true
+    },
+    "excluded": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/excludedResource" },
+      "uniqueItems": true
+    },
+    "transitions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/transition" },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "projectPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\r\\n\\u0000\\\\]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "digest", "manifest"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/sha256" },
+        "manifest": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "digest", "source"],
+      "properties": {
+        "id": { "const": "document-authoring-capabilities-v1" },
+        "digest": { "$ref": "#/$defs/sha256" },
+        "source": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "reason"],
+      "properties": {
+        "path": { "$ref": "#/$defs/projectPath" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "excludedResource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "reason"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/*-]+$"
+        },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability", "purpose", "command", "plan_path", "aider_file"],
+      "properties": {
+        "capability": {
+          "enum": [
+            "edit-content",
+            "edit-references",
+            "edit-metadata",
+            "design-structure",
+            "review-content"
+          ]
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "command": {
+          "type": "string",
+          "pattern": "^/load build/ai/switch/[a-z-]+\\.aider$"
+        },
+        "plan_path": { "$ref": "#/$defs/projectPath" },
+        "aider_file": { "$ref": "#/$defs/projectPath" }
+      }
+    }
+  }
+}

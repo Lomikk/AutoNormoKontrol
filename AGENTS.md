@@ -74,8 +74,16 @@
 .\AutoNormoKontrol.cmd draft    # проверить содержание и собрать черновой PDF
 .\AutoNormoKontrol.cmd check    # тесты программы, затем Draft-сборка
 .\AutoNormoKontrol.cmd status   # показать состояние аудитов и последней сборки
+.\AutoNormoKontrol.cmd context edit-content content/00-introduction.md # подготовить AI-контекст
 .\AutoNormoKontrol.cmd strict   # финальная fail-closed сборка
 ```
+
+Команда `context` принимает только один из capabilities, зарегистрированных в
+`scripts/context-capabilities-v1.json`, и точный target из `inputs.content`
+активного профиля. Сгенерированный `context-plan-v1` ограничивает editable
+область Aider и служит рекомендацией области работы для локального агента, но не
+заменяет этот файл или системную инструкцию профиля и не даёт агенту права
+самостоятельно расширять полномочия.
 
 Для диагностики и разработки допустим прямой запуск отдельных этапов:
 

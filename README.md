@@ -37,6 +37,16 @@
 [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md); здесь не поддерживается
 второй независимый список.
 
+Для работы с Aider команда `context` формирует безопасный profile-driven набор
+editable/read-only файлов и готовые `/load`-переключатели. Например:
+
+```powershell
+.\AutoNormoKontrol.cmd context edit-content content/00-introduction.md
+```
+
+Capability-модель, границы полномочий и generated-файлы описаны в
+[`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md#capability-модель-ai-контекста).
+
 CLI запускается через небольшой `.cmd`-файл, поэтому пользователю не нужно
 менять системную PowerShell Execution Policy. Все операции выполняются локально
 на компьютере пользователя. CLI не присваивает статусы аудита или внешней

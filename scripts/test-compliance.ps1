@@ -1100,6 +1100,23 @@ if (Test-Path -LiteralPath $assetTestRootFull -PathType Container) {
     }
 }
 
+# R1.4a/context-plan-v1 is an engine contract, not a document fixture. Keep its
+# fail-closed permission and adapter tests in a focused script, but run them as
+# part of the normal compliance suite so `check` cannot skip them.
+$contextPlanTestPath = Join-Path $root 'scripts/test-context-plan.ps1'
+if (-not (Test-Path -LiteralPath $contextPlanTestPath -PathType Leaf)) {
+    $failures.Add('context-plan-v1 contract test script is missing')
+}
+else {
+    $contextPlanTestResult = Invoke-PowerShellFile -ScriptPath $contextPlanTestPath
+    if ($contextPlanTestResult.ExitCode -ne 0) {
+        $failures.Add("context-plan-v1 contract tests failed:`n$($contextPlanTestResult.Text)")
+    }
+    else {
+        Write-Host $contextPlanTestResult.Text.TrimEnd()
+    }
+}
+
 # The CLI is the public entry point for users who should not need to know the
 # internal PowerShell scripts. Keep a small smoke contract in the normal suite.
 $cliPath = Join-Path $root 'scripts/autonormokontrol.ps1'
@@ -1144,6 +1161,12 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
         $invalidOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
             -File $cliPath does-not-exist 2>&1)
         $invalidExitCode = $LASTEXITCODE
+        $contextOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+            -File $cliPath context edit-content ([string]@($profileConfig.inputs.content)[0]) 2>&1)
+        $contextExitCode = $LASTEXITCODE
+        $contextUsageOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+            -File $cliPath context 2>&1)
+        $contextUsageExitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousErrorActionPreference
@@ -1152,15 +1175,26 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
     $helpText = $helpOutput | Out-String
     if ($helpExitCode -ne 0 -or $helpText -notmatch '(?m)^\s+check\s+' -or
         $helpText -notmatch '(?m)^\s+draft\s+' -or
-        $helpText -notmatch '(?m)^\s+install\s+') {
+        $helpText -notmatch '(?m)^\s+install\s+' -or
+        $helpText -notmatch '(?m)^\s+context\s+') {
         $failures.Add("CLI smoke contract: help failed or commands are missing`n$helpText")
     }
     if ($invalidExitCode -ne 2) {
         $failures.Add(('CLI smoke contract: unknown command returned {0}, expected 2' -f
             $invalidExitCode))
     }
+    if ($contextExitCode -ne 0 -or
+        -not (Test-Path -LiteralPath (Join-Path $root 'build/ai/context-plan.json') -PathType Leaf)) {
+        $failures.Add("CLI smoke contract: context command failed`n$($contextOutput | Out-String)")
+    }
+    if ($contextUsageExitCode -ne 2) {
+        $failures.Add(('CLI smoke contract: invalid context usage returned {0}, expected 2' -f
+            $contextUsageExitCode))
+    }
 
-    if ($helpExitCode -eq 0 -and $invalidExitCode -eq 2 -and $parseErrors.Count -eq 0) {
+    if ($helpExitCode -eq 0 -and $invalidExitCode -eq 2 -and
+        $contextExitCode -eq 0 -and $contextUsageExitCode -eq 2 -and
+        $parseErrors.Count -eq 0) {
         Write-Host 'PASS AutoNormoKontrol CLI smoke contract'
     }
 

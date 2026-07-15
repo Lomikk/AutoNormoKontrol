@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "policy_id": "document-authoring-capabilities-v1",
+  "capabilities": [
+    {
+      "id": "edit-content",
+      "purpose": "Edit one selected content file without changing references or document metadata.",
+      "editable": ["target"],
+      "read_only": ["metadata"]
+    },
+    {
+      "id": "edit-references",
+      "purpose": "Edit the selected content file and the active bibliography together.",
+      "editable": ["target", "bibliography"],
+      "read_only": ["metadata"]
+    },
+    {
+      "id": "edit-metadata",
+      "purpose": "Edit user-supplied document metadata while keeping the profile contract read-only.",
+      "editable": ["metadata"],
+      "read_only": []
+    },
+    {
+      "id": "design-structure",
+      "purpose": "Design headings and the semantic structure of the selected content file with document-wide context.",
+      "editable": ["target"],
+      "read_only": ["metadata", "other_content"]
+    },
+    {
+      "id": "review-content",
+      "purpose": "Review the selected content file without editing any workspace file.",
+      "editable": [],
+      "read_only": ["target", "metadata"]
+    }
+  ]
+}
