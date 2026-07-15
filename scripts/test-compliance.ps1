@@ -1044,6 +1044,62 @@ else {
     Write-Host 'PASS R1.1 Draft integration contract'
 }
 
+# R0/remove-snapshot-content-fallback: the profile is the only source of the
+# document input list. The snapshot writer must never restore coursework paths.
+$snapshotWriterText = Get-SourceText 'scripts/write-document-snapshot.ps1'
+$courseworkSnapshotPaths = @(
+    'content/00-introduction.md', 'content/01-literature-review.md',
+    'content/02-main.md', 'content/03-conclusion.md',
+    'content/90-bibliography.md', 'content/99-appendix.md'
+)
+foreach ($path in $courseworkSnapshotPaths) {
+    if ($snapshotWriterText.Contains($path)) {
+        $failures.Add("R0 snapshot writer retains hard-coded coursework content path: $path")
+    }
+}
+if ($snapshotWriterText -notmatch '\[Parameter\(Mandatory\s*=\s*\$true\)\]\s*\r?\n\s*\[ValidateNotNullOrEmpty\(\)\]\s*\r?\n\s*\[string\[\]\]\$ContentPaths') {
+    $failures.Add('R0 snapshot writer does not require a non-empty ContentPaths argument')
+}
+if (-not $buildScriptText.Contains('-ContentPaths (@($content) + @($metadataPath, $bibliographyPath))')) {
+    $failures.Add('R0 Draft integration does not pass profile content, metadata, and bibliography to snapshot writer')
+}
+else {
+    Write-Host 'PASS R0 profile-driven snapshot inputs are wired through Draft build'
+}
+
+if (Test-Path -LiteralPath $assetTestRootFull -PathType Container) {
+    $missingContentPaths = Invoke-PowerShellFile -ScriptPath $snapshotWriterPath `
+        -Arguments @('-ProjectRoot', $assetTestRootFull, '-OutputPath', 'build/snapshot-missing-content.json')
+    if ($missingContentPaths.ExitCode -eq 0 -or $missingContentPaths.Text -notmatch 'ContentPaths') {
+        $failures.Add("R0 missing ContentPaths did not fail closed:`n$($missingContentPaths.Text)")
+    }
+    else {
+        Write-Host 'PASS R0 missing ContentPaths fails closed'
+    }
+
+    $emptyContentPaths = $null
+    $emptyContentPathsExitCode = 0
+    $previousErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $snapshotWriterCommandPath = $snapshotWriterPath.Replace("'", "''")
+        $assetTestCommandRoot = $assetTestRootFull.Replace("'", "''")
+        $emptyContentPaths = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+            -Command "& '$snapshotWriterCommandPath' -ProjectRoot '$assetTestCommandRoot' -OutputPath 'build/snapshot-empty-content.json' -ContentPaths @(); if (`$?) { exit `$LASTEXITCODE }; exit 1" 2>&1)
+        $emptyContentPathsExitCode = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+    }
+    $emptyContentPathsText = ($emptyContentPaths | Out-String)
+    if ($emptyContentPathsExitCode -eq 0 -or $emptyContentPathsText -notmatch 'ContentPaths') {
+        $failures.Add("R0 empty ContentPaths did not fail closed:`n$emptyContentPathsText")
+    }
+    else {
+        Write-Host 'PASS R0 empty ContentPaths fails closed'
+    }
+}
+
 # The CLI is the public entry point for users who should not need to know the
 # internal PowerShell scripts. Keep a small smoke contract in the normal suite.
 $cliPath = Join-Path $root 'scripts/autonormokontrol.ps1'

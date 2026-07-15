@@ -4,16 +4,9 @@ param(
     [string]$ProfileId = 'unspecified-profile',
     [string]$AssetReportPath = 'build/asset-report.json',
     [string]$OutputPath = 'build/document-snapshot.json',
-    [string[]]$ContentPaths = @(
-        'content/00-introduction.md',
-        'content/01-literature-review.md',
-        'content/02-main.md',
-        'content/03-conclusion.md',
-        'content/90-bibliography.md',
-        'content/99-appendix.md',
-        'metadata.yaml',
-        'bibliography.bib'
-    )
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [string[]]$ContentPaths
 )
 
 $ErrorActionPreference = 'Stop'
@@ -56,6 +49,10 @@ function Assert-RecordedHash {
 }
 
 try {
+    if ($null -eq $ContentPaths -or $ContentPaths.Count -eq 0) {
+        throw 'ContentPaths must contain at least one explicitly declared document input.'
+    }
+
     if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
         $ProjectRoot = Split-Path -Parent $PSScriptRoot
     }

@@ -32,17 +32,10 @@
 Вывод native-инструментов декодируется в месте их запуска, поэтому CLI не меняет
 глобальную кодовую страницу консоли.
 
-Те же действия можно выполнять без меню:
-
-```powershell
-.\AutoNormoKontrol.cmd doctor   # проверить окружение
-.\AutoNormoKontrol.cmd install  # установить доступные зависимости через WinGet
-.\AutoNormoKontrol.cmd check    # тесты, затем Draft-сборка
-.\AutoNormoKontrol.cmd draft    # только черновой PDF
-.\AutoNormoKontrol.cmd status   # состояние аудита и последней сборки
-.\AutoNormoKontrol.cmd strict   # строгая fail-closed сборка
-.\AutoNormoKontrol.cmd open     # открыть последний PDF
-```
+Те же действия можно выполнять без меню. Канонический полный список команд и
+их точное назначение находится в
+[`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md); здесь не поддерживается
+второй независимый список.
 
 CLI запускается через небольшой `.cmd`-файл, поэтому пользователю не нужно
 менять системную PowerShell Execution Policy. Все операции выполняются локально
