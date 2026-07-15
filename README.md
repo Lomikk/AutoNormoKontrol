@@ -218,9 +218,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-traceability.
 - `compliance/external-acceptance.yaml` — решения кафедры и другие внешние факты;
 - поле `compliance.research_notes` активного manifest — результат поиска
   публичных локальных правил;
-- `sources/sto-susu-21-2008.txt` — извлечённый полный текст 56-страничного СТО;
-- `sources/SOURCE_MANIFEST.md` — хэши PDF/текста и воспроизводимая команда
-  извлечения без OCR.
+- `sources/susu/sto-21-2008/original/CTOsusu21-2008.pdf` — канонический
+  оригинал 56-страничного СТО;
+- `sources/susu/sto-21-2008/derived/standard.layout.txt` — воспроизводимая
+  текстовая копия для нормативной трассировки;
+- `sources/susu/sto-21-2008/manifest.json` — provenance, SHA-256 оригинала,
+  производных данных и приложений.
 
 ## Что редактировать
 
