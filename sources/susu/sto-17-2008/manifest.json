@@ -1,0 +1,56 @@
+{
+    "schema_version":  1,
+    "id":  "sto-17-2008",
+    "code":  "СТО ЮУрГУ 17-2008",
+    "source_listing":  "../provenance/Источник.yml",
+    "standard":  {
+                     "original":  "sto-17-2008/original/CTOsusu17-2008.pdf",
+                     "sha256":  "3d1418567b3f2e21ef6bf2c753a8b91667d1f89e9caf4d64957d9c1c905c38a8",
+                     "derived":  {
+                                     "role":  "normative-standard",
+                                     "source_sha256":  "3d1418567b3f2e21ef6bf2c753a8b91667d1f89e9caf4d64957d9c1c905c38a8",
+                                     "pages":  41,
+                                     "text":  "sto-17-2008/derived/standard.layout.txt",
+                                     "text_sha256":  "5ea3b6097f8db42ef2a4afca8800b920b4d941a13d3d843fe389eb17631455c2",
+                                     "text_bytes":  112816
+                                 }
+                 },
+    "attachments":  [
+                        {
+                            "file":  "sto-17-2008/attachments/original/titul referat.doc",
+                            "source_name":  "titul referat.doc",
+                            "media_type":  "doc",
+                            "sha256":  "ce73eb8fecdbad09b22d03ce71d33f92ffa59bb24d97b78d7a84c650bea68b4c",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-17-2008/attachments/converted/titul referat.docx",
+                            "source_name":  "titul referat.docx",
+                            "media_type":  "docx",
+                            "sha256":  "8fc778195b2e947ed858737295a3e972723d09d198ee25683121cd1b21892ee2",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-17-2008/attachments/rendered/titul referat.pdf",
+                            "source_name":  "titul referat.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "57264476d006d548a3efbdcb0a7a6f998fae8777e8cc0165526ff179efdda6a8",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "57264476d006d548a3efbdcb0a7a6f998fae8777e8cc0165526ff179efdda6a8",
+                                            "pages":  1,
+                                            "text":  "sto-17-2008/derived/forms/titul referat.layout.txt",
+                                            "text_sha256":  "d5ca2b6caa72c3453a888a8e1d8b7558e3ac779d47f05330c68f3bfc72ae8a79",
+                                            "text_bytes":  1894
+                                        }
+                        }
+                    ],
+    "interpretation_status":  "not-a-profile",
+    "notes":  [
+                  "This manifest identifies files and reproducible derivatives only.",
+                  "It does not classify normative requirements or determine document-profile applicability."
+              ]
+}

@@ -1,11 +1,47 @@
 [CmdletBinding()]
 param(
-    [string]$RegistryPath = 'compliance/requirements.json'
+    [string]$ProfilePath = '',
+    [string]$CanonicalInventoryPath = '',
+    [string]$RegistryPath = '',
+    [string[]]$ImplementationPaths = @(),
+    [string[]]$TestPaths = @(),
+    [string[]]$PromptPaths = @(),
+    [string[]]$SemanticPaths = @(),
+    [string[]]$ExternalPaths = @()
 )
 
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'profile.ps1')
+$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $ProfilePath
+if (-not $PSBoundParameters.ContainsKey('CanonicalInventoryPath')) {
+    $CanonicalInventoryPath = [string]$resolvedProfile.Data.compliance.canonical_inventory
+}
+if (-not $PSBoundParameters.ContainsKey('RegistryPath')) {
+    $RegistryPath = [string]$resolvedProfile.Data.compliance.requirements
+}
+if (-not $PSBoundParameters.ContainsKey('ImplementationPaths')) {
+    $ImplementationPaths = @($resolvedProfile.Data.compliance.implementation_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('TestPaths')) {
+    $TestPaths = @($resolvedProfile.Data.compliance.test_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('PromptPaths')) {
+    $PromptPaths = @($resolvedProfile.Data.compliance.prompt_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('SemanticPaths')) {
+    $SemanticPaths = @($resolvedProfile.Data.compliance.semantic_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('ExternalPaths')) {
+    $ExternalPaths = @($resolvedProfile.Data.compliance.external_paths)
+}
+$canonicalInventory = if ([System.IO.Path]::IsPathRooted($CanonicalInventoryPath)) {
+    $CanonicalInventoryPath
+}
+else {
+    Join-Path $root $CanonicalInventoryPath
+}
 $registry = if ([System.IO.Path]::IsPathRooted($RegistryPath)) {
     $RegistryPath
 }
@@ -167,6 +203,33 @@ if (-not (Test-Path -LiteralPath $registry -PathType Leaf)) {
     exit 1
 }
 
+if (-not (Test-Path -LiteralPath $canonicalInventory -PathType Leaf)) {
+    Write-Error "Canonical requirement inventory not found: $canonicalInventory"
+    exit 1
+}
+
+try {
+    $canonicalDocument = (Get-Content -LiteralPath $canonicalInventory -Raw -Encoding UTF8) |
+        ConvertFrom-Json
+}
+catch {
+    Write-Error "Canonical requirement inventory is not valid JSON: $($_.Exception.Message)"
+    exit 1
+}
+if ($canonicalDocument.schema_version -ne 1 -or
+    [string]$canonicalDocument.profile_id -ne $resolvedProfile.ProfileId -or
+    $canonicalDocument.requirement_ids -is [string]) {
+    Write-Error 'Canonical requirement inventory has an unsupported or inconsistent structure.'
+    exit 1
+}
+$canonicalIds = @($canonicalDocument.requirement_ids | ForEach-Object { [string]$_ })
+if ($canonicalIds.Count -eq 0 -or
+    @($canonicalIds | Where-Object { [string]::IsNullOrWhiteSpace($_) }).Count -gt 0 -or
+    @($canonicalIds | Group-Object | Where-Object Count -ne 1).Count -gt 0) {
+    Write-Error 'Canonical requirement inventory must contain unique non-empty IDs.'
+    exit 1
+}
+
 try {
     $registryDocument = (Get-Content -LiteralPath $registry -Raw -Encoding UTF8) | ConvertFrom-Json
 }
@@ -193,21 +256,16 @@ if ($requirements.Count -eq 0) {
 
 # Real implementation sources only. The registry and the coverage checker are
 # deliberately excluded so they cannot prove their own assertions.
-$implementationFiles = @(Get-TextFiles @('filters', 'styles', 'templates'))
-$implementationFiles += @(Get-TextFiles @(
-    'scripts/build.ps1',
-    'scripts/lint-content.ps1',
-    'scripts/validate-pdf.ps1'
-))
+$implementationFiles = @(Get-TextFiles $ImplementationPaths)
 $implementationFiles = @($implementationFiles | Sort-Object FullName -Unique)
 
 # Test evidence includes fixtures, executable compliance tests and PDF
 # postflight assertions. STO markers must occur in comments in these files.
-$testFiles = @(Get-TextFiles @('tests', 'scripts/test-compliance.ps1', 'scripts/validate-pdf.ps1'))
+$testFiles = @(Get-TextFiles $TestPaths)
 $testFiles = @($testFiles | Sort-Object FullName -Unique)
-$promptFiles = @(Get-TextFiles @('prompts'))
-$semanticFiles = @(Get-TextFiles @('compliance/semantic-review.yaml'))
-$externalFiles = @(Get-TextFiles @('compliance/external-acceptance.yaml'))
+$promptFiles = @(Get-TextFiles $PromptPaths)
+$semanticFiles = @(Get-TextFiles $SemanticPaths)
+$externalFiles = @(Get-TextFiles $ExternalPaths)
 
 $failures = New-Object System.Collections.Generic.List[string]
 $seenIds = @{}
@@ -218,13 +276,15 @@ $requiredRegistryFields = @(
     'id', 'summary', 'applicability', 'mechanism', 'status',
     'implementation_markers', 'test_markers', 'notes'
 )
-$mechanismStatuses = @{
-    'programmatic' = 'specified'
-    'ai' = 'semantic-review-required'
-    'external' = 'external-evidence-required'
-    'conflict' = 'blocked-pending-resolution'
-    'informational' = 'indexed'
-    'not-applicable' = 'not-applicable-coursework'
+$mechanismStatuses = @{}
+$mechanismStatusProperty = $registryDocument.metadata.PSObject.Properties['mechanism_statuses']
+if ($null -eq $mechanismStatusProperty -or $null -eq $mechanismStatusProperty.Value) {
+    Add-Failure $failures '<registry-metadata>' 'missing mechanism_statuses mapping'
+}
+else {
+    foreach ($property in $mechanismStatusProperty.Value.PSObject.Properties) {
+        $mechanismStatuses[$property.Name.ToLowerInvariant()] = ([string]$property.Value).ToLowerInvariant()
+    }
 }
 foreach ($requirement in $requirements) {
     $candidateId = [string](Get-PropertyValue -Object $requirement -Names @('id'))
@@ -286,64 +346,8 @@ foreach ($requirement in $requirements) {
     }
 }
 
-# Canonical inventory is generated independently of requirements.json. This
-# prevents a shortened registry from making its own coverage report green.
-$canonicalIds = New-Object System.Collections.Generic.List[string]
-foreach ($section in 1..9) { $canonicalIds.Add("STO-$section") }
-foreach ($clause in 1..5) { $canonicalIds.Add("STO-3.$clause") }
-foreach ($clause in 1..6) { $canonicalIds.Add("STO-5.$clause") }
-
-$section7Ranges = @{
-    '1' = 3
-    '2' = 3
-    '3' = 5
-    '4' = 2
-    '5' = 4
-    '6' = 0
-    '7' = 0
-    '8' = 3
-    '9' = 0
-    '10' = 0
-    '11' = 7
-    '12' = 9
-}
-foreach ($subsection in 1..12) {
-    $canonicalIds.Add("STO-7.$subsection")
-    $lastClause = [int]$section7Ranges[[string]$subsection]
-    if ($lastClause -gt 0) {
-        foreach ($clause in 1..$lastClause) {
-            $canonicalIds.Add("STO-7.$subsection.$clause")
-        }
-    }
-}
-
-$section8Ranges = @{
-    '1' = 7
-    '2' = 11
-    '3' = 3
-    '4' = 9
-    '5' = 12
-    '6' = 16
-    '7' = 18
-}
-foreach ($subsection in 1..7) {
-    $canonicalIds.Add("STO-8.$subsection")
-    foreach ($clause in 1..([int]$section8Ranges[[string]$subsection])) {
-        $canonicalIds.Add("STO-8.$subsection.$clause")
-    }
-}
-
-foreach ($clause in 1..4) { $canonicalIds.Add("STO-9.$clause") }
-foreach ($appendix in @(
-    'A1', 'A2', 'B1', 'B2', 'V', 'G', 'D', 'E1', 'E2',
-    'ZH', 'I1', 'I2', 'K', 'L', 'M', 'N', 'P'
-)) {
-    $canonicalIds.Add("STO-$appendix")
-}
-
-if ($canonicalIds.Count -ne 172) {
-    Add-Failure $failures '<canonical-inventory>' "internal canonical count is $($canonicalIds.Count), expected 172"
-}
+# The profile-owned canonical inventory is independent of requirements.json.
+# A shortened registry therefore cannot make its own coverage report green.
 $canonicalSet = @{}
 foreach ($id in $canonicalIds) { $canonicalSet[$id] = $true }
 $actualSet = @{}

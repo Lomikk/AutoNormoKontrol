@@ -1,0 +1,119 @@
+Source SHA256: 55a88322d6e39b21b643500080d34e9e99238f7aede3ee78d2225afafb066aee
+Text SHA256: f18dd346d94d2a9b4c79baea7ceab40e741e4736374bdd1f7c323c906bedc910
+
+[pdfinfo]
+Title:           
+Author:          Max
+Creator:         Acrobat PDFMaker 8.1 for Word
+Producer:        Acrobat Distiller 8.1.0 (Windows)
+CreationDate:    Thu Sep  4 13:30:24 2008 RTZ 4 (����)
+ModDate:         Thu Sep  4 13:59:04 2008 RTZ 4 (����)
+Custom Metadata: yes
+Metadata Stream: yes
+Tagged:          yes
+UserProperties:  no
+Suspects:        no
+Form:            AcroForm
+JavaScript:      no
+Pages:           56
+Encrypted:       no
+Page size:       595.22 x 842 pts (A4)
+Page rot:        0
+File size:       0 bytes
+Optimized:       no
+PDF version:     1.6
+
+[pdffonts]
+Syntax Error: No display font for 'ArialUnicode'
+name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no      22  0
+IDNNDA+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes     25  0
+Arial                                TrueType          WinAnsi          yes no  no    6136  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no      52  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no      49  0
+IHDLNP+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes     44  0
+IHDMGA+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes     39  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no     174  0
+IMECEO+TimesNewRomanPS-ItalicMT      TrueType          WinAnsi          yes yes no     171  0
+TimesNewRomanPS-BoldMT               TrueType          WinAnsi          no  no  no     169  0
+IMEBMO+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes    164  0
+IMECCO+TimesNewRomanPS-ItalicMT      CID TrueType      Identity-H       yes yes yes    159  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no     352  0
+IIGGPI+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes    347  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no     454  0
+IIOEKK+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes    449  0
+IIOEPK+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes    459  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no     633  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no     643  0
+IKJNIM+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes    628  0
+IKJNOL+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes    638  0
+ArialMT                              TrueType          WinAnsi          no  no  no     700  0
+IMECEO+TimesNewRomanPS-ItalicMT      TrueType          WinAnsi          yes yes no     653  0
+IKKIIC+SymbolMT                      CID TrueType      Identity-H       yes yes yes    648  0
+IKKLAF+BaskOldFace                   TrueType          WinAnsi          yes yes no     663  0
+IKKGLL+TimesNewRomanPS-ItalicMT      CID TrueType      Identity-H       yes yes yes    658  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    1998  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    1995  0
+IMOIKJ+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   1990  0
+IMOJBJ+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   1985  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    2199  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    2196  0
+INIOHH+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   2191  0
+INIOMH+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   2186  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    2394  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    2404  0
+IOBIGA+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   2389  0
+IOBIMP+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   2399  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    2682  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    2694  0
+IOMGLJ+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   2677  0
+IOMGPJ+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   2689  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3021  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3018  0
+JACKPE+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3013  0
+JACLEE+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3008  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3091  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3088  0
+JBFBAN+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3083  0
+JBFBHN+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3078  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3229  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3226  0
+JBNDKD+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3221  0
+JBNDPD+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3216  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3521  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3518  0
+ArialMT                              TrueType          WinAnsi          no  no  no    3530  0
+JDIGNJ+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3513  0
+JDIHHI+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3508  0
+JDIHLI+Wingdings-Regular             CID TrueType      Identity-H       yes yes no    3526  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3666  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3672  0
+JECNOF+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3661  0
+JECOFF+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3677  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3836  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3848  0
+JEODAF+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3829  0
+JEODGF+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3843  0
+TimesNewRomanPS-ItalicMT             TrueType          WinAnsi          no  no  no    3834  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    3978  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    3991  0
+JFOOCI+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   3973  0
+JFOOII+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   3986  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    4967  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    4964  0
+JGMFMF+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   4959  0
+JGMGAG+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   4954  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    5108  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    5105  0
+JHICOJ+TimesNewRomanPS-BoldItalicMT  TrueType          WinAnsi          yes yes no    5102  0
+JHIDPE+ArialNarrow-Italic            TrueType          WinAnsi          yes yes no    5099  0
+TimesNewRomanPS-ItalicMT             TrueType          WinAnsi          no  no  no    5097  0
+JHICDI+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   5092  0
+JHICKH+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   5087  0
+JHIDNE+ArialNarrow-Italic            CID TrueType      Identity-H       yes yes yes   5082  0
+JHICOI+TimesNewRomanPS-BoldItalicMT  CID TrueType      Identity-H       yes yes yes   5077  0
+IHDMBP+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes no    5403  0
+IDNNGA+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes no    5400  0
+JIOBEP+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes   5395  0
+JIOBKP+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes   5390  0

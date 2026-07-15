@@ -36,8 +36,10 @@
 Обязательный контекст:
 
 - `AGENTS.md`;
-- `prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md`;
-- `compliance/requirements.json`;
+- `profiles/active-profile.txt`;
+- указанный им `profiles/<profile-id>/profile.yaml`;
+- файлы из полей `compliance.system_prompt` и `compliance.requirements`
+  выбранного manifest;
 - `README.md`;
 - `metadata.yaml`;
 - изменяемый файл `content/*.md`;
@@ -119,8 +121,10 @@ Aider удобнее ручного копирования, потому что 
 Пример команд внутри Aider:
 
 ```text
-/read-only AGENTS.md prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md
-/read-only compliance/requirements.json README.md
+/read-only AGENTS.md profiles/active-profile.txt
+/read-only profiles/susu-hsem-ceit-coursework-v1/profile.yaml README.md
+/read-only profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md
+/read-only profiles/susu-hsem-ceit-coursework-v1/compliance/requirements.json
 /read-only metadata.yaml bibliography.bib
 /add content/02-main.md
 /copy-context Измени только content/02-main.md по приложенным фактам. Не трогай журналы приёмки.

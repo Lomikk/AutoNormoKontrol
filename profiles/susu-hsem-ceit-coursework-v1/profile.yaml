@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "profile_id": "susu-hsem-ceit-coursework-v1",
+  "document_type": "coursework",
+  "inputs": {
+    "content": [
+      "content/00-introduction.md",
+      "content/01-literature-review.md",
+      "content/02-main.md",
+      "content/03-conclusion.md",
+      "content/90-bibliography.md",
+      "content/99-appendix.md"
+    ],
+    "metadata": "metadata.yaml",
+    "bibliography": "bibliography.bib",
+    "asset_manifest": "assets/manifest.json"
+  },
+  "compliance": {
+    "canonical_inventory": "profiles/susu-hsem-ceit-coursework-v1/compliance/canonical-requirement-ids.json",
+    "requirements": "profiles/susu-hsem-ceit-coursework-v1/compliance/requirements.json",
+    "review_inventory": "profiles/susu-hsem-ceit-coursework-v1/compliance/review-inventory.yaml",
+    "semantic_review": "compliance/semantic-review.yaml",
+    "external_acceptance": "compliance/external-acceptance.yaml",
+    "semantic_review_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml",
+    "external_acceptance_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/external-acceptance.yaml",
+    "system_prompt": "profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md",
+    "format_spec": "format-spec.yaml",
+    "research_notes": "profiles/susu-hsem-ceit-coursework-v1/compliance/research-notes.md",
+    "implementation_paths": [
+      "profiles/susu-hsem-ceit-coursework-v1/filters",
+      "profiles/susu-hsem-ceit-coursework-v1/styles",
+      "profiles/susu-hsem-ceit-coursework-v1/templates",
+      "profiles/susu-hsem-ceit-coursework-v1/postflight",
+      "scripts/build.ps1",
+      "scripts/lint-content.ps1"
+    ],
+    "test_paths": [
+      "tests",
+      "scripts/test-compliance.ps1",
+      "profiles/susu-hsem-ceit-coursework-v1/postflight/validate-pdf.ps1"
+    ],
+    "prompt_paths": [
+      "profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md"
+    ],
+    "semantic_paths": [
+      "compliance/semantic-review.yaml"
+    ],
+    "external_paths": [
+      "compliance/external-acceptance.yaml"
+    ]
+  },
+  "render": {
+    "pandoc_from": "markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute",
+    "template": "profiles/susu-hsem-ceit-coursework-v1/templates/susu-coursework.tex",
+    "style_files": [
+      "profiles/susu-hsem-ceit-coursework-v1/styles/susu-coursework.sty"
+    ],
+    "lua_filters": [
+      "profiles/susu-hsem-ceit-coursework-v1/filters/sto-validate.lua",
+      "profiles/susu-hsem-ceit-coursework-v1/filters/susu.lua"
+    ],
+    "tex_input_paths": [
+      ".",
+      "profiles/susu-hsem-ceit-coursework-v1/styles"
+    ],
+    "postflight": "profiles/susu-hsem-ceit-coursework-v1/postflight/validate-pdf.ps1"
+  },
+  "assets": {
+    "report": "build/asset-report.json",
+    "output_directory": "build/assets"
+  },
+  "outputs": {
+    "tex": "build/coursework.tex",
+    "pdf": "build/coursework.pdf"
+  },
+  "reports": {
+    "document_snapshot": "build/document-snapshot.json",
+    "build_report": "build/build-report.json",
+    "postflight": "build/compliance-report.json",
+    "traceability_json": "build/sto-traceability.json",
+    "traceability_markdown": "build/sto-traceability.md"
+  },
+  "capabilities": {
+    "assignment": "required",
+    "abstract": "required",
+    "figures": "optional",
+    "tables": "optional",
+    "equations": "optional",
+    "appendices": "optional"
+  }
+}

@@ -1,0 +1,87 @@
+{
+    "schema_version":  1,
+    "id":  "sto-04-2008",
+    "code":  "СТО ЮУрГУ 04-2008",
+    "source_listing":  "../provenance/Источник.yml",
+    "standard":  {
+                     "original":  "sto-04-2008/original/CTOsusu04-2008.pdf",
+                     "sha256":  "db3a4ca969781fd8cbfa3899adfd93e18509cb5a8cc9fd4f7158caabdcec859a",
+                     "derived":  {
+                                     "role":  "normative-standard",
+                                     "source_sha256":  "db3a4ca969781fd8cbfa3899adfd93e18509cb5a8cc9fd4f7158caabdcec859a",
+                                     "pages":  56,
+                                     "text":  "sto-04-2008/derived/standard.layout.txt",
+                                     "text_sha256":  "6de1329acbd1f54ff353a8e4f1150c29bb8014058535ccef21b0dcb88303f5f8",
+                                     "text_bytes":  197315
+                                 }
+                 },
+    "attachments":  [
+                        {
+                            "file":  "sto-04-2008/attachments/original/form task diploma.doc",
+                            "source_name":  "form task diploma.doc",
+                            "media_type":  "doc",
+                            "sha256":  "9dc51362f7cbd1861cbfa0eaa677d7e708ae0773915fb6d188ae43920d7203e7",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-04-2008/attachments/converted/form task diploma.docx",
+                            "source_name":  "form task diploma.docx",
+                            "media_type":  "docx",
+                            "sha256":  "5566e9ddf534e475a109a4766f1747cf5d9edcdc1740875233ae320822a7cabf",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-04-2008/attachments/rendered/form task diploma.pdf",
+                            "source_name":  "form task diploma.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "3c2a60e90caa90def9702bf18b22dfe3849441868b70715370da82b12e1875aa",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "3c2a60e90caa90def9702bf18b22dfe3849441868b70715370da82b12e1875aa",
+                                            "pages":  4,
+                                            "text":  "sto-04-2008/derived/forms/form task diploma.layout.txt",
+                                            "text_sha256":  "8ce16ffdd676c71eb0c05895ea28bcc383e38e8e28d5d0ff6e4b8fcd119f389c",
+                                            "text_bytes":  8196
+                                        }
+                        },
+                        {
+                            "file":  "sto-04-2008/attachments/original/form task papers and projects.doc",
+                            "source_name":  "form task papers and projects.doc",
+                            "media_type":  "doc",
+                            "sha256":  "038ddcda49677aa71cd103151e0d37669aba6d6322d6cfd45fa2e1525644ef8f",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-04-2008/attachments/converted/form task papers and projects.docx",
+                            "source_name":  "form task papers and projects.docx",
+                            "media_type":  "docx",
+                            "sha256":  "d07bc9ea97a21cdea7a774f9b86abe41c59be45a0508a4f2d4181bc459aae804",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-04-2008/attachments/rendered/form task papers and projects.pdf",
+                            "source_name":  "form task papers and projects.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "f6dea009a1ee1c15aac715807a587c452a981ce6f334932c6a1a511313084102",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "f6dea009a1ee1c15aac715807a587c452a981ce6f334932c6a1a511313084102",
+                                            "pages":  2,
+                                            "text":  "sto-04-2008/derived/forms/form task papers and projects.layout.txt",
+                                            "text_sha256":  "7e30b81a2c83a747beb8a594886b2dd06492fb447d085d1d9d9e14ba2b80fbd0",
+                                            "text_bytes":  4660
+                                        }
+                        }
+                    ],
+    "interpretation_status":  "not-a-profile",
+    "notes":  [
+                  "This manifest identifies files and reproducible derivatives only.",
+                  "It does not classify normative requirements or determine document-profile applicability."
+              ]
+}

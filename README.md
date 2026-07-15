@@ -104,6 +104,49 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-compliance.ps
   `content-hash`;
 - `build/compliance-report.json` — результаты физической проверки PDF.
 
+## Формальный контракт профиля
+
+Текущая сборка выбирается не набором путей, зашитых в `build.ps1`, а единственной
+строкой в `profiles/active-profile.txt`. Она указывает на manifest
+`profiles/susu-hsem-ceit-coursework-v1/profile.yaml`. Manifest задаёт стабильный
+ID и тип документа, порядок Markdown-файлов, нормативный реестр, журналы
+приёмки, canonical review inventory, шаблон, фильтры, стили, capabilities,
+выходы и отчёты. Формат описан точной схемой
+`schemas/profile-v1.schema.json`.
+
+Manifest записан в JSON-совместимом подмножестве YAML 1.2. Это позволяет
+PowerShell 5.1 проверять его без стороннего YAML-модуля. Неизвестное поле,
+неподдерживаемая версия, отсутствующий источник или путь за пределы репозитория
+останавливают сборку. Указатель обязан содержать ровно один существующий путь
+вида `profiles/<profile-id>/profile.yaml`. Поиск «первого найденного профиля» и
+неявный fallback намеренно отсутствуют.
+
+Каталог профиля хранит неизменяемую реализацию правил: canonical inventory,
+`requirements.json`, review templates, системную инструкцию, Lua-фильтры,
+LaTeX-шаблон, стиль и PDF-postflight. Корень workspace хранит данные конкретной
+работы: `content/`, `metadata.yaml`, `bibliography.bib`, `assets/`,
+`format-spec.yaml` и активные `compliance/semantic-review.yaml` и
+`compliance/external-acceptance.yaml`. Последние нельзя переиспользовать как
+готовое доказательство для другой работы.
+
+`profile_digest` связывает manifest с нормативным реестром, review inventory,
+системной инструкцией, шаблоном, стилями, Lua-фильтрами и PDF-postflight. ID и
+digest записываются в `build/build-report.json` и отчёт трассировки. Это не
+заменяет `content-hash`: первый идентифицирует реализацию правил, второй —
+конкретный проверяемый снимок содержания и ассетов.
+
+Для диагностического запуска другого явно указанного manifest предусмотрен
+параметр разработчика:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\build.ps1 `
+  -Mode Draft -ProfilePath profiles/<profile-id>/profile.yaml
+```
+
+Публичное переключение профилей и второй тип документа относятся к следующим
+этапам roadmap; наличие этого параметра само по себе не объявляет новый профиль
+поддерживаемым.
+
 ## Воспроизводимые ассеты
 
 Каталог `assets/` содержит только версионируемые исходники конкретной работы:
@@ -133,8 +176,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\test-compliance.ps
 
 ## Как отслеживается каждый пункт СТО
 
-Источник трассировки — `compliance/requirements.json`. Для каждого пункта там
-зафиксированы применимость, механизм закрытия, статус, реализация и тест.
+Источник трассировки задаётся полем `compliance.requirements` активного manifest.
+Для текущего профиля это
+`profiles/susu-hsem-ceit-coursework-v1/compliance/requirements.json`. Для каждого
+пункта там зафиксированы применимость, механизм закрытия, статус, реализация и
+тест. Exact-set всех 172 ID хранится рядом в
+`canonical-requirement-ids.json`, а не зашивается в общий движок.
 
 В реальном обработчике и тесте размещается тот же маркер, например:
 
@@ -163,12 +210,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-traceability.
 
 - `AGENTS.md` — автоматически обнаруживаемый контракт работы агента в
   репозитории;
-- `prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md` — обязательная системная
-  инструкция для ИИ;
+- `profiles/active-profile.txt` — единственный явный выбор manifest;
+- поле `compliance.system_prompt` активного manifest — обязательная системная
+  инструкция для ИИ текущего профиля;
 - `compliance/semantic-review.yaml` — смысловой аудит с цитатами/доказательствами
   и хэшем содержания;
 - `compliance/external-acceptance.yaml` — решения кафедры и другие внешние факты;
-- `compliance/research-notes.md` — результат поиска публичных локальных правил;
+- поле `compliance.research_notes` активного manifest — результат поиска
+  публичных локальных правил;
 - `sources/sto-susu-21-2008.txt` — извлечённый полный текст 56-страничного СТО;
 - `sources/SOURCE_MANIFEST.md` — хэши PDF/текста и воспроизводимая команда
   извлечения без OCR.
@@ -180,6 +229,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-traceability.
 - `content/*.md` — только содержание;
 - `bibliography.bib` — только реально использованные источники;
 - `format-spec.yaml` — активные решения профиля и их происхождение.
+
+Карта переноса старых путей и правила обновления workspace описаны в
+`docs/MIGRATION_R3.md`.
 
 Базовый вариант пункта 8.1.3 — Times New Roman 14 пт, одинарный интервал и
 абзацный отступ 0,7 см. Полуторный интервал и 1,5 см допустимы только после

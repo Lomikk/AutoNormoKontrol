@@ -1,13 +1,53 @@
 [CmdletBinding()]
 param(
-    [string]$RegistryPath = 'compliance/requirements.json',
-    [string]$JsonOutputPath = 'build/sto-traceability.json',
-    [string]$MarkdownOutputPath = 'build/sto-traceability.md'
+    [string]$ProfilePath = '',
+    [string]$RegistryPath = '',
+    [string]$JsonOutputPath = '',
+    [string]$MarkdownOutputPath = '',
+    [string]$ProfileId = '',
+    [string]$ProfileDigest = '',
+    [string[]]$ImplementationPaths = @(),
+    [string[]]$TestPaths = @(),
+    [string[]]$PromptPaths = @(),
+    [string[]]$SemanticPaths = @(),
+    [string[]]$ExternalPaths = @()
 )
 
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
+. (Join-Path $PSScriptRoot 'profile.ps1')
+$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $ProfilePath
+if (-not $PSBoundParameters.ContainsKey('RegistryPath')) {
+    $RegistryPath = [string]$resolvedProfile.Data.compliance.requirements
+}
+if (-not $PSBoundParameters.ContainsKey('JsonOutputPath')) {
+    $JsonOutputPath = [string]$resolvedProfile.Data.reports.traceability_json
+}
+if (-not $PSBoundParameters.ContainsKey('MarkdownOutputPath')) {
+    $MarkdownOutputPath = [string]$resolvedProfile.Data.reports.traceability_markdown
+}
+if (-not $PSBoundParameters.ContainsKey('ProfileId')) {
+    $ProfileId = $resolvedProfile.ProfileId
+}
+if (-not $PSBoundParameters.ContainsKey('ProfileDigest')) {
+    $ProfileDigest = $resolvedProfile.ProfileDigest
+}
+if (-not $PSBoundParameters.ContainsKey('ImplementationPaths')) {
+    $ImplementationPaths = @($resolvedProfile.Data.compliance.implementation_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('TestPaths')) {
+    $TestPaths = @($resolvedProfile.Data.compliance.test_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('PromptPaths')) {
+    $PromptPaths = @($resolvedProfile.Data.compliance.prompt_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('SemanticPaths')) {
+    $SemanticPaths = @($resolvedProfile.Data.compliance.semantic_paths)
+}
+if (-not $PSBoundParameters.ContainsKey('ExternalPaths')) {
+    $ExternalPaths = @($resolvedProfile.Data.compliance.external_paths)
+}
 $registry = if ([System.IO.Path]::IsPathRooted($RegistryPath)) {
     $RegistryPath
 }
@@ -247,20 +287,15 @@ if ($requirements.Count -eq 0) {
 }
 
 # Evidence scopes intentionally mirror scripts/check-coverage.ps1. This report
-# and compliance/requirements.json are excluded: neither may prove an assertion.
-$implementationFiles = @(Get-TextFiles @('filters', 'styles', 'templates'))
-$implementationFiles += @(Get-TextFiles @(
-    'scripts/build.ps1',
-    'scripts/lint-content.ps1',
-    'scripts/validate-pdf.ps1'
-))
+# and the profile requirements registry are excluded: neither may prove an assertion.
+$implementationFiles = @(Get-TextFiles $ImplementationPaths)
 $implementationFiles = @($implementationFiles | Sort-Object FullName -Unique)
 
-$testFiles = @(Get-TextFiles @('tests', 'scripts/test-compliance.ps1', 'scripts/validate-pdf.ps1'))
+$testFiles = @(Get-TextFiles $TestPaths)
 $testFiles = @($testFiles | Sort-Object FullName -Unique)
-$promptFiles = @(Get-TextFiles @('prompts'))
-$semanticFiles = @(Get-TextFiles @('compliance/semantic-review.yaml'))
-$externalFiles = @(Get-TextFiles @('compliance/external-acceptance.yaml'))
+$promptFiles = @(Get-TextFiles $PromptPaths)
+$semanticFiles = @(Get-TextFiles $SemanticPaths)
+$externalFiles = @(Get-TextFiles $ExternalPaths)
 
 $allEvidenceFiles = @(
     $implementationFiles + $testFiles + $promptFiles + $semanticFiles + $externalFiles |
@@ -376,6 +411,8 @@ $counts = [ordered]@{
 
 $report = [pscustomobject][ordered]@{
     schema_version = 1
+    profile_id = $ProfileId
+    profile_digest = $ProfileDigest
     registry = [pscustomobject][ordered]@{
         file = Get-RelativeProjectPath $registry
         sha256 = (Get-FileHash -LiteralPath $registry -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -394,7 +431,16 @@ $report = [pscustomobject][ordered]@{
 }
 
 $markdown = New-Object System.Collections.Generic.List[string]
-$markdown.Add('# STO SUSU 21-2008 requirement traceability')
+$traceabilityTitle = if ($null -ne $registryDocument.metadata -and
+    -not [string]::IsNullOrWhiteSpace([string]$registryDocument.metadata.standard)) {
+    [string]$registryDocument.metadata.standard + ' requirement traceability'
+}
+else {
+    'Requirement traceability'
+}
+$markdown.Add('# ' + $traceabilityTitle)
+$markdown.Add('')
+$markdown.Add(('Profile: `{0}` (`sha256:{1}`).' -f $ProfileId, $ProfileDigest))
 $markdown.Add('')
 $markdown.Add(('Registry: `{0}` (`sha256:{1}`).' -f $report.registry.file, $report.registry.sha256))
 $markdown.Add('')

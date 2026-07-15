@@ -1,0 +1,149 @@
+{
+    "schema_version":  1,
+    "id":  "sto-22-2008",
+    "code":  "СТО ЮУрГУ 22-2008",
+    "source_listing":  "../provenance/Источник.yml",
+    "standard":  {
+                     "original":  "sto-22-2008/original/CTOsusu22-2008.pdf",
+                     "sha256":  "c11b77f774ab23d2241325084e8a44c1a57b6621f131cbfe48a5913d6af99e1a",
+                     "derived":  {
+                                     "role":  "normative-standard",
+                                     "source_sha256":  "c11b77f774ab23d2241325084e8a44c1a57b6621f131cbfe48a5913d6af99e1a",
+                                     "pages":  35,
+                                     "text":  "sto-22-2008/derived/standard.layout.txt",
+                                     "text_sha256":  "3395d87b6d053415190f218d65f746a2a83ca8f1c2218bd6ce3e263b7532fd9e",
+                                     "text_bytes":  106062
+                                 }
+                 },
+    "attachments":  [
+                        {
+                            "file":  "sto-22-2008/attachments/original/cto_22_pril_a.doc",
+                            "source_name":  "cto_22_pril_a.doc",
+                            "media_type":  "doc",
+                            "sha256":  "28e0293bc7ea1bbffd9da465138b9eb9012ed04506efa219c0d656924cede3a6",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/converted/cto_22_pril_a.docx",
+                            "source_name":  "cto_22_pril_a.docx",
+                            "media_type":  "docx",
+                            "sha256":  "155f84544e9af716352db838205da737758e1cde8c3a997e13fd11f850644610",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/rendered/cto_22_pril_a.pdf",
+                            "source_name":  "cto_22_pril_a.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "791b9f9ceec499ad79dd7e94fc8b6a4dd0adf7db3aab9dd4351d2bc768d69002",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "791b9f9ceec499ad79dd7e94fc8b6a4dd0adf7db3aab9dd4351d2bc768d69002",
+                                            "pages":  2,
+                                            "text":  "sto-22-2008/derived/forms/cto_22_pril_a.layout.txt",
+                                            "text_sha256":  "9a49b414dbb6885eb96f959926a3ea089bd9fe32944fc041cb0033cf01f608e6",
+                                            "text_bytes":  4506
+                                        }
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/original/cto_22_pril_b.doc",
+                            "source_name":  "cto_22_pril_b.doc",
+                            "media_type":  "doc",
+                            "sha256":  "ab7433129f9d4de25ba8aff2d81e3b52edf10cb7f2e12356e23a8f630ada5fe6",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/converted/cto_22_pril_b.docx",
+                            "source_name":  "cto_22_pril_b.docx",
+                            "media_type":  "docx",
+                            "sha256":  "a57167d10316d82add542e319084e6162f667af3381e2de36ddc3596144bf492",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/rendered/cto_22_pril_b.pdf",
+                            "source_name":  "cto_22_pril_b.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "b2299ccd9b993ea996a46f26f50973953f0c1174cdf51606e3eb57841961c6af",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "b2299ccd9b993ea996a46f26f50973953f0c1174cdf51606e3eb57841961c6af",
+                                            "pages":  2,
+                                            "text":  "sto-22-2008/derived/forms/cto_22_pril_b.layout.txt",
+                                            "text_sha256":  "06845bd6a917bc9996e7d872ec3477be0e482cd99ae738d170c53e80dbeb76ff",
+                                            "text_bytes":  5058
+                                        }
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/original/cto_22_pril_d.doc",
+                            "source_name":  "cto_22_pril_d.doc",
+                            "media_type":  "doc",
+                            "sha256":  "37b46ab16de55d6f497e44b426076d5c2182049ae1563b5d6cc4a169c6d9033c",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/converted/cto_22_pril_d.docx",
+                            "source_name":  "cto_22_pril_d.docx",
+                            "media_type":  "docx",
+                            "sha256":  "ff0b75e679bb507cebf6fc3077109ecaabb002f3ae5006870436eeb287833dc4",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/rendered/cto_22_pril_d.pdf",
+                            "source_name":  "cto_22_pril_d.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "a59aae8d3f6e88ea86f613160bb1cdd65d3b910d5cd058f3449ac1fbc038d119",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "a59aae8d3f6e88ea86f613160bb1cdd65d3b910d5cd058f3449ac1fbc038d119",
+                                            "pages":  1,
+                                            "text":  "sto-22-2008/derived/forms/cto_22_pril_d.layout.txt",
+                                            "text_sha256":  "8cd7c4074de3d089b71d09c99d34df0b23a9a160b455428e360e73439717c673",
+                                            "text_bytes":  600
+                                        }
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/original/cto_22_pril_g.doc",
+                            "source_name":  "cto_22_pril_g.doc",
+                            "media_type":  "doc",
+                            "sha256":  "b2f121dcaea052a2445e60b0ef167b5b9afcf6b8ac6d875ba900d989599db180",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/converted/cto_22_pril_g.docx",
+                            "source_name":  "cto_22_pril_g.docx",
+                            "media_type":  "docx",
+                            "sha256":  "513c6c0f12c8033290167d5ea8b826e9d7e5fc7f5eb31f64fbab511787aa3a08",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-22-2008/attachments/rendered/cto_22_pril_g.pdf",
+                            "source_name":  "cto_22_pril_g.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "cc4f33c2b4b81f6665ad0984d4152eb8ff1c9d09ce48de133d918c83af2312d5",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "cc4f33c2b4b81f6665ad0984d4152eb8ff1c9d09ce48de133d918c83af2312d5",
+                                            "pages":  1,
+                                            "text":  "sto-22-2008/derived/forms/cto_22_pril_g.layout.txt",
+                                            "text_sha256":  "93c0b145fe1a625bba827599935958e13a2c19b4074f157fbcf144b0286ee196",
+                                            "text_bytes":  2774
+                                        }
+                        }
+                    ],
+    "interpretation_status":  "not-a-profile",
+    "notes":  [
+                  "This manifest identifies files and reproducible derivatives only.",
+                  "It does not classify normative requirements or determine document-profile applicability."
+              ]
+}

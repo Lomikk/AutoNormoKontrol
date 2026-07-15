@@ -4,45 +4,6 @@
 local errors = {}
 local warnings = {}
 
--- STO-AI-GATE: exact semantic-review contract.  The release gate checks the
--- complete set, not merely the records that happen to remain in the YAML.
-local required_semantic_rule_ids = {
-  ['STO-5.1'] = true, ['STO-5.4'] = true, ['STO-5.5'] = true,
-  ['STO-7.3.2'] = true, ['STO-7.3.3'] = true, ['STO-7.3.4'] = true,
-  ['STO-7.5.1'] = true, ['STO-7.5.2'] = true, ['STO-7.5.3'] = true,
-  ['STO-7.5.4'] = true, ['STO-7.6'] = true, ['STO-7.7'] = true,
-  ['STO-7.8.1'] = true, ['STO-7.8.2'] = true, ['STO-7.8.3'] = true,
-  ['STO-7.9'] = true, ['STO-7.10'] = true, ['STO-7.11.1'] = true,
-  ['STO-7.11.4'] = true, ['STO-7.12.1'] = true, ['STO-7.12.2'] = true,
-  ['STO-8.1.7'] = true, ['STO-8.2.1'] = true, ['STO-8.2.5'] = true,
-  ['STO-8.2.8'] = true, ['STO-8.2.10'] = true, ['STO-8.2.11'] = true,
-  ['STO-8.4.1'] = true, ['STO-8.4.2'] = true, ['STO-8.4.3'] = true,
-  ['STO-8.4.4'] = true, ['STO-8.4.5'] = true, ['STO-8.4.6'] = true,
-  ['STO-8.4.7'] = true, ['STO-8.4.8'] = true, ['STO-8.4.9'] = true,
-  ['STO-8.5.1'] = true, ['STO-8.5.3'] = true, ['STO-8.5.4'] = true,
-  ['STO-8.5.5'] = true, ['STO-8.5.6'] = true, ['STO-8.5.7'] = true,
-  ['STO-8.6.1'] = true, ['STO-8.6.5'] = true, ['STO-8.6.6'] = true,
-  ['STO-8.6.9'] = true, ['STO-8.6.10'] = true, ['STO-8.6.11'] = true,
-  ['STO-8.6.12'] = true, ['STO-8.6.14'] = true, ['STO-8.6.15'] = true,
-  ['STO-8.7.3'] = true, ['STO-8.7.4'] = true, ['STO-8.7.7'] = true,
-  ['STO-8.7.8'] = true, ['STO-8.7.9'] = true, ['STO-8.7.15'] = true,
-  ['STO-8.7.16'] = true, ['STO-8.7.17'] = true, ['STO-8.7.18'] = true,
-}
-
--- STO-EXT-GATE: exact external-acceptance contract, including deliberately
--- split decisions where one STO clause has several independently provable facts.
-local required_external_item_ids = {
-  ['STO-1'] = true, ['STO-2'] = true, ['STO-5.1'] = true,
-  ['STO-5.3'] = true, ['STO-6'] = true, ['STO-7.1.1'] = true,
-  ['STO-7.1.1-document-code'] = true, ['STO-A1'] = true,
-  ['STO-7.2.1'] = true, ['STO-7.3.1'] = true, ['STO-7.5.3'] = true,
-  ['STO-7.11.3'] = true, ['STO-8.2.1'] = true,
-  ['STO-8.1.3-backend'] = true, ['STO-8.1.3-spacing'] = true,
-  ['STO-8.1.2-physical'] = true, ['STO-8.1.5'] = true,
-  ['STO-8.5.8'] = true, ['STO-8.5.9'] = true, ['STO-8.7.1'] = true,
-  ['STO-8.7.17'] = true, ['STO-K'] = true, ['STO-2008-CURRENCY'] = true,
-}
-
 local function add_error(clause, message)
   errors[#errors + 1] = clause .. ': ' .. message
 end
@@ -120,6 +81,26 @@ end
 local function meta_bool(value)
   local normalized = lower(text(value))
   return normalized == 'true' or normalized == 'yes' or normalized == '1'
+end
+
+local function profile_inventory_set(clause, label, values)
+  local result = {}
+  local count = 0
+  for _, value in ipairs(values or {}) do
+    local identifier = text(value)
+    if identifier == '' then
+      add_error(clause, label .. ': empty id in profile inventory')
+    elseif result[identifier] then
+      add_error(clause, label .. ': duplicate profile id ' .. identifier)
+    else
+      result[identifier] = true
+      count = count + 1
+    end
+  end
+  if count == 0 then
+    add_error(clause, label .. ': profile inventory is missing or empty')
+  end
+  return result
 end
 
 local function table_has_value(value)
@@ -443,6 +424,20 @@ local function scan_blocks(blocks, context)
 end
 
 local function validate_metadata(doc, mode)
+  -- STO-AI-GATE, STO-EXT-GATE: exact review inventories are profile data,
+  -- never hard-coded renderer state and never inferred from mutable journals.
+  local profile_inventory = doc.meta['profile-inventory'] or {}
+  local inventory_profile_id = text(profile_inventory['profile-id'])
+  if inventory_profile_id == '' then
+    add_error('STO-AI-GATE', 'profile inventory has no profile-id')
+  elseif inventory_profile_id ~= text(doc.meta['active-profile-id']) then
+    add_error('STO-AI-GATE', 'profile inventory belongs to another active profile')
+  end
+  local required_semantic_rule_ids = profile_inventory_set(
+    'STO-AI-GATE', 'semantic-rule-ids', profile_inventory['semantic-rule-ids'])
+  local required_external_item_ids = profile_inventory_set(
+    'STO-EXT-GATE', 'external-item-ids', profile_inventory['external-item-ids'])
+
   local function required(clause, label, value)
     if is_placeholder(value) then
       if mode == 'strict' then
@@ -544,6 +539,9 @@ local function validate_metadata(doc, mode)
     local external = doc.meta['external-acceptance'] or {}
     validate_exact_record_set('STO-EXT-GATE', 'external-acceptance.items',
       external.items, required_external_item_ids)
+    if text(external['profile-id']) ~= inventory_profile_id then
+      add_error('STO-EXT-GATE', 'external acceptance belongs to another profile')
+    end
     if text(external.status) ~= 'accepted' then
       add_error('STO-EXT-GATE', 'внешние реквизиты/исключения не подтверждены')
     end

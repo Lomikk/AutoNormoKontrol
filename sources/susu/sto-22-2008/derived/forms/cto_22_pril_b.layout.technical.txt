@@ -1,0 +1,36 @@
+Source SHA256: b2299ccd9b993ea996a46f26f50973953f0c1174cdf51606e3eb57841961c6af
+Text SHA256: 06845bd6a917bc9996e7d872ec3477be0e482cd99ae738d170c53e80dbeb76ff
+
+[pdfinfo]
+Title:           
+Subject:         
+Keywords:        
+Author:          user
+Creator:         Acrobat PDFMaker 25 для Word
+Producer:        Adobe PDF Library 25.1.243
+CreationDate:    Wed Jul 15 07:54:20 2026 RTZ 4 (����)
+ModDate:         Wed Jul 15 07:54:20 2026 RTZ 4 (����)
+Custom Metadata: yes
+Metadata Stream: yes
+Tagged:          yes
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           2
+Encrypted:       no
+Page size:       595.2 x 841.92 pts (A4)
+Page rot:        0
+File size:       0 bytes
+Optimized:       yes
+PDF version:     1.6
+
+[pdffonts]
+name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+KSRCJY+TimesNewRomanPSMT             CID TrueType      Identity-H       yes yes yes    302  0
+SRQTRI+TimesNewRomanPS-BoldMT        CID TrueType      Identity-H       yes yes yes    307  0
+HYBFTE+SymbolMT                      CID TrueType      Identity-H       yes yes yes    312  0
+KFPXJY+TimesNewRomanPS-BoldMT        TrueType          WinAnsi          yes yes yes    314  0
+VTELHC+TimesNewRomanPSMT             TrueType          WinAnsi          yes yes yes    316  0
+GUMZFG+ArialMT                       TrueType          WinAnsi          yes yes yes    318  0

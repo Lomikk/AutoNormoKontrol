@@ -1,0 +1,56 @@
+{
+    "schema_version":  1,
+    "id":  "sto-19-2008",
+    "code":  "СТО ЮУрГУ 19-2008",
+    "source_listing":  "../provenance/Источник.yml",
+    "standard":  {
+                     "original":  "sto-19-2008/original/CTOsusu19-2008.pdf",
+                     "sha256":  "14c930ee2225d88c3b1e5524c8948c016ac738bd1510b07393d72672f2e5d620",
+                     "derived":  {
+                                     "role":  "normative-standard",
+                                     "source_sha256":  "14c930ee2225d88c3b1e5524c8948c016ac738bd1510b07393d72672f2e5d620",
+                                     "pages":  30,
+                                     "text":  "sto-19-2008/derived/standard.layout.txt",
+                                     "text_sha256":  "57c56829476c17b1695e9be874a535cdea48c1bdd8014df3f5c917b36b23434f",
+                                     "text_bytes":  111455
+                                 }
+                 },
+    "attachments":  [
+                        {
+                            "file":  "sto-19-2008/attachments/original/titul_nir.doc",
+                            "source_name":  "titul_nir.doc",
+                            "media_type":  "doc",
+                            "sha256":  "d1378ee0e3df93797ccd58a6f1472f72a1e5b7d192e5b1c1cf91340b302eb0cc",
+                            "role":  "original-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-19-2008/attachments/converted/titul_nir.docx",
+                            "source_name":  "titul_nir.docx",
+                            "media_type":  "docx",
+                            "sha256":  "73e0d7ef737ea4f22099acab34b68618a4914d42b2b4fb716465bd10ba2e7481",
+                            "role":  "converted-form",
+                            "derived":  null
+                        },
+                        {
+                            "file":  "sto-19-2008/attachments/rendered/titul_nir.pdf",
+                            "source_name":  "titul_nir.pdf",
+                            "media_type":  "pdf",
+                            "sha256":  "fb7300b74327a6fd3c149d3dbf9d480d74f1ba6b12ac4e9366e8da0d96668098",
+                            "role":  "rendered-form",
+                            "derived":  {
+                                            "role":  "form-rendering",
+                                            "source_sha256":  "fb7300b74327a6fd3c149d3dbf9d480d74f1ba6b12ac4e9366e8da0d96668098",
+                                            "pages":  1,
+                                            "text":  "sto-19-2008/derived/forms/titul_nir.layout.txt",
+                                            "text_sha256":  "a2b303e0947d40c10b787c13e9f32bd75134d4cf313007e0d881283b0b30220d",
+                                            "text_bytes":  2368
+                                        }
+                        }
+                    ],
+    "interpretation_status":  "not-a-profile",
+    "notes":  [
+                  "This manifest identifies files and reproducible derivatives only.",
+                  "It does not classify normative requirements or determine document-profile applicability."
+              ]
+}

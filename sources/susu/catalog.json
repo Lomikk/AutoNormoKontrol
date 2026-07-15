@@ -1,0 +1,50 @@
+{
+    "schema_version":  1,
+    "corpus":  "susu-official-education-documents",
+    "source_listing":  {
+                           "file":  "provenance/Источник.yml",
+                           "sha256":  "468fafaeb48b4fabd8319524db9b9aea7aca05ed1c17ce1872f44fb1f753a0e1",
+                           "url":  "https://k.susu.ru/index.php/15-dokumentatsiya/48-dokumenty-po-uchebnoj-deyatelnosti"
+                       },
+    "documents":  [
+                      {
+                          "id":  "sto-04-2008",
+                          "code":  "СТО ЮУрГУ 04-2008",
+                          "manifest":  "sto-04-2008/manifest.json",
+                          "standard_sha256":  "db3a4ca969781fd8cbfa3899adfd93e18509cb5a8cc9fd4f7158caabdcec859a",
+                          "attachment_count":  6
+                      },
+                      {
+                          "id":  "sto-17-2008",
+                          "code":  "СТО ЮУрГУ 17-2008",
+                          "manifest":  "sto-17-2008/manifest.json",
+                          "standard_sha256":  "3d1418567b3f2e21ef6bf2c753a8b91667d1f89e9caf4d64957d9c1c905c38a8",
+                          "attachment_count":  3
+                      },
+                      {
+                          "id":  "sto-19-2008",
+                          "code":  "СТО ЮУрГУ 19-2008",
+                          "manifest":  "sto-19-2008/manifest.json",
+                          "standard_sha256":  "14c930ee2225d88c3b1e5524c8948c016ac738bd1510b07393d72672f2e5d620",
+                          "attachment_count":  3
+                      },
+                      {
+                          "id":  "sto-21-2008",
+                          "code":  "СТО ЮУрГУ 21-2008",
+                          "manifest":  "sto-21-2008/manifest.json",
+                          "standard_sha256":  "55a88322d6e39b21b643500080d34e9e99238f7aede3ee78d2225afafb066aee",
+                          "attachment_count":  12
+                      },
+                      {
+                          "id":  "sto-22-2008",
+                          "code":  "СТО ЮУрГУ 22-2008",
+                          "manifest":  "sto-22-2008/manifest.json",
+                          "standard_sha256":  "c11b77f774ab23d2241325084e8a44c1a57b6621f131cbfe48a5913d6af99e1a",
+                          "attachment_count":  12
+                      }
+                  ],
+    "known_listing_discrepancies":  [
+                                        "STO 21 declares cto_21_pril_g.doc twice with different labels; this is one physical file with two declared roles."
+                                    ],
+    "scope":  "Source corpus only. No requirement inventory or profile inheritance is implied."
+}

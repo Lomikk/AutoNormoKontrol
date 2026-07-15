@@ -1,18 +1,25 @@
 ﻿param(
+    [string]$ProjectRoot = '',
     [Parameter(Mandatory = $true)]
     [string]$PdfPath,
     [Parameter(Mandatory = $true)]
-    [string]$TexPath
+    [string]$TexPath,
+    [string]$ReportPath = ''
 )
 
 $ErrorActionPreference = 'Stop'
-$root = Split-Path -Parent $PSScriptRoot
+$root = if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
+    [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..'))
+}
+else {
+    [System.IO.Path]::GetFullPath($ProjectRoot)
+}
 $pdf = (Resolve-Path -LiteralPath (Join-Path $root $PdfPath)).Path
 $tex = (Resolve-Path -LiteralPath (Join-Path $root $TexPath)).Path
 $log = [System.IO.Path]::ChangeExtension($tex, '.log')
 $build = Split-Path -Parent $pdf
-$bbox = Join-Path $env:TEMP ("susu-coursework-bbox-{0}.html" -f $PID)
-$plain = Join-Path $env:TEMP ("susu-coursework-text-{0}.txt" -f $PID)
+$bbox = Join-Path $env:TEMP ("autonormokontrol-bbox-{0}.html" -f $PID)
+$plain = Join-Path $env:TEMP ("autonormokontrol-text-{0}.txt" -f $PID)
 $failures = New-Object System.Collections.Generic.List[string]
 
 function Add-Failure([string]$Clause, [string]$Message) {
@@ -221,7 +228,18 @@ $report = [ordered]@{
     status = if ($failures.Count -eq 0) { 'pass' } else { 'fail' }
     failures = @($failures)
 }
-$reportPath = Join-Path $build 'compliance-report.json'
+$reportPath = if ([string]::IsNullOrWhiteSpace($ReportPath)) {
+    Join-Path $build 'compliance-report.json'
+}
+else {
+    $candidate = [System.IO.Path]::GetFullPath((Join-Path $root $ReportPath))
+    $rootPrefix = [System.IO.Path]::GetFullPath($root).TrimEnd('\', '/') + `
+        [System.IO.Path]::DirectorySeparatorChar
+    if (-not $candidate.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Postflight report path leaves the project root: $ReportPath"
+    }
+    $candidate
+}
 [System.IO.File]::WriteAllText(
     $reportPath,
     ($report | ConvertTo-Json -Depth 5),

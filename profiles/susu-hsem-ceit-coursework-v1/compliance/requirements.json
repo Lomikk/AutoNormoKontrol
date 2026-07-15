@@ -13,6 +13,14 @@
       "not-applicable": "Не применяется к выбранному профилю курсовой работы.",
       "conflict": "Требование конфликтует с выбранным LaTeX-процессом или область применения не подтверждена; нужен явно утвержденный допуск."
     },
+    "mechanism_statuses": {
+      "programmatic": "specified",
+      "ai": "semantic-review-required",
+      "external": "external-evidence-required",
+      "conflict": "blocked-pending-resolution",
+      "informational": "indexed",
+      "not-applicable": "not-applicable-coursework"
+    },
     "status_values": [
       "indexed",
       "specified",

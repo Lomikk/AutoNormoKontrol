@@ -3,12 +3,16 @@
 Перед чтением или изменением `content/*.md`, `metadata.yaml`,
 `bibliography.bib`, профиля оформления либо журналов приемки полностью прочитай:
 
-1. `prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md`;
-2. `compliance/requirements.json`;
-3. `README.md`.
+1. `profiles/active-profile.txt`;
+2. указанный там `profile.yaml`;
+3. файлы из его полей `compliance.system_prompt` и
+   `compliance.requirements`;
+4. `README.md`.
 
-Инструкция из `prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md` обязательна для всей
-работы с курсовой и действует как fail-closed контракт.
+Инструкция из `compliance.system_prompt` активного профиля обязательна для всей
+работы с документом и действует как fail-closed контракт. Не выбирай профиль
+сканированием каталога: единственный источник выбора —
+`profiles/active-profile.txt` либо явно переданный `-ProfilePath`.
 
 Перед изменением архитектуры профилей, созданием нового типа документа,
 кафедрального режима или команды инициализации также полностью прочитай
@@ -25,9 +29,9 @@
   решения, подписи, дисциплину, реквизиты или доказательства;
 - изменение реализации нормативного правила обязано содержать комментарий
   `STO-x.y.z` в реальном обработчике и реальный тест с тем же маркером;
-- новый/изменённый пункт должен оставаться зарегистрированным в
-  `compliance/requirements.json`; нельзя ослаблять canonical inventory либо
-  coverage gate ради зелёной сборки;
+- новый/изменённый пункт должен оставаться зарегистрированным в файле
+  `compliance.requirements` активного профиля; нельзя ослаблять его независимый
+  `compliance.canonical_inventory` либо coverage gate ради зелёной сборки;
 - после изменения содержания запускай Draft-сборку; после изменения реализации,
   реестра, тестов или сборочных скриптов запускай
   `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-compliance.ps1`

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonormokontrol.local/schemas/profile-v1.schema.json",
+  "title": "AutoNormoKontrol document profile manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "document_type",
+    "inputs",
+    "compliance",
+    "render",
+    "assets",
+    "outputs",
+    "reports",
+    "capabilities"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$"
+    },
+    "document_type": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content", "metadata", "bibliography", "asset_manifest"],
+      "properties": {
+        "content": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "metadata": { "$ref": "#/$defs/projectPath" },
+        "bibliography": { "$ref": "#/$defs/projectPath" },
+        "asset_manifest": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_inventory",
+        "requirements",
+        "review_inventory",
+        "semantic_review",
+        "external_acceptance",
+        "semantic_review_template",
+        "external_acceptance_template",
+        "system_prompt",
+        "format_spec",
+        "research_notes",
+        "implementation_paths",
+        "test_paths",
+        "prompt_paths",
+        "semantic_paths",
+        "external_paths"
+      ],
+      "properties": {
+        "canonical_inventory": { "$ref": "#/$defs/projectPath" },
+        "requirements": { "$ref": "#/$defs/projectPath" },
+        "review_inventory": { "$ref": "#/$defs/projectPath" },
+        "semantic_review": { "$ref": "#/$defs/projectPath" },
+        "external_acceptance": { "$ref": "#/$defs/projectPath" },
+        "semantic_review_template": { "$ref": "#/$defs/projectPath" },
+        "external_acceptance_template": { "$ref": "#/$defs/projectPath" },
+        "system_prompt": { "$ref": "#/$defs/projectPath" },
+        "format_spec": { "$ref": "#/$defs/projectPath" },
+        "research_notes": { "$ref": "#/$defs/projectPath" },
+        "implementation_paths": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "test_paths": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "prompt_paths": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "semantic_paths": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "external_paths": { "$ref": "#/$defs/nonEmptyPathArray" }
+      }
+    },
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pandoc_from",
+        "template",
+        "style_files",
+        "lua_filters",
+        "tex_input_paths",
+        "postflight"
+      ],
+      "properties": {
+        "pandoc_from": { "type": "string", "minLength": 1 },
+        "template": { "$ref": "#/$defs/projectPath" },
+        "style_files": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "lua_filters": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "tex_input_paths": { "$ref": "#/$defs/nonEmptyPathArray" },
+        "postflight": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report", "output_directory"],
+      "properties": {
+        "report": { "$ref": "#/$defs/projectPath" },
+        "output_directory": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tex", "pdf"],
+      "properties": {
+        "tex": { "$ref": "#/$defs/projectPath" },
+        "pdf": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "reports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_snapshot",
+        "build_report",
+        "postflight",
+        "traceability_json",
+        "traceability_markdown"
+      ],
+      "properties": {
+        "document_snapshot": { "$ref": "#/$defs/projectPath" },
+        "build_report": { "$ref": "#/$defs/projectPath" },
+        "postflight": { "$ref": "#/$defs/projectPath" },
+        "traceability_json": { "$ref": "#/$defs/projectPath" },
+        "traceability_markdown": { "$ref": "#/$defs/projectPath" }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assignment", "abstract", "figures", "tables", "equations", "appendices"],
+      "properties": {
+        "assignment": { "$ref": "#/$defs/capability" },
+        "abstract": { "$ref": "#/$defs/capability" },
+        "figures": { "$ref": "#/$defs/capability" },
+        "tables": { "$ref": "#/$defs/capability" },
+        "equations": { "$ref": "#/$defs/capability" },
+        "appendices": { "$ref": "#/$defs/capability" }
+      }
+    }
+  },
+  "$defs": {
+    "projectPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+    },
+    "nonEmptyPathArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/projectPath" }
+    },
+    "capability": {
+      "type": "string",
+      "enum": ["required", "optional", "forbidden"]
+    }
+  }
+}

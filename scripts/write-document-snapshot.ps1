@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$ProjectRoot = '',
+    [string]$ProfileId = 'unspecified-profile',
     [string]$AssetReportPath = 'build/asset-report.json',
     [string]$OutputPath = 'build/document-snapshot.json',
     [string[]]$ContentPaths = @(
@@ -132,7 +133,7 @@ try {
 
     $snapshot = [pscustomobject][ordered]@{
         version = 1
-        profile_id = 'susu-hsem-ceit-coursework-v1'
+        profile_id = $ProfileId
         algorithm = 'sha256(path-null-file-sha256)'
         content_hash = $snapshotHash
         files = $records

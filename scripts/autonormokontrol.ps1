@@ -10,6 +10,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
+. (Join-Path $PSScriptRoot 'profile.ps1')
+$script:ActiveProfile = $null
+$script:ActiveProfilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $root
 $script:PowerShellExecutable = if ($PSVersionTable.PSEdition -eq 'Core') {
     (Get-Process -Id $PID).Path
 }
@@ -34,6 +37,14 @@ function Write-Success {
 function Write-Failure {
     param([string]$Text)
     Write-Host ("ERR {0}" -f $Text) -ForegroundColor Red
+}
+
+function Get-ActiveProfile {
+    if ($null -eq $script:ActiveProfile) {
+        $script:ActiveProfile = Resolve-AutoNormoKontrolProfile `
+            -Root $root -ProfilePath $script:ActiveProfilePath
+    }
+    return $script:ActiveProfile
 }
 
 function Add-ProcessPath {
@@ -284,15 +295,18 @@ function Get-DocumentYamlValue {
 function Show-Status {
     Write-Title 'Состояние проекта'
 
-    $semanticPath = Join-Path $root 'compliance\semantic-review.yaml'
-    $externalPath = Join-Path $root 'compliance\external-acceptance.yaml'
+    $profile = Get-ActiveProfile
+    $semanticPath = Join-Path $root ([string]$profile.Data.compliance.semantic_review)
+    $externalPath = Join-Path $root ([string]$profile.Data.compliance.external_acceptance)
     $semanticStatus = Get-DocumentYamlValue $semanticPath 'status'
     $externalStatus = Get-DocumentYamlValue $externalPath 'status'
 
+    Write-Host ("Профиль:                {0}" -f $profile.ProfileId)
+    Write-Host ("Digest профиля:         {0}" -f $profile.ProfileDigest)
     Write-Host ("Смысловой аудит:        {0}" -f $semanticStatus)
     Write-Host ("Внешняя приёмка:        {0}" -f $externalStatus)
 
-    $pdfPath = Join-Path $root 'build\coursework.pdf'
+    $pdfPath = Join-Path $root ([string]$profile.Data.outputs.pdf)
     if (Test-Path -LiteralPath $pdfPath -PathType Leaf) {
         $pdf = Get-Item -LiteralPath $pdfPath
         Write-Host ("Последний PDF:          {0}" -f $pdf.FullName)
@@ -303,7 +317,7 @@ function Show-Status {
         Write-Host 'Последний PDF:          ещё не собран' -ForegroundColor DarkYellow
     }
 
-    $reportPath = Join-Path $root 'build\compliance-report.json'
+    $reportPath = Join-Path $root ([string]$profile.Data.reports.postflight)
     if (Test-Path -LiteralPath $reportPath -PathType Leaf) {
         try {
             $report = Get-Content -Raw -Encoding UTF8 -LiteralPath $reportPath | ConvertFrom-Json
@@ -314,7 +328,7 @@ function Show-Status {
         }
     }
 
-    $tracePath = Join-Path $root 'build\sto-traceability.json'
+    $tracePath = Join-Path $root ([string]$profile.Data.reports.traceability_json)
     if (Test-Path -LiteralPath $tracePath -PathType Leaf) {
         try {
             $trace = Get-Content -Raw -Encoding UTF8 -LiteralPath $tracePath | ConvertFrom-Json
@@ -334,7 +348,8 @@ function Show-Status {
 }
 
 function Open-ResultPdf {
-    $pdfPath = Join-Path $root 'build\coursework.pdf'
+    $profile = Get-ActiveProfile
+    $pdfPath = Join-Path $root ([string]$profile.Data.outputs.pdf)
     if (-not (Test-Path -LiteralPath $pdfPath -PathType Leaf)) {
         Write-Failure 'PDF ещё не собран. Сначала выполните команду draft.'
         return 1
@@ -400,7 +415,8 @@ function Invoke-CliCommand {
         }
         'trace' {
             Write-Title 'Трассировка требований СТО'
-            Invoke-ProjectScript 'report-traceability.ps1' -ExitCode $ExitCode
+            Invoke-ProjectScript 'report-traceability.ps1' `
+                -Arguments @('-ProfilePath', $script:ActiveProfilePath) -ExitCode $ExitCode
             break
         }
         'test' {
@@ -418,7 +434,8 @@ function Invoke-CliCommand {
                 $ExitCode.Value = 127
                 break
             }
-            Invoke-ProjectScript 'build.ps1' @('-Mode', 'Draft') -ExitCode $ExitCode
+            Invoke-ProjectScript 'build.ps1' `
+                @('-Mode', 'Draft', '-ProfilePath', $script:ActiveProfilePath) -ExitCode $ExitCode
             break
         }
         'strict' {
@@ -428,7 +445,8 @@ function Invoke-CliCommand {
                 $ExitCode.Value = 127
                 break
             }
-            Invoke-ProjectScript 'build.ps1' @('-Mode', 'Strict') -ExitCode $ExitCode
+            Invoke-ProjectScript 'build.ps1' `
+                @('-Mode', 'Strict', '-ProfilePath', $script:ActiveProfilePath) -ExitCode $ExitCode
             break
         }
         'check' {
@@ -441,7 +459,8 @@ function Invoke-CliCommand {
             if ($ExitCode.Value -ne 0) {
                 break
             }
-            Invoke-ProjectScript 'build.ps1' @('-Mode', 'Draft') -ExitCode $ExitCode
+            Invoke-ProjectScript 'build.ps1' `
+                @('-Mode', 'Draft', '-ProfilePath', $script:ActiveProfilePath) -ExitCode $ExitCode
             break
         }
         default {
