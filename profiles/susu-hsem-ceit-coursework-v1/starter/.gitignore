@@ -1,5 +1,4 @@
 /build/
-/Workspaces/
 /output/
 *.aux
 *.bcf
@@ -12,5 +11,4 @@
 *.synctex.gz
 *.toc
 .aider*
-
-nppBackup
+.gemini/

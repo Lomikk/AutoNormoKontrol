@@ -1,10 +1,16 @@
 param(
+    [string]$ProjectRoot = '',
     [string[]]$ContentPaths = @('content')
 )
 
 $ErrorActionPreference = 'Stop'
 
-$root = Split-Path -Parent $PSScriptRoot
+$root = if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
+    Split-Path -Parent $PSScriptRoot
+}
+else {
+    [System.IO.Path]::GetFullPath($ProjectRoot)
+}
 $files = New-Object System.Collections.Generic.List[System.IO.FileInfo]
 foreach ($path in $ContentPaths) {
     $full = if ([System.IO.Path]::IsPathRooted($path)) { $path } else { Join-Path $root $path }

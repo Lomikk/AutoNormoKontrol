@@ -384,7 +384,7 @@ if (-not ($failures | Where-Object { $_ -like 'R3 profile-owned*' -or
 $engineFiles = @(
     'scripts/autonormokontrol.ps1', 'scripts/build.ps1', 'scripts/check-coverage.ps1',
     'scripts/lint-content.ps1', 'scripts/profile.ps1', 'scripts/report-traceability.ps1',
-    'scripts/write-document-snapshot.ps1'
+    'scripts/workspace.ps1', 'scripts/write-document-snapshot.ps1'
 )
 foreach ($engineFile in $engineFiles) {
     $engineText = Get-SourceText $engineFile
@@ -462,7 +462,8 @@ catch {
 
 $buildProfileText = Get-SourceText 'scripts/build.ps1'
 foreach ($requiredLiteral in @(
-    'Resolve-AutoNormoKontrolProfile',
+    'Resolve-AutoNormoKontrolWorkspace',
+    '$workspace.Profile',
     '$profile.ProfileId',
     '$profile.ProfileDigest',
     '$config.outputs.pdf',
@@ -1060,8 +1061,12 @@ foreach ($path in $courseworkSnapshotPaths) {
 if ($snapshotWriterText -notmatch '\[Parameter\(Mandatory\s*=\s*\$true\)\]\s*\r?\n\s*\[ValidateNotNullOrEmpty\(\)\]\s*\r?\n\s*\[string\[\]\]\$ContentPaths') {
     $failures.Add('R0 snapshot writer does not require a non-empty ContentPaths argument')
 }
-if (-not $buildScriptText.Contains('-ContentPaths (@($content) + @($metadataPath, $bibliographyPath))')) {
-    $failures.Add('R0 Draft integration does not pass profile content, metadata, and bibliography to snapshot writer')
+if (-not $buildScriptText.Contains('-ContentPaths $snapshotInputs') -or
+    -not $buildScriptText.Contains('$metadataPath') -or
+    -not $buildScriptText.Contains('$bibliographyPath') -or
+    -not $buildScriptText.Contains('$config.compliance.format_spec') -or
+    -not $buildScriptText.Contains('$script:AutoNormoKontrolWorkspaceManifest')) {
+    $failures.Add('R0 Draft integration does not pass content, metadata, bibliography, format spec, and project manifest to snapshot writer')
 }
 else {
     Write-Host 'PASS R0 profile-driven snapshot inputs are wired through Draft build'
@@ -1132,7 +1137,7 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
     (Test-Path -LiteralPath $launcherPath -PathType Leaf)) {
     $tokens = $null
     $parseErrors = $null
-    [void][System.Management.Automation.Language.Parser]::ParseFile(
+    $cliAst = [System.Management.Automation.Language.Parser]::ParseFile(
         $cliPath,
         [ref]$tokens,
         [ref]$parseErrors
@@ -1140,6 +1145,14 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
     if ($parseErrors.Count -gt 0) {
         $failures.Add(('CLI smoke contract: parser errors: {0}' -f
             (($parseErrors | ForEach-Object Message) -join '; ')))
+    }
+    $bareElseCommands = @($cliAst.FindAll({
+        param($node)
+        $node -is [System.Management.Automation.Language.CommandAst] -and
+            $node.GetCommandName() -eq 'else'
+    }, $true))
+    if ($bareElseCommands.Count -gt 0) {
+        $failures.Add('CLI smoke contract: a bare else command escaped structural parsing')
     }
 
     $launcherText = [System.IO.File]::ReadAllText($launcherPath, [System.Text.Encoding]::UTF8)
@@ -1176,6 +1189,9 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
     if ($helpExitCode -ne 0 -or $helpText -notmatch '(?m)^\s+check\s+' -or
         $helpText -notmatch '(?m)^\s+draft\s+' -or
         $helpText -notmatch '(?m)^\s+install\s+' -or
+        $helpText -notmatch '(?m)^\s+new\s+' -or
+        $helpText -notmatch '(?m)^\s+export\s+' -or
+        $helpText -notmatch '(?m)^\s+archive\s+' -or
         $helpText -notmatch '(?m)^\s+context\s+') {
         $failures.Add("CLI smoke contract: help failed or commands are missing`n$helpText")
     }
@@ -1209,6 +1225,17 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
             $failures.Add("CLI dependency installer contract: missing $literal")
         }
     }
+}
+
+# R1/workspace + R1/publish: exercise the complete public lifecycle in a
+# disposable Workspaces child. The helper owns fail-closed cleanup.
+$lifecycleTest = Invoke-PowerShellFile `
+    -ScriptPath (Join-Path $root 'scripts/test-workspace-lifecycle.ps1')
+if ($lifecycleTest.ExitCode -ne 0) {
+    $failures.Add("R1 workspace lifecycle integration failed:`n$($lifecycleTest.Text)")
+}
+else {
+    Write-Host 'PASS R1 workspace lifecycle integration'
 }
 
 # Native stderr decoding must not depend on the active Windows console code

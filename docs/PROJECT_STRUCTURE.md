@@ -9,6 +9,7 @@
 Команды запускаются из корня репозитория:
 
 ```powershell
+.\AutoNormoKontrol.cmd new <название работы>
 .\AutoNormoKontrol.cmd doctor
 .\AutoNormoKontrol.cmd install [--yes]
 .\AutoNormoKontrol.cmd check
@@ -19,10 +20,14 @@
 .\AutoNormoKontrol.cmd trace
 .\AutoNormoKontrol.cmd status
 .\AutoNormoKontrol.cmd open
+.\AutoNormoKontrol.cmd export
+.\AutoNormoKontrol.cmd archive [метка]
 .\AutoNormoKontrol.cmd context <capability> <content-file>
 .\AutoNormoKontrol.cmd help
 ```
 
+- `new` из центрального каталога создаёт Draft-valid работу в
+  `Workspaces/<название>` и никогда не перезаписывает существующую папку.
 - `doctor` проверяет Pandoc, TeX Live и PDF-инструменты.
 - `install` может установить Pandoc через WinGet; `--yes` убирает вопрос
   подтверждения только для этого действия. TeX Live устанавливается отдельно.
@@ -33,16 +38,28 @@
 - `test` запускает тесты правил и coverage gate.
 - `trace` строит отчёт трассировки требований.
 - `status` показывает состояния аудитов, PDF postflight и последнего PDF.
-- `open` открывает последний PDF из `build/`.
+- `open` открывает опубликованный `output/document.pdf`, а до публикации —
+  последний PDF из `build/`.
+- `export` атомарно публикует последний успешный и актуальный PDF как
+  `output/document.pdf`; для Draft явно выводится предупреждение.
+- `archive` по явному действию сохраняет неизменяемую копию опубликованного PDF
+  и отказывается перезаписывать существующий архив.
 - `context` строит проверенный `context-plan-v1` и Aider `/load`-файлы для
   выбранного capability и content-файла активного профиля.
 - `help` показывает справку CLI.
 
-Команды `new`, `export` и `archive` пока не реализованы. Не следует
-документировать их как рабочие и не следует имитировать их ручным удалением,
-перезаписью или публикацией файлов. Сейчас новый workspace создаётся только
-вручную на основании активного профиля, а рабочий результат находится в
-`build/`.
+Центральный launcher создаёт работу; после этого пользователь и пишущий агент
+запускают тонкий `AutoNormoKontrol.cmd` уже внутри неё. Локальный launcher не
+содержит движок и работает, пока проект остаётся внутри общего каталога
+`Workspaces`. Перемещение работ в произвольное место и установка через `PATH`
+отложены, но формат данных workspace от относительного `..\..` не зависит.
+
+`context-plan-v1` остаётся экспериментальным адаптером старого корневого
+workspace для Aider. Он не является частью Gemini CLI MVP и намеренно не
+запускается внутри новой отдельной работы: Gemini CLI стартует в корне workspace
+и самостоятельно управляет своим контекстом. Общим контрактом для всех агентов
+остаётся точная диагностика `draft`, а не принудительное управление читаемыми
+файлами.
 
 ## Границы каталогов
 
@@ -50,14 +67,31 @@
 |---|---|---|
 | engine | `AutoNormoKontrol.cmd`, `scripts/`, `schemas/` | Только read-only контекст; не менять в обычной работе с содержанием |
 | profile | `profiles/`, `profiles/active-profile.txt` | Read-only нормативный и оформительский контракт; профиль выбирается только через active-profile |
-| workspace | `content/`, `metadata.yaml`, `bibliography.bib`, `assets/`, `format-spec.yaml`, `compliance/` | Editable только явно разрешённые файлы текущей задачи; журналы приёмки не менять без отдельной задачи и реального основания |
+| workspace | `Workspaces/<name>/`: `project.yaml`, `content/`, `metadata.yaml`, `bibliography.bib`, `assets/`, `format-spec.yaml`, `compliance/`, `guide/` | Editable только данные одной работы; `project.yaml` задаёт профиль и явный порядок глав; журналы приёмки не менять без отдельной задачи и реального основания |
 | sources | `sources/` | Канонические нормативные исходники; read-only, не добавлять в обычный контекст редактирования |
 | tests | `tests/`, включая находящиеся там fixtures | Read-only искусственные примеры для проверки программы; не редактировать при исправлении курсовой |
 | docs | `README.md`, `AGENTS.md`, `docs/` | Документация и агентский контракт; read-only при написании работы |
-| build | Сгенерированные PDF, TeX, отчёты и snapshots | Всегда generated/excluded; не добавлять в Aider как editable-файлы |
+| build | Сгенерированные PDF, TeX, отчёты и snapshots внутри workspace | Всегда generated/excluded; не добавлять в агентский контекст как editable-файлы |
+| output | Стабильный `document.pdf`, export-report и явные архивы | Пользовательский результат; не редактировать вручную и не считать источником содержания |
 
 `AGENTS.md`, `README.md`, этот справочник и файлы активного профиля могут быть
 read-only контекстом для агента. Они не являются содержанием курсовой.
+
+## Manifest отдельной работы
+
+`project.yaml` записан в строгом JSON-совместимом подмножестве YAML и проверяется
+по контракту `schemas/workspace-v1.schema.json`. Он фиксирует:
+
+- ID, путь manifest и digest одного профиля;
+- минимальную и исходную версию движка;
+- тип документа;
+- непустой уникальный массив `document.content` в точном порядке сборки.
+
+Неизвестные поля, traversal-пути, отсутствующие Markdown-файлы, неправильный
+тип документа и несовместимая версия останавливают команду. Изменившийся digest
+профиля показывается как предупреждение; тихого обновления или миграции работа
+не выполняет. `project.yaml` включён в document snapshot, поэтому изменение
+порядка глав после Draft делает прежний export устаревшим.
 
 ## Capability-модель AI-контекста
 

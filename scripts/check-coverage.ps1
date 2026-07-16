@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$ProfilePath = '',
+    [string]$WorkspaceRoot = '',
+    [string[]]$ContentPaths = @(),
     [string]$CanonicalInventoryPath = '',
     [string]$RegistryPath = '',
     [string[]]$ImplementationPaths = @(),
@@ -13,8 +15,19 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $root }
+$WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot)
 . (Join-Path $PSScriptRoot 'profile.ps1')
-$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $ProfilePath
+if ($ContentPaths.Count -eq 0) {
+    $workspaceManifest = Join-Path $WorkspaceRoot 'project.yaml'
+    if (Test-Path -LiteralPath $workspaceManifest -PathType Leaf) {
+        $ContentPaths = @((Get-Content -Raw -Encoding UTF8 -LiteralPath $workspaceManifest |
+            ConvertFrom-Json).document.content | ForEach-Object { [string]$_ })
+    }
+}
+$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root `
+    -WorkspaceRoot $WorkspaceRoot -ProfilePath $ProfilePath `
+    -ContentPaths $ContentPaths
 if (-not $PSBoundParameters.ContainsKey('CanonicalInventoryPath')) {
     $CanonicalInventoryPath = [string]$resolvedProfile.Data.compliance.canonical_inventory
 }
@@ -50,7 +63,10 @@ else {
 }
 
 function Get-TextFiles {
-    param([string[]]$Paths)
+    param(
+        [string[]]$Paths,
+        [string]$BaseRoot = $root
+    )
 
     $result = New-Object System.Collections.Generic.List[System.IO.FileInfo]
     foreach ($path in $Paths) {
@@ -59,7 +75,7 @@ function Get-TextFiles {
             $path
         }
         else {
-            Join-Path $root $path
+            Join-Path $BaseRoot $path
         }
         if (Test-Path -LiteralPath $fullPath -PathType Leaf) {
             $result.Add((Get-Item -LiteralPath $fullPath))
@@ -264,8 +280,8 @@ $implementationFiles = @($implementationFiles | Sort-Object FullName -Unique)
 $testFiles = @(Get-TextFiles $TestPaths)
 $testFiles = @($testFiles | Sort-Object FullName -Unique)
 $promptFiles = @(Get-TextFiles $PromptPaths)
-$semanticFiles = @(Get-TextFiles $SemanticPaths)
-$externalFiles = @(Get-TextFiles $ExternalPaths)
+$semanticFiles = @(Get-TextFiles $SemanticPaths $WorkspaceRoot)
+$externalFiles = @(Get-TextFiles $ExternalPaths $WorkspaceRoot)
 
 $failures = New-Object System.Collections.Generic.List[string]
 $seenIds = @{}

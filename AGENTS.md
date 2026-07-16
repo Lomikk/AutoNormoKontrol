@@ -74,9 +74,17 @@
 .\AutoNormoKontrol.cmd draft    # проверить содержание и собрать черновой PDF
 .\AutoNormoKontrol.cmd check    # тесты программы, затем Draft-сборка
 .\AutoNormoKontrol.cmd status   # показать состояние аудитов и последней сборки
+.\AutoNormoKontrol.cmd export   # опубликовать актуальный успешный PDF
+.\AutoNormoKontrol.cmd archive [метка] # сохранить явный архивный снимок
 .\AutoNormoKontrol.cmd context edit-content content/00-introduction.md # подготовить AI-контекст
 .\AutoNormoKontrol.cmd strict   # финальная fail-closed сборка
 ```
+
+Новая работа создаётся только центральной командой
+`.\AutoNormoKontrol.cmd new <название>`. В отдельном workspace список и порядок
+глав берутся из `project.yaml: document.content`; не сканируй `content/` и не
+возвращай список из manifest профиля. Тонкий launcher внутри workspace не даёт
+права изменять центральный движок.
 
 Команда `context` принимает только один из capabilities, зарегистрированных в
 `scripts/context-capabilities-v1.json`, и точный target из `inputs.content`

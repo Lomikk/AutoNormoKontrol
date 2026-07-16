@@ -1,23 +1,60 @@
+[CmdletBinding()]
 param(
     [ValidateSet('Draft', 'Strict')]
     [string]$Mode = 'Draft',
-    [string]$ProfilePath = ''
+    [string]$ProfilePath = '',
+    [string]$WorkspaceRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
 
-$root = Split-Path -Parent $PSScriptRoot
-Set-Location -LiteralPath $root
+$engineRoot = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $engineRoot }
+$WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
+
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
 . (Join-Path $PSScriptRoot 'profile.ps1')
+. (Join-Path $PSScriptRoot 'workspace.ps1')
 
-$profile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $ProfilePath
+$workspace = Resolve-AutoNormoKontrolWorkspace `
+    -EngineRoot $engineRoot -WorkspaceRoot $WorkspaceRoot
+$profile = $workspace.Profile
+if (-not [string]::IsNullOrWhiteSpace($ProfilePath)) {
+    $normalizedProfilePath = $ProfilePath.Replace('\', '/')
+    if ($workspace.Legacy) {
+        # R2 migration diagnostic: the embedded legacy workspace may be probed
+        # with another manifest. A real workspace remains pinned by project.yaml.
+        $profile = Resolve-AutoNormoKontrolProfile -Root $engineRoot `
+            -WorkspaceRoot $WorkspaceRoot -ProfilePath $normalizedProfilePath
+    }
+    elseif ($normalizedProfilePath -ne $workspace.ProfilePath) {
+        throw ("Explicit profile '{0}' does not match workspace profile '{1}'." -f
+            $ProfilePath, $workspace.ProfilePath)
+    }
+}
 $config = $profile.Data
-$content = @($config.inputs.content | ForEach-Object { [string]$_ })
+$content = @($workspace.ContentPaths)
+if ($workspace.Legacy) { $content = @($config.inputs.content | ForEach-Object { [string]$_ }) }
+
+if (-not $workspace.ProfileDigestMatches) {
+    Write-Warning (("Workspace was created with profile digest {0}, current digest is {1}. " +
+        'The build will use the current profile; review the resulting PDF.') -f
+        $workspace.PinnedProfileDigest, $profile.ProfileDigest)
+}
+if (-not $workspace.EngineVersionMatches) {
+    Write-Warning (("Workspace was created with AutoNormoKontrol {0}; current engine is {1}. " +
+        'The build continues without automatic migration; review the result.') -f
+        $workspace.CreatedWithEngineVersion, $workspace.EngineVersion)
+}
+
+Set-Location -LiteralPath $WorkspaceRoot
+
 $metadataPath = [string]$config.inputs.metadata
 $bibliographyPath = [string]$config.inputs.bibliography
 $assetManifestPath = [string]$config.inputs.asset_manifest
-$reviewInventoryPath = [string]$config.compliance.review_inventory
+$reviewInventoryPath = Resolve-ProfileProjectPath -Root $engineRoot `
+    -Path ([string]$config.compliance.review_inventory) `
+    -Location 'compliance.review_inventory' -Kind File
 $semanticReviewPath = [string]$config.compliance.semantic_review
 $externalAcceptancePath = [string]$config.compliance.external_acceptance
 $assetReportPath = [string]$config.assets.report
@@ -28,19 +65,26 @@ $postflightReportPath = [string]$config.reports.postflight
 $outputTexPath = [string]$config.outputs.tex
 $outputPdfPath = [string]$config.outputs.pdf
 
-& (Join-Path $PSScriptRoot 'check-coverage.ps1') -ProfilePath $profile.ManifestPath
+& (Join-Path $PSScriptRoot 'check-coverage.ps1') `
+    -ProfilePath $profile.ManifestPath `
+    -WorkspaceRoot $WorkspaceRoot `
+    -ContentPaths $content
 if (-not $?) { exit 1 }
 
 # STO-TRACEABILITY: every normal build refreshes the human- and
 # machine-readable file:line ledger after the fail-closed coverage gate.
-& (Join-Path $PSScriptRoot 'report-traceability.ps1') -ProfilePath $profile.ManifestPath
+& (Join-Path $PSScriptRoot 'report-traceability.ps1') `
+    -ProfilePath $profile.ManifestPath `
+    -WorkspaceRoot $WorkspaceRoot `
+    -ContentPaths $content
 if (-not $?) { exit 1 }
 
-& (Join-Path $PSScriptRoot 'lint-content.ps1') -ContentPaths $content
+& (Join-Path $PSScriptRoot 'lint-content.ps1') `
+    -ProjectRoot $WorkspaceRoot -ContentPaths $content
 if (-not $?) { exit 1 }
 
-$build = Split-Path -Parent (Join-Path $root $outputPdfPath)
-$assetBuild = Join-Path $root $assetBuildPath
+$build = Split-Path -Parent (Join-Path $WorkspaceRoot $outputPdfPath)
+$assetBuild = Join-Path $WorkspaceRoot $assetBuildPath
 $texCache = Join-Path $build 'texmf-var'
 New-Item -ItemType Directory -Force -Path $assetBuild | Out-Null
 New-Item -ItemType Directory -Force -Path $texCache | Out-Null
@@ -48,22 +92,37 @@ New-Item -ItemType Directory -Force -Path $texCache | Out-Null
 # R1.1: build only manifest-declared assets through the fixed generator
 # whitelist. fixtures/ remain test data and never participate in this path.
 & (Join-Path $PSScriptRoot 'build-assets.ps1') `
+    -ProjectRoot $WorkspaceRoot `
     -ManifestPath $assetManifestPath `
     -ReportPath $assetReportPath
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # STO-AI-GATE, R1.1: bind semantic review to the complete verifiable document
-# snapshot: Markdown, metadata, bibliography, asset manifest, source data,
-# TeX plot source and generated PDF. Any one of them invalidates stale review.
+# snapshot: Markdown, metadata, bibliography, the document-local format spec,
+# asset manifest, source data, TeX plot source and generated PDF. Any one of
+# them invalidates stale review and prevents exporting an obsolete build.
+$snapshotInputs = @($content) + @(
+    $metadataPath,
+    $bibliographyPath,
+    [string]$config.compliance.format_spec
+)
+if (-not $workspace.Legacy) {
+    # R1/workspace: project.yaml owns chapter order. Reordering or adding a
+    # chapter must invalidate both semantic review and a pending export.
+    $snapshotInputs += $script:AutoNormoKontrolWorkspaceManifest
+}
 & (Join-Path $PSScriptRoot 'write-document-snapshot.ps1') `
+    -ProjectRoot $WorkspaceRoot `
     -ProfileId $profile.ProfileId `
     -AssetReportPath $assetReportPath `
     -OutputPath $snapshotPath `
-    -ContentPaths (@($content) + @($metadataPath, $bibliographyPath))
+    -ContentPaths $snapshotInputs
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-$snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath $snapshotPath | ConvertFrom-Json
-$assetReport = Get-Content -Raw -Encoding UTF8 -LiteralPath $assetReportPath | ConvertFrom-Json
+$snapshotFull = Join-Path $WorkspaceRoot $snapshotPath
+$assetReportFull = Join-Path $WorkspaceRoot $assetReportPath
+$snapshot = Get-Content -Raw -Encoding UTF8 -LiteralPath $snapshotFull | ConvertFrom-Json
+$assetReport = Get-Content -Raw -Encoding UTF8 -LiteralPath $assetReportFull | ConvertFrom-Json
 $contentHash = [string]$snapshot.content_hash
 $modeValue = $Mode.ToLowerInvariant()
 
@@ -82,11 +141,14 @@ try {
     $env:TEXMFVAR = $texCache
     $env:TEXMFCACHE = $texCache
     $texInputs = @($config.render.tex_input_paths | ForEach-Object {
-        Resolve-ProfileProjectPath -Root $root -Path ([string]$_) `
+        $baseRoot = if ([string]$_ -eq '.') { $WorkspaceRoot } else { $engineRoot }
+        Resolve-ProfileProjectPath -Root $baseRoot -Path ([string]$_) `
             -Location 'render.tex_input_paths' -Kind Directory
     })
     $env:TEXINPUTS = ($texInputs -join ';') + ';'
 
+    $templatePath = Resolve-ProfileProjectPath -Root $engineRoot `
+        -Path ([string]$config.render.template) -Location 'render.template' -Kind File
     $pandocArguments = @($content) + @(
         "--from=$($config.render.pandoc_from)",
         '--to=latex',
@@ -100,31 +162,35 @@ try {
         "--metadata=compliance-mode:$modeValue",
         "--metadata=active-profile-id:$($profile.ProfileId)",
         "--metadata=content-hash:$contentHash",
-        "--template=$($config.render.template)"
+        "--template=$templatePath"
     )
     foreach ($filter in @($config.render.lua_filters)) {
-        $pandocArguments += "--lua-filter=$filter"
+        $filterPath = Resolve-ProfileProjectPath -Root $engineRoot -Path ([string]$filter) `
+            -Location 'render.lua_filters' -Kind File
+        $pandocArguments += "--lua-filter=$filterPath"
     }
     $pandocArguments += @(
         '--biblatex',
-        "--resource-path=$root;$build",
+        "--resource-path=$WorkspaceRoot;$build",
         "--output=$outputTexPath"
     )
     $pandocPath = Resolve-PandocExecutable
     $pandocResult = Invoke-Utf8NativeCommand `
         -FilePath $pandocPath `
         -Arguments $pandocArguments `
-        -WorkingDirectory $root
+        -WorkingDirectory $WorkspaceRoot
     Write-NativeCommandResult $pandocResult
     if ($pandocResult.ExitCode -ne 0) { exit $pandocResult.ExitCode }
 
-    $texOutputDirectory = Split-Path -Parent (Join-Path $root $outputTexPath)
+    $texOutputDirectory = Split-Path -Parent (Join-Path $WorkspaceRoot $outputTexPath)
     & latexmk -lualatex -interaction=nonstopmode -halt-on-error -file-line-error `
         "-outdir=$texOutputDirectory" $outputTexPath
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-    & (Join-Path $root ([string]$config.render.postflight)) `
-        -ProjectRoot $root -PdfPath $outputPdfPath -TexPath $outputTexPath `
+    $postflightScript = Resolve-ProfileProjectPath -Root $engineRoot `
+        -Path ([string]$config.render.postflight) -Location 'render.postflight' -Kind File
+    & $postflightScript `
+        -ProjectRoot $WorkspaceRoot -PdfPath $outputPdfPath -TexPath $outputTexPath `
         -ReportPath $postflightReportPath
     if (-not $?) { exit 1 }
 }
@@ -138,8 +204,9 @@ finally {
 }
 
 Write-Host ''
-$pdfRelative = $outputPdfPath
-$pdf = Get-Item -LiteralPath $pdfRelative
+$pdfRelative = $outputPdfPath.Replace('\', '/')
+$pdfFull = Join-Path $WorkspaceRoot $pdfRelative
+$pdf = Get-Item -LiteralPath $pdfFull
 $pdfHash = (Get-FileHash -LiteralPath $pdf.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
 $buildReport = [pscustomobject][ordered]@{
     version = 1
@@ -151,7 +218,7 @@ $buildReport = [pscustomobject][ordered]@{
     profile_digest = $profile.ProfileDigest
     mode = $modeValue
     content_hash = $contentHash
-    document_snapshot = $snapshotPath
+    document_snapshot = $snapshotPath.Replace('\', '/')
     asset_manifest = $assetReport.manifest
     used_assets = @($assetReport.assets)
     output = [pscustomobject][ordered]@{
@@ -160,14 +227,15 @@ $buildReport = [pscustomobject][ordered]@{
         bytes = $pdf.Length
     }
 }
+$buildReportFull = Join-Path $WorkspaceRoot $buildReportPath
 [System.IO.File]::WriteAllText(
-    (Join-Path $root $buildReportPath),
+    $buildReportFull,
     ($buildReport | ConvertTo-Json -Depth 12),
     (New-Object System.Text.UTF8Encoding($false))
 )
 
 Write-Host ("Ready: {0}" -f $pdf.FullName)
-& pdfinfo -enc UTF-8 $pdfRelative | Select-String 'Pages|Page size'
+& pdfinfo -enc UTF-8 $pdf.FullName | Select-String 'Pages|Page size'
 Write-Host ("File size:       {0} bytes" -f $pdf.Length)
 Write-Host ("Mode:            {0}" -f $Mode)
 Write-Host ("Profile:         {0}" -f $profile.ProfileId)
@@ -182,4 +250,4 @@ foreach ($asset in @($assetReport.assets)) {
     }
     Write-Host ("    output {0}: {1}" -f $asset.output.path, $asset.output.sha256)
 }
-Write-Host ("Build report:    {0}" -f $buildReportPath)
+Write-Host ("Build report:    {0}" -f $buildReportFull)

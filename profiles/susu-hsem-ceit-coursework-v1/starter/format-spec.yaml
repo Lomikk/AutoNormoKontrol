@@ -1,0 +1,105 @@
+profile:
+  id: susu-hsem-ceit-coursework-v1
+  university: susu
+  school: hsem
+  department: ceit
+  direction: 09.03.02
+  work_type: coursework
+  status: working-default
+
+sources:
+  - id: sto-susu-21-2008
+    file: sources/susu/sto-21-2008/original/CTOsusu21-2008.pdf
+    title: >-
+      СТО ЮУрГУ 21–2008. Курсовая и выпускная квалификационная работа.
+      Требования к содержанию и оформлению
+    edition: 1
+    effective_from: 2008-09-01
+    pdf_modified: 2017-11-18
+  - id: current-university-name
+    title: Основные сведения ЮУрГУ
+    url: https://www.susu.ru/ru/university/official/basic
+    checked: 2026-07-13
+
+decisions:
+  - id: page.size
+    value: A4
+    source: {document: sto-susu-21-2008, clause: 8.1.2, pdf_page: 18}
+    status: implemented
+  - id: body.font
+    value: Times New Roman
+    source: {document: sto-susu-21-2008, clause: 8.1.3, pdf_page: 18}
+    status: implemented
+  - id: body.font_size
+    value: 14pt
+    source: {document: sto-susu-21-2008, clause: 8.1.3, pdf_page: 18}
+    status: implemented
+  - id: body.line_spacing
+    value: 1.0
+    source: {document: sto-susu-21-2008, clause: 8.1.3, pdf_page: 18}
+    choice: normative-default
+    rationale: Полуторный интервал допустим только по документированному решению кафедры
+    status: implemented
+  - id: body.paragraph_indent
+    value: 0.7cm
+    source: {document: sto-susu-21-2008, clause: 8.1.3, pdf_page: 18}
+    choice: normative-default
+    rationale: Отступ 1,5 см допустим только по документированному решению кафедры
+    status: implemented
+  - id: page.margins
+    value: {top: 20mm, bottom: 26mm, left: 25mm, right: 10mm}
+    source: {document: sto-susu-21-2008, clause: 8.1.4, pdf_page: 19}
+    status: implemented
+  - id: page.frame
+    value: none
+    source: {document: sto-susu-21-2008, clause: 8.1.4, pdf_page: 19}
+    status: implemented
+  - id: page.number
+    value: {position: bottom-center, distance_from_edge: 20mm}
+    source: {document: sto-susu-21-2008, clauses: [8.1.4, 8.3.1, 8.3.2, 8.3.3], pdf_pages: [19, 20, 21]}
+    status: implemented
+  - id: headings
+    value: {section: uppercase, subsection: sentence-case, trailing_period: false}
+    source: {document: sto-susu-21-2008, clauses: [8.2.5, 8.2.6, 8.2.7, 8.2.8], pdf_page: 20}
+    status: implemented
+  - id: figures
+    value: {numbering: section, caption_position: bottom, label_separator: en-dash}
+    source: {document: sto-susu-21-2008, clauses: [8.5.1, 8.5.2, 8.5.5], pdf_pages: [23, 24]}
+    status: implemented
+  - id: tables
+    value: {numbering: section, caption_position: top, font_size: 12pt}
+    source: {document: sto-susu-21-2008, clauses: [8.6.3, 8.6.5, 8.6.13], pdf_pages: [24, 25]}
+    choice: section-numbering-allowed
+    status: implemented
+  - id: equations
+    value: {numbering: section, label: right}
+    source: {document: sto-susu-21-2008, clauses: [8.7.5, 8.7.12], pdf_pages: [26, 28]}
+    choice: section-numbering-allowed
+    status: implemented
+  - id: bibliography
+    value: biblatex-gost/gost-numeric
+    source: {document: sto-susu-21-2008, clause: 7.11, pdf_pages: [15, 16]}
+    note: Реализация современнее библиографических примеров 2008 года
+    status: implemented
+  - id: assignment
+    value: required-form-with-visible-placeholders
+    source: {document: sto-susu-21-2008, clause: 7.2, pdf_pages: [12, 13]}
+    rationale: Форма обязательна, но утверждаемые кафедрой данные не должны выдумываться
+    status: pending-input
+  - id: title_page.organization
+    value: current-official-name
+    source: {document: current-university-name}
+    overrides: sto-susu-21-2008
+    rationale: Организационно-правовая форма и ведомство 2008 года устарели
+    status: implemented
+
+content_policy:
+  semantic_markdown_only: true
+  forbidden_commands:
+    - vspace
+    - hspace
+    - fontsize
+    - setlength
+    - newgeometry
+    - pagebreak
+    - newpage

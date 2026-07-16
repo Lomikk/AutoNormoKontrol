@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
     [string]$ProfilePath = '',
+    [string]$WorkspaceRoot = '',
+    [string[]]$ContentPaths = @(),
     [string]$RegistryPath = '',
     [string]$JsonOutputPath = '',
     [string]$MarkdownOutputPath = '',
@@ -16,8 +18,19 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $root }
+$WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot)
 . (Join-Path $PSScriptRoot 'profile.ps1')
-$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $ProfilePath
+if ($ContentPaths.Count -eq 0) {
+    $workspaceManifest = Join-Path $WorkspaceRoot 'project.yaml'
+    if (Test-Path -LiteralPath $workspaceManifest -PathType Leaf) {
+        $ContentPaths = @((Get-Content -Raw -Encoding UTF8 -LiteralPath $workspaceManifest |
+            ConvertFrom-Json).document.content | ForEach-Object { [string]$_ })
+    }
+}
+$resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root `
+    -WorkspaceRoot $WorkspaceRoot -ProfilePath $ProfilePath `
+    -ContentPaths $ContentPaths
 if (-not $PSBoundParameters.ContainsKey('RegistryPath')) {
     $RegistryPath = [string]$resolvedProfile.Data.compliance.requirements
 }
@@ -56,17 +69,25 @@ else {
 }
 
 function Resolve-ProjectPath {
-    param([string]$Path)
+    param(
+        [string]$Path,
+        [string]$BaseRoot = $root
+    )
 
     if ([System.IO.Path]::IsPathRooted($Path)) { return $Path }
-    return Join-Path $root $Path
+    return Join-Path $BaseRoot $Path
 }
 
 function Get-RelativeProjectPath {
     param([string]$Path)
 
-    $fullRoot = [System.IO.Path]::GetFullPath($root).TrimEnd('\', '/')
     $fullPath = [System.IO.Path]::GetFullPath($Path)
+    $fullWorkspace = [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
+    $workspacePrefix = $fullWorkspace + [System.IO.Path]::DirectorySeparatorChar
+    if ($fullPath.StartsWith($workspacePrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $fullPath.Substring($fullWorkspace.Length).TrimStart('\', '/').Replace('\', '/')
+    }
+    $fullRoot = [System.IO.Path]::GetFullPath($root).TrimEnd('\', '/')
     if ($fullPath.StartsWith($fullRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
         return $fullPath.Substring($fullRoot.Length).TrimStart('\', '/').Replace('\', '/')
     }
@@ -74,12 +95,15 @@ function Get-RelativeProjectPath {
 }
 
 function Get-TextFiles {
-    param([string[]]$Paths)
+    param(
+        [string[]]$Paths,
+        [string]$BaseRoot = $root
+    )
 
     $result = New-Object System.Collections.Generic.List[System.IO.FileInfo]
     foreach ($path in $Paths) {
         if ([string]::IsNullOrWhiteSpace($path)) { continue }
-        $fullPath = Resolve-ProjectPath $path
+        $fullPath = Resolve-ProjectPath $path $BaseRoot
         if (Test-Path -LiteralPath $fullPath -PathType Leaf) {
             $result.Add((Get-Item -LiteralPath $fullPath))
         }
@@ -294,8 +318,8 @@ $implementationFiles = @($implementationFiles | Sort-Object FullName -Unique)
 $testFiles = @(Get-TextFiles $TestPaths)
 $testFiles = @($testFiles | Sort-Object FullName -Unique)
 $promptFiles = @(Get-TextFiles $PromptPaths)
-$semanticFiles = @(Get-TextFiles $SemanticPaths)
-$externalFiles = @(Get-TextFiles $ExternalPaths)
+$semanticFiles = @(Get-TextFiles $SemanticPaths $WorkspaceRoot)
+$externalFiles = @(Get-TextFiles $ExternalPaths $WorkspaceRoot)
 
 $allEvidenceFiles = @(
     $implementationFiles + $testFiles + $promptFiles + $semanticFiles + $externalFiles |
@@ -487,8 +511,8 @@ foreach ($item in $results) {
         (Escape-MarkdownCell $item.registry_notes)))
 }
 
-$jsonOutput = Resolve-ProjectPath $JsonOutputPath
-$markdownOutput = Resolve-ProjectPath $MarkdownOutputPath
+$jsonOutput = Resolve-ProjectPath $JsonOutputPath $WorkspaceRoot
+$markdownOutput = Resolve-ProjectPath $MarkdownOutputPath $WorkspaceRoot
 foreach ($output in @($jsonOutput, $markdownOutput)) {
     $directory = Split-Path -Parent $output
     if (-not (Test-Path -LiteralPath $directory -PathType Container)) {

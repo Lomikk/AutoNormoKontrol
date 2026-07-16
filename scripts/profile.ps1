@@ -134,14 +134,16 @@ function Get-ProfileDigest {
         [string]$Document.compliance.semantic_review_template,
         [string]$Document.compliance.external_acceptance_template,
         [string]$Document.compliance.system_prompt,
-        [string]$Document.compliance.format_spec,
         [string]$Document.compliance.research_notes,
         [string]$Document.render.template,
         [string]$Document.render.postflight
     ) + @($Document.render.style_files) + @($Document.render.lua_filters)
     $paths = @($paths | ForEach-Object { ([string]$_).Replace('\', '/') } | Sort-Object -Unique)
     $lines = foreach ($path in $paths) {
-        $full = Resolve-ProfileProjectPath -Root $Root -Path $path -Location 'profile_digest' -Kind File
+        # R1/workspace: only immutable engine/profile files define the profile
+        # digest. Mutable workspace inputs belong to the document snapshot.
+        $full = Resolve-ProfileProjectPath -Root $Root -Path $path `
+            -Location 'profile_digest' -Kind File
         $path + [char]0 + (Get-ProfileSha256 $full)
     }
     $bytes = [System.Text.Encoding]::UTF8.GetBytes(($lines -join "`n"))
@@ -158,10 +160,17 @@ function Resolve-AutoNormoKontrolProfile {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)][string]$Root,
-        [string]$ProfilePath = ''
+        [string]$WorkspaceRoot = '',
+        [string]$ProfilePath = '',
+        [string[]]$ContentPaths = @()
     )
 
     $rootFull = [System.IO.Path]::GetFullPath($Root)
+    if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $rootFull }
+    $workspaceFull = [System.IO.Path]::GetFullPath($WorkspaceRoot)
+    if (-not (Test-Path -LiteralPath $workspaceFull -PathType Container)) {
+        throw "Workspace root does not exist: $workspaceFull"
+    }
     if ([string]::IsNullOrWhiteSpace($ProfilePath)) {
         $ProfilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $rootFull
     }
@@ -204,6 +213,13 @@ function Resolve-AutoNormoKontrolProfile {
         'assignment', 'abstract', 'figures', 'tables', 'equations', 'appendices'
     )
 
+    # R1/workspace: chapter order belongs to one document, not to the engine
+    # profile. Legacy root builds keep profile.inputs.content; a real workspace
+    # supplies the explicit ordered project.yaml document.content list.
+    if ($ContentPaths.Count -gt 0) {
+        $document.inputs.content = @($ContentPaths)
+    }
+
     if ([int]$document.schema_version -ne 1 -or [string]$document.schema_version -ne '1') {
         throw "Unsupported profile schema_version: $($document.schema_version)"
     }
@@ -216,40 +232,43 @@ function Resolve-AutoNormoKontrolProfile {
         throw "Invalid document_type: $($document.document_type)"
     }
 
-    $fileFields = @(
-        @('inputs.metadata', $document.inputs.metadata),
-        @('inputs.bibliography', $document.inputs.bibliography),
-        @('inputs.asset_manifest', $document.inputs.asset_manifest),
+    $engineFileFields = @(
         @('compliance.canonical_inventory', $document.compliance.canonical_inventory),
         @('compliance.requirements', $document.compliance.requirements),
         @('compliance.review_inventory', $document.compliance.review_inventory),
-        @('compliance.semantic_review', $document.compliance.semantic_review),
-        @('compliance.external_acceptance', $document.compliance.external_acceptance),
         @('compliance.semantic_review_template', $document.compliance.semantic_review_template),
         @('compliance.external_acceptance_template', $document.compliance.external_acceptance_template),
         @('compliance.system_prompt', $document.compliance.system_prompt),
-        @('compliance.format_spec', $document.compliance.format_spec),
         @('compliance.research_notes', $document.compliance.research_notes),
         @('render.template', $document.render.template),
         @('render.postflight', $document.render.postflight)
     )
-    foreach ($entry in $fileFields) {
+    foreach ($entry in $engineFileFields) {
         [void](Resolve-ProfileProjectPath -Root $rootFull -Path ([string]$entry[1]) `
             -Location ([string]$entry[0]) -Kind File)
     }
 
-    $arrayFields = @(
-        @('inputs.content', $document.inputs.content, 'File'),
+    $workspaceFileFields = @(
+        @('inputs.metadata', $document.inputs.metadata),
+        @('inputs.bibliography', $document.inputs.bibliography),
+        @('inputs.asset_manifest', $document.inputs.asset_manifest),
+        @('compliance.semantic_review', $document.compliance.semantic_review),
+        @('compliance.external_acceptance', $document.compliance.external_acceptance),
+        @('compliance.format_spec', $document.compliance.format_spec)
+    )
+    foreach ($entry in $workspaceFileFields) {
+        [void](Resolve-ProfileProjectPath -Root $workspaceFull -Path ([string]$entry[1]) `
+            -Location ([string]$entry[0]) -Kind File)
+    }
+
+    $engineArrayFields = @(
         @('compliance.implementation_paths', $document.compliance.implementation_paths, 'Any'),
         @('compliance.test_paths', $document.compliance.test_paths, 'Any'),
         @('compliance.prompt_paths', $document.compliance.prompt_paths, 'Any'),
-        @('compliance.semantic_paths', $document.compliance.semantic_paths, 'Any'),
-        @('compliance.external_paths', $document.compliance.external_paths, 'Any'),
         @('render.style_files', $document.render.style_files, 'File'),
-        @('render.lua_filters', $document.render.lua_filters, 'File'),
-        @('render.tex_input_paths', $document.render.tex_input_paths, 'Directory')
+        @('render.lua_filters', $document.render.lua_filters, 'File')
     )
-    foreach ($entry in $arrayFields) {
+    foreach ($entry in $engineArrayFields) {
         $items = @(ConvertTo-ProfileStringArray -Value $entry[1] -Location $entry[0])
         foreach ($item in $items) {
             $kind = [string]$entry[2]
@@ -265,6 +284,40 @@ function Resolve-AutoNormoKontrolProfile {
         }
     }
 
+    $workspaceArrayFields = @(
+        @('inputs.content', $document.inputs.content, 'File'),
+        @('compliance.semantic_paths', $document.compliance.semantic_paths, 'Any'),
+        @('compliance.external_paths', $document.compliance.external_paths, 'Any')
+    )
+    foreach ($entry in $workspaceArrayFields) {
+        $items = @(ConvertTo-ProfileStringArray -Value $entry[1] -Location $entry[0])
+        foreach ($item in $items) {
+            $kind = [string]$entry[2]
+            if ($kind -eq 'Any') {
+                $full = Resolve-ProfileProjectPath -Root $workspaceFull -Path $item `
+                    -Location $entry[0] -Kind Output
+                if (-not (Test-Path -LiteralPath $full)) {
+                    throw "Profile evidence path '$($entry[0])' was not found: $item"
+                }
+            }
+            else {
+                [void](Resolve-ProfileProjectPath -Root $workspaceFull -Path $item `
+                    -Location $entry[0] -Kind $kind)
+            }
+        }
+    }
+
+    # R1/workspace: the current v1 manifest uses `.` for workspace resources
+    # and profile-relative directories for trusted TeX inputs. Do not infer a
+    # root by scanning the filesystem.
+    $texInputItems = @(ConvertTo-ProfileStringArray -Value $document.render.tex_input_paths `
+        -Location 'render.tex_input_paths')
+    foreach ($item in $texInputItems) {
+        $texRoot = if ($item -eq '.') { $workspaceFull } else { $rootFull }
+        [void](Resolve-ProfileProjectPath -Root $texRoot -Path $item `
+            -Location 'render.tex_input_paths' -Kind Directory)
+    }
+
     Assert-ProfileString $document.render.pandoc_from 'render.pandoc_from'
     foreach ($entry in @(
         @('assets.report', $document.assets.report),
@@ -277,7 +330,7 @@ function Resolve-AutoNormoKontrolProfile {
         @('reports.traceability_json', $document.reports.traceability_json),
         @('reports.traceability_markdown', $document.reports.traceability_markdown)
     )) {
-        [void](Resolve-ProfileProjectPath -Root $rootFull -Path ([string]$entry[1]) `
+        [void](Resolve-ProfileProjectPath -Root $workspaceFull -Path ([string]$entry[1]) `
             -Location ([string]$entry[0]) -Kind Output)
     }
 
@@ -297,6 +350,8 @@ function Resolve-AutoNormoKontrolProfile {
         ManifestSha256 = Get-ProfileSha256 $manifestFull
         ProfileDigest = Get-ProfileDigest -Root $rootFull `
             -ManifestRelativePath $manifestRelative -Document $document
+        EngineRoot = $rootFull
+        WorkspaceRoot = $workspaceFull
         Data = $document
     }
 }
