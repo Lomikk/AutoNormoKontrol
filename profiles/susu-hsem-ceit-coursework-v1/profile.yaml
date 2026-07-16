@@ -2,7 +2,8 @@
   "schema_version": 1,
   "profile_id": "susu-hsem-ceit-coursework-v1",
   "document_type": "coursework",
-  "inputs": {
+  "starter": {
+    "directory": "profiles/susu-hsem-ceit-coursework-v1/starter",
     "content": [
       "content/00-introduction.md",
       "content/01-literature-review.md",
@@ -10,7 +11,9 @@
       "content/03-conclusion.md",
       "content/90-bibliography.md",
       "content/99-appendix.md"
-    ],
+    ]
+  },
+  "inputs": {
     "metadata": "metadata.yaml",
     "bibliography": "bibliography.bib",
     "asset_manifest": "assets/manifest.json"
@@ -43,10 +46,10 @@
       "profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md"
     ],
     "semantic_paths": [
-      "compliance/semantic-review.yaml"
+      "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml"
     ],
     "external_paths": [
-      "compliance/external-acceptance.yaml"
+      "profiles/susu-hsem-ceit-coursework-v1/review-templates/external-acceptance.yaml"
     ]
   },
   "render": {

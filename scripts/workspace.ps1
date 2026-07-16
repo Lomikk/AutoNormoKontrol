@@ -74,29 +74,6 @@ function Resolve-AutoNormoKontrolWorkspace {
 
     $engineVersion = Get-AutoNormoKontrolEngineVersion -EngineRoot $engineFull
     $manifestFull = Join-Path $workspaceFull $script:AutoNormoKontrolWorkspaceManifest
-    $legacy = $workspaceFull.Equals($engineFull, [StringComparison]::OrdinalIgnoreCase) -and
-        -not (Test-Path -LiteralPath $manifestFull -PathType Leaf)
-
-    if ($legacy) {
-        $profilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $engineFull
-        $profile = Resolve-AutoNormoKontrolProfile -Root $engineFull `
-            -WorkspaceRoot $workspaceFull -ProfilePath $profilePath
-        return [pscustomobject][ordered]@{
-            EngineRoot = $engineFull
-            WorkspaceRoot = $workspaceFull
-            ManifestPath = $null
-            Manifest = $null
-            Legacy = $true
-            EngineVersion = $engineVersion
-            CreatedWithEngineVersion = $engineVersion
-            EngineVersionMatches = $true
-            ProfilePath = $profilePath
-            PinnedProfileDigest = $profile.ProfileDigest
-            ProfileDigestMatches = $true
-            Profile = $profile
-        }
-    }
-
     if (-not (Test-Path -LiteralPath $manifestFull -PathType Leaf)) {
         throw "Workspace manifest was not found: $manifestFull"
     }
@@ -156,9 +133,7 @@ function Resolve-AutoNormoKontrolWorkspace {
         [void](Resolve-WorkspaceOwnedPath $workspaceFull $normalized File)
     }
 
-    $profile = Resolve-AutoNormoKontrolProfile -Root $engineFull `
-        -WorkspaceRoot $workspaceFull -ProfilePath $profilePath `
-        -ContentPaths $contentPaths
+    $profile = Resolve-AutoNormoKontrolProfile -Root $engineFull -ProfilePath $profilePath
     if ($profile.ProfileId -ne $profileId) {
         throw "Workspace expects profile '$profileId', manifest declares '$($profile.ProfileId)'."
     }
@@ -167,12 +142,46 @@ function Resolve-AutoNormoKontrolWorkspace {
             $document.document.type, $profile.DocumentType)
     }
 
+    # The profile only declares these workspace-owned paths. Resolve every
+    # concrete input and output here, against the selected project root.
+    $workspaceInputs = @(
+        @('inputs.metadata', $profile.Data.inputs.metadata),
+        @('inputs.bibliography', $profile.Data.inputs.bibliography),
+        @('inputs.asset_manifest', $profile.Data.inputs.asset_manifest),
+        @('compliance.semantic_review', $profile.Data.compliance.semantic_review),
+        @('compliance.external_acceptance', $profile.Data.compliance.external_acceptance),
+        @('compliance.format_spec', $profile.Data.compliance.format_spec)
+    )
+    foreach ($entry in $workspaceInputs) {
+        [void](Resolve-WorkspaceOwnedPath $workspaceFull ([string]$entry[1]) File)
+    }
+
+    $workspaceOutputs = @(
+        @('assets.report', $profile.Data.assets.report),
+        @('assets.output_directory', $profile.Data.assets.output_directory),
+        @('outputs.tex', $profile.Data.outputs.tex),
+        @('outputs.pdf', $profile.Data.outputs.pdf),
+        @('reports.document_snapshot', $profile.Data.reports.document_snapshot),
+        @('reports.build_report', $profile.Data.reports.build_report),
+        @('reports.postflight', $profile.Data.reports.postflight),
+        @('reports.traceability_json', $profile.Data.reports.traceability_json),
+        @('reports.traceability_markdown', $profile.Data.reports.traceability_markdown)
+    )
+    foreach ($entry in $workspaceOutputs) {
+        [void](Resolve-WorkspaceOwnedPath $workspaceFull ([string]$entry[1]) Output)
+    }
+
+    foreach ($texInput in @($profile.Data.render.tex_input_paths)) {
+        if ([string]$texInput -eq '.') {
+            [void](Resolve-WorkspaceOwnedPath $workspaceFull '.' Directory)
+        }
+    }
+
     return [pscustomobject][ordered]@{
         EngineRoot = $engineFull
         WorkspaceRoot = $workspaceFull
         ManifestPath = $manifestFull
         Manifest = $document
-        Legacy = $false
         EngineVersion = $engineVersion
         CreatedWithEngineVersion = [string]$document.engine.created_with
         EngineVersionMatches = $engineVersion -eq [string]$document.engine.created_with
@@ -233,19 +242,11 @@ function New-AutoNormoKontrolWorkspace {
     if ([string]::IsNullOrWhiteSpace($ProfilePath)) {
         $ProfilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $engineFull
     }
-    $profileManifest = Resolve-ProfileProjectPath -Root $engineFull -Path $ProfilePath `
-        -Location 'new.profile' -Kind File
-    try {
-        $profileData = [System.IO.File]::ReadAllText(
-            $profileManifest,
-            [System.Text.Encoding]::UTF8
-        ) | ConvertFrom-Json
-    }
-    catch { throw "Profile manifest is not valid JSON-compatible YAML: $($_.Exception.Message)" }
-    $starter = Join-Path (Split-Path -Parent $profileManifest) 'starter'
-    if (-not (Test-Path -LiteralPath $starter -PathType Container)) {
-        throw "Profile starter directory was not found: $starter"
-    }
+    $profile = Resolve-AutoNormoKontrolProfile -Root $engineFull -ProfilePath $ProfilePath
+    $profileData = $profile.Data
+    $starter = Resolve-ProfileProjectPath -Root $engineFull `
+        -Path ([string]$profileData.starter.directory) -Location 'starter.directory' `
+        -Kind Directory
 
     $staging = Join-Path $workspacesRoot ('.ank-new-' + [guid]::NewGuid().ToString('N'))
     $committed = $false
@@ -310,13 +311,13 @@ exit /b %ERRORLEVEL%
         )
 
         $engineVersion = Get-AutoNormoKontrolEngineVersion -EngineRoot $engineFull
-        $contentPaths = @(ConvertTo-ProfileStringArray -Value $profileData.inputs.content `
-            -Location 'inputs.content')
+        $contentPaths = @(ConvertTo-ProfileStringArray -Value $profileData.starter.content `
+            -Location 'starter.content')
         $manifest = [pscustomobject][ordered]@{
             schema_version = 1
             profile = [pscustomobject][ordered]@{
                 id = [string]$profileData.profile_id
-                manifest = $ProfilePath.Replace('\', '/')
+                manifest = $profile.ManifestPath
                 digest = ('0' * 64)
             }
             engine = [pscustomobject][ordered]@{
@@ -334,13 +335,10 @@ exit /b %ERRORLEVEL%
             (New-Object System.Text.UTF8Encoding($false))
         )
 
-        $resolved = Resolve-AutoNormoKontrolProfile -Root $engineFull `
-            -WorkspaceRoot $staging -ProfilePath $ProfilePath `
-            -ContentPaths $contentPaths
-        $manifest.profile.id = $resolved.ProfileId
-        $manifest.profile.manifest = $resolved.ManifestPath
-        $manifest.profile.digest = $resolved.ProfileDigest
-        $manifest.document.type = $resolved.DocumentType
+        $manifest.profile.id = $profile.ProfileId
+        $manifest.profile.manifest = $profile.ManifestPath
+        $manifest.profile.digest = $profile.ProfileDigest
+        $manifest.document.type = $profile.DocumentType
         [System.IO.File]::WriteAllText(
             (Join-Path $staging $script:AutoNormoKontrolWorkspaceManifest),
             ($manifest | ConvertTo-Json -Depth 8),

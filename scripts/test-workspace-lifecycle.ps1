@@ -49,6 +49,14 @@ function Get-OptionalHash {
     return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
 }
 
+function Get-HelpCommandNames {
+    param([string]$Text)
+    return @([regex]::Matches(
+        $Text,
+        '(?m)^\s{2}([a-z][a-z0-9-]*)\s{2,}'
+    ) | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
+}
+
 function Write-WorkspaceManifest {
     param([object]$Document)
     [System.IO.File]::WriteAllText(
@@ -61,8 +69,13 @@ function Write-WorkspaceManifest {
 try {
     $rootArtifacts = @(
         'build/coursework.pdf',
+        'build/coursework.tex',
         'build/build-report.json',
-        'build/sto-traceability.json'
+        'build/document-snapshot.json',
+        'build/compliance-report.json',
+        'build/sto-traceability.json',
+        'output/document.pdf',
+        'output/export-report.json'
     )
     $rootHashesBefore = @{}
     foreach ($path in $rootArtifacts) {
@@ -89,6 +102,40 @@ try {
         Assert-Lifecycle (Test-Path -LiteralPath (Join-Path $workspaceRoot $relative) -PathType Leaf) `
             "starter file is missing: $relative"
     }
+    $localLauncher = Join-Path $workspaceRoot 'AutoNormoKontrol.cmd'
+
+    # R1/workspace-only: a document launcher exposes only the document lifecycle.
+    $workspaceHelp = Invoke-LifecycleCli -FilePath $localLauncher `
+        -Arguments @('help') -WorkingDirectory $workspaceRoot
+    $actualWorkspaceCommands = @(Get-HelpCommandNames $workspaceHelp.Text)
+    $expectedWorkspaceCommands = @(
+        'draft', 'strict', 'status', 'open', 'export', 'archive', 'help'
+    ) | Sort-Object
+    Assert-Lifecycle ($workspaceHelp.ExitCode -eq 0 -and
+        @(Compare-Object $expectedWorkspaceCommands $actualWorkspaceCommands).Count -eq 0) `
+        ("workspace help must expose exactly [{0}], got [{1}]`n{2}" -f
+            ($expectedWorkspaceCommands -join ', '),
+            ($actualWorkspaceCommands -join ', '),
+            $workspaceHelp.Text)
+
+    $wrongWorkspaceName = 'Wrong mode ' + [guid]::NewGuid().ToString('N').Substring(0, 8)
+    $wrongWorkspacePath = Join-Path $workspacesRoot $wrongWorkspaceName
+    $centralOnlyCases = @(
+        [pscustomobject]@{ Name = 'new'; Arguments = @('new', $wrongWorkspaceName) },
+        [pscustomobject]@{ Name = 'check'; Arguments = @('check') },
+        [pscustomobject]@{ Name = 'doctor'; Arguments = @('doctor') },
+        [pscustomobject]@{ Name = 'install'; Arguments = @('install', '--yes') }
+    )
+    foreach ($case in $centralOnlyCases) {
+        $wrongMode = Invoke-LifecycleCli -FilePath $localLauncher `
+            -Arguments $case.Arguments -WorkingDirectory $workspaceRoot
+        Assert-Lifecycle ($wrongMode.ExitCode -eq 2 -and
+            $wrongMode.Text -match '(?i)AutoNormoKontrol[.]cmd') `
+            ("workspace accepted central command '{0}' or omitted a mode diagnostic " +
+                "(exit {1}):`n{2}" -f $case.Name, $wrongMode.ExitCode, $wrongMode.Text)
+    }
+    Assert-Lifecycle (-not (Test-Path -LiteralPath $wrongWorkspacePath)) `
+        'workspace-local new created a sibling workspace'
     foreach ($forbidden in @('scripts', 'profiles', 'sources')) {
         Assert-Lifecycle (-not (Test-Path -LiteralPath (Join-Path $workspaceRoot $forbidden))) `
             "workspace contains an engine directory: $forbidden"
@@ -225,7 +272,6 @@ try {
         [System.IO.File]::WriteAllText($manifestPath, $originalManifest, $encoding)
     }
 
-    $localLauncher = Join-Path $workspaceRoot 'AutoNormoKontrol.cmd'
     foreach ($command in @('export', 'archive')) {
         $beforeBuild = Invoke-LifecycleCli -FilePath $localLauncher `
             -Arguments @($command) -WorkingDirectory $engineRoot
@@ -235,6 +281,16 @@ try {
     Assert-Lifecycle (-not (Test-Path -LiteralPath `
         (Join-Path $workspaceRoot 'output/document.pdf') -PathType Leaf)) `
         'pre-build publish created output/document.pdf'
+
+    # The starter is intentionally not accepted for release. This call proves
+    # that the public strict command reaches build.ps1 in Strict mode and that
+    # the compliance gates, not a broken CLI dispatch, reject it.
+    $strictBeforeAcceptance = Invoke-LifecycleCli -FilePath $localLauncher `
+        -Arguments @('strict') -WorkingDirectory $engineRoot
+    Assert-Lifecycle ($strictBeforeAcceptance.ExitCode -ne 0 -and
+        $strictBeforeAcceptance.Text -match 'STO-(AI|EXT)-GATE') `
+        ("starter Strict did not fail through a compliance gate:`n" +
+            $strictBeforeAcceptance.Text)
 
     $draft = Invoke-LifecycleCli -FilePath $localLauncher `
         -Arguments @('draft') -WorkingDirectory $engineRoot

@@ -1,8 +1,6 @@
 [CmdletBinding()]
 param(
     [string]$ProfilePath = '',
-    [string]$WorkspaceRoot = '',
-    [string[]]$ContentPaths = @(),
     [string]$CanonicalInventoryPath = '',
     [string]$RegistryPath = '',
     [string[]]$ImplementationPaths = @(),
@@ -15,19 +13,9 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
-if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $root }
-$WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot)
 . (Join-Path $PSScriptRoot 'profile.ps1')
-if ($ContentPaths.Count -eq 0) {
-    $workspaceManifest = Join-Path $WorkspaceRoot 'project.yaml'
-    if (Test-Path -LiteralPath $workspaceManifest -PathType Leaf) {
-        $ContentPaths = @((Get-Content -Raw -Encoding UTF8 -LiteralPath $workspaceManifest |
-            ConvertFrom-Json).document.content | ForEach-Object { [string]$_ })
-    }
-}
 $resolvedProfile = Resolve-AutoNormoKontrolProfile -Root $root `
-    -WorkspaceRoot $WorkspaceRoot -ProfilePath $ProfilePath `
-    -ContentPaths $ContentPaths
+    -ProfilePath $ProfilePath
 if (-not $PSBoundParameters.ContainsKey('CanonicalInventoryPath')) {
     $CanonicalInventoryPath = [string]$resolvedProfile.Data.compliance.canonical_inventory
 }
@@ -280,8 +268,8 @@ $implementationFiles = @($implementationFiles | Sort-Object FullName -Unique)
 $testFiles = @(Get-TextFiles $TestPaths)
 $testFiles = @($testFiles | Sort-Object FullName -Unique)
 $promptFiles = @(Get-TextFiles $PromptPaths)
-$semanticFiles = @(Get-TextFiles $SemanticPaths $WorkspaceRoot)
-$externalFiles = @(Get-TextFiles $ExternalPaths $WorkspaceRoot)
+$semanticFiles = @(Get-TextFiles $SemanticPaths $root)
+$externalFiles = @(Get-TextFiles $ExternalPaths $root)
 
 $failures = New-Object System.Collections.Generic.List[string]
 $seenIds = @{}

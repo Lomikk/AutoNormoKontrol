@@ -1,6 +1,5 @@
 /build/
 /Workspaces/
-/output/
 *.aux
 *.bcf
 *.blg
@@ -11,6 +10,3 @@
 *.run.xml
 *.synctex.gz
 *.toc
-.aider*
-
-nppBackup

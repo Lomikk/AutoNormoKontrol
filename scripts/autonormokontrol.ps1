@@ -11,8 +11,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $engineRoot = Split-Path -Parent $PSScriptRoot
-if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $engineRoot }
-$workspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
+$script:IsWorkspaceMode = -not [string]::IsNullOrWhiteSpace($WorkspaceRoot)
+$workspaceRoot = if ($script:IsWorkspaceMode) {
+    [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
+}
+else {
+    $null
+}
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
 . (Join-Path $PSScriptRoot 'profile.ps1')
 . (Join-Path $PSScriptRoot 'workspace.ps1')
@@ -52,6 +57,9 @@ function Get-ActiveProfile {
 }
 
 function Get-ActiveWorkspace {
+    if (-not $script:IsWorkspaceMode) {
+        throw 'Команда документа доступна только из Workspaces/<работа>.'
+    }
     if ($null -eq $script:ActiveWorkspace) {
         $script:ActiveWorkspace = Resolve-AutoNormoKontrolWorkspace `
             -EngineRoot $engineRoot -WorkspaceRoot $workspaceRoot
@@ -278,7 +286,7 @@ function Show-Doctor {
     Write-Host ''
     Write-Host ("PowerShell:    {0} ({1})" -f $PSVersionTable.PSVersion, $PSVersionTable.PSEdition)
     Write-Host ("Движок:        {0}" -f $engineRoot)
-    Write-Host ("Рабочая папка: {0}" -f $workspaceRoot)
+    Write-Host 'Контекст:      центральный движок'
 
     if ($missingRequired.Count -gt 0) {
         Write-Failure ("Не хватает обязательных инструментов: {0}" -f ($missingRequired -join ', '))
@@ -320,14 +328,12 @@ function Show-Status {
     Write-Host ("Workspace:              {0}" -f $workspaceRoot)
     Write-Host ("Профиль:                {0}" -f $profile.ProfileId)
     Write-Host ("Digest профиля:         {0}" -f $profile.ProfileDigest)
-    if (-not $workspace.Legacy) {
-        $digestState = if ($workspace.ProfileDigestMatches) { 'совпадает' } else { 'ИЗМЕНИЛСЯ' }
-        Write-Host ("Зафиксированный digest: {0} ({1})" -f
-            $workspace.PinnedProfileDigest, $digestState)
-        $engineState = if ($workspace.EngineVersionMatches) { 'совпадает' } else { 'ДРУГАЯ ВЕРСИЯ' }
-        Write-Host ("Версия движка:          {0}; создано на {1} ({2})" -f
-            $workspace.EngineVersion, $workspace.CreatedWithEngineVersion, $engineState)
-    }
+    $digestState = if ($workspace.ProfileDigestMatches) { 'совпадает' } else { 'ИЗМЕНИЛСЯ' }
+    Write-Host ("Зафиксированный digest: {0} ({1})" -f
+        $workspace.PinnedProfileDigest, $digestState)
+    $engineState = if ($workspace.EngineVersionMatches) { 'совпадает' } else { 'ДРУГАЯ ВЕРСИЯ' }
+    Write-Host ("Версия движка:          {0}; создано на {1} ({2})" -f
+        $workspace.EngineVersion, $workspace.CreatedWithEngineVersion, $engineState)
     Write-Host ("Смысловой аудит:        {0}" -f $semanticStatus)
     Write-Host ("Внешняя приёмка:        {0}" -f $externalStatus)
 
@@ -402,10 +408,6 @@ function Open-ResultPdf {
 function New-WorkspaceFromCli {
     param([string[]]$Arguments)
 
-    if (-not $workspaceRoot.Equals($engineRoot, [StringComparison]::OrdinalIgnoreCase)) {
-        Write-Failure 'Команда new запускается из центрального AutoNormoKontrol.cmd.'
-        return 2
-    }
     if ($Arguments.Count -ne 1 -or [string]::IsNullOrWhiteSpace([string]$Arguments[0])) {
         Write-Failure 'Использование: AutoNormoKontrol.cmd new <название работы>'
         return 2
@@ -420,9 +422,6 @@ function New-WorkspaceFromCli {
 }
 
 function Export-WorkspacePdf {
-    if ($workspaceRoot.Equals($engineRoot, [StringComparison]::OrdinalIgnoreCase)) {
-        Write-Host 'Примечание: публикуется встроенный legacy workspace.' -ForegroundColor DarkYellow
-    }
     $result = Export-AutoNormoKontrolPdf -Workspace (Get-ActiveWorkspace)
     if ($result.Mode -eq 'draft') {
         Write-Host 'WARNING: опубликован Draft PDF; это не подтверждение Strict-готовности.' `
@@ -452,22 +451,27 @@ function Show-Help {
     Write-Host '  AutoNormoKontrol.cmd <команда>        однократный запуск'
     Write-Host ''
     Write-Host 'Команды:' -ForegroundColor DarkCyan
-    Write-Host '  new      создать новую курсовую: new <название>'
-    Write-Host '  check    полный локальный цикл: тесты, затем Draft-сборка'
-    Write-Host '  draft    собрать черновой PDF с явными предупреждениями'
-    Write-Host '  strict   строгая fail-closed сборка для выпуска'
-    Write-Host '  test     запустить тесты правил и coverage-gate'
-    Write-Host '  trace    обновить отчёт трассировки требований СТО'
-    Write-Host '  status   показать состояние аудита и последней сборки'
-    Write-Host '  doctor   проверить Pandoc, TeX Live и PDF-инструменты'
-    Write-Host '  install  установить доступные зависимости через WinGet'
-    Write-Host '  open     открыть последний собранный PDF'
-    Write-Host '  export   опубликовать последний проверенный PDF как output/document.pdf'
-    Write-Host '  archive  сохранить неизменяемую копию: archive [метка]'
-    Write-Host '  context  подготовить безопасный AI-контекст: context <capability> <content-file>'
-    Write-Host '  help     показать эту справку'
-    Write-Host ''
-    Write-Host 'CLI не меняет semantic-review или external-acceptance и не обходит Strict-gate.'
+    if ($script:IsWorkspaceMode) {
+        Write-Host '  draft    собрать черновой PDF с явными предупреждениями'
+        Write-Host '  strict   строгая fail-closed сборка для выпуска'
+        Write-Host '  status   показать состояние аудита и последней сборки'
+        Write-Host '  open     открыть последний собранный PDF'
+        Write-Host '  export   опубликовать проверенный PDF как output/document.pdf'
+        Write-Host '  archive  сохранить неизменяемую копию: archive [метка]'
+        Write-Host '  help     показать эту справку'
+        Write-Host ''
+        Write-Host 'Команды документа работают только в Workspaces/<работа>.'
+        Write-Host 'CLI не меняет журналы приёмки и не обходит Strict-gate.'
+    }
+    else {
+        Write-Host '  new      создать новую курсовую: new <название>'
+        Write-Host '  check    проверить код движка и полный жизненный цикл тестовой работы'
+        Write-Host '  doctor   проверить Pandoc, TeX Live и PDF-инструменты'
+        Write-Host '  install  установить доступные зависимости через WinGet'
+        Write-Host '  help     показать эту справку'
+        Write-Host ''
+        Write-Host 'Корень содержит только движок. Документы находятся в Workspaces/<работа>.'
+    }
     return 0
 }
 
@@ -481,8 +485,30 @@ function Invoke-CliCommand {
 
     $ExitCode.Value = 0
     $normalized = $Name.Trim().ToLowerInvariant()
+    if ($normalized -in @('-h', '--help', '/?')) { $normalized = 'help' }
+    $centralCommands = @('new', 'check', 'doctor', 'install', 'help')
+    $workspaceCommands = @('draft', 'strict', 'status', 'open', 'export', 'archive', 'help')
+    $allowed = if ($script:IsWorkspaceMode) { $workspaceCommands } else { $centralCommands }
+    if ($normalized -notin $allowed) {
+        $known = @($centralCommands + $workspaceCommands | Select-Object -Unique)
+        if ($normalized -in $known) {
+            $location = if ($script:IsWorkspaceMode) {
+                'центрального AutoNormoKontrol.cmd'
+            }
+            else {
+                'Workspaces/<работа>/AutoNormoKontrol.cmd'
+            }
+            Write-Failure ("Команда '{0}' доступна только из {1}." -f $normalized, $location)
+        }
+        else {
+            Write-Failure ("Неизвестная команда: {0}" -f $Name)
+        }
+        Write-Host 'Используйте AutoNormoKontrol.cmd help для списка команд.'
+        $ExitCode.Value = 2
+        return
+    }
     switch ($normalized) {
-        { $_ -in @('help', '-h', '--help', '/?') } {
+        'help' {
             $ExitCode.Value = Show-Help
             break
         }
@@ -517,59 +543,14 @@ function Invoke-CliCommand {
             $ExitCode.Value = Archive-WorkspacePdf -Arguments $Arguments
             break
         }
-        'trace' {
-            Write-Title 'Трассировка требований СТО'
-            $workspace = Get-ActiveWorkspace
-            $traceArguments = @(
-                '-ProfilePath', $workspace.ProfilePath,
-                '-WorkspaceRoot', $workspaceRoot
-            )
-            Invoke-ProjectScript 'report-traceability.ps1' `
-                -Arguments $traceArguments -ExitCode $ExitCode
-            break
-        }
-        'context' {
-            Write-Title 'AI context plan'
-            $workspace = Get-ActiveWorkspace
-            if (-not $workspace.Legacy) {
-                Write-Failure 'Команда context пока не входит в MVP отдельного workspace.'
-                Write-Host 'Gemini CLI запускается в корне работы и сам управляет своим контекстом.'
-                $ExitCode.Value = 2
-                break
-            }
-            if ($Arguments.Count -ne 2) {
-                Write-Failure 'Использование: AutoNormoKontrol.cmd context <capability> <content-file>'
-                Write-Host 'Пример: AutoNormoKontrol.cmd context edit-content content/00-introduction.md'
-                $ExitCode.Value = 2
-                break
-            }
-            Invoke-ProjectScript 'context-plan.ps1' `
-                -Arguments @(
-                    '-Capability', [string]$Arguments[0],
-                    '-Target', [string]$Arguments[1],
-                    '-ProfilePath', $workspace.ProfilePath
-                ) -ExitCode $ExitCode
-            break
-        }
-        'test' {
-            Write-Title 'Тесты соответствия'
-            if (-not (Assert-Tools @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext'))) {
-                $ExitCode.Value = 127
-                break
-            }
-            Invoke-ProjectScript 'test-compliance.ps1' -ExitCode $ExitCode
-            break
-        }
-        { $_ -in @('draft', 'build') } {
+        'draft' {
             Write-Title 'Черновая сборка'
             if (-not (Assert-Tools @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext'))) {
                 $ExitCode.Value = 127
                 break
             }
-            $workspace = Get-ActiveWorkspace
             Invoke-ProjectScript 'build.ps1' `
-                @('-Mode', 'Draft', '-ProfilePath', $workspace.ProfilePath,
-                    '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
+                @('-Mode', 'Draft', '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
             break
         }
         'strict' {
@@ -579,10 +560,8 @@ function Invoke-CliCommand {
                 $ExitCode.Value = 127
                 break
             }
-            $workspace = Get-ActiveWorkspace
             Invoke-ProjectScript 'build.ps1' `
-                @('-Mode', 'Strict', '-ProfilePath', $workspace.ProfilePath,
-                    '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
+                @('-Mode', 'Strict', '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
             break
         }
         'check' {
@@ -592,13 +571,6 @@ function Invoke-CliCommand {
                 break
             }
             Invoke-ProjectScript 'test-compliance.ps1' -ExitCode $ExitCode
-            if ($ExitCode.Value -ne 0) {
-                break
-            }
-            $workspace = Get-ActiveWorkspace
-            Invoke-ProjectScript 'build.ps1' `
-                @('-Mode', 'Draft', '-ProfilePath', $workspace.ProfilePath,
-                    '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
             break
         }
         default {
@@ -614,39 +586,48 @@ function Invoke-CliCommand {
 function Show-InteractiveMenu {
     while ($true) {
         Write-Title 'AutoNormoKontrol'
-        Write-Host '1  Полная проверка (тесты + Draft)'
-        Write-Host '2  Собрать Draft PDF'
-        Write-Host '3  Запустить тесты'
-        Write-Host '4  Показать состояние проекта'
-        Write-Host '5  Обновить трассировку СТО'
-        Write-Host '6  Проверить окружение'
-        Write-Host '7  Установить зависимости'
-        Write-Host '8  Собрать Strict PDF'
-        Write-Host '9  Открыть последний PDF'
-        Write-Host 'N  Создать новую курсовую'
-        Write-Host 'E  Опубликовать output/document.pdf'
-        Write-Host 'A  Создать архивный снимок'
+        if ($script:IsWorkspaceMode) {
+            Write-Host '1  Собрать Draft PDF'
+            Write-Host '2  Собрать Strict PDF'
+            Write-Host '3  Показать состояние работы'
+            Write-Host '4  Открыть последний PDF'
+            Write-Host '5  Опубликовать output/document.pdf'
+            Write-Host '6  Создать архивный снимок'
+        }
+        else {
+            Write-Host '1  Создать новую курсовую'
+            Write-Host '2  Проверить движок'
+            Write-Host '3  Проверить окружение'
+            Write-Host '4  Установить зависимости'
+        }
         Write-Host 'H  Справка'
         Write-Host 'Q  Выход'
         Write-Host ''
 
         $choice = (Read-Host 'Выберите действие').Trim().ToLowerInvariant()
-        $selectedCommand = switch ($choice) {
-            '1' { 'check' }
-            '2' { 'draft' }
-            '3' { 'test' }
-            '4' { 'status' }
-            '5' { 'trace' }
-            '6' { 'doctor' }
-            '7' { 'install' }
-            '8' { 'strict' }
-            '9' { 'open' }
-            'n' { 'new' }
-            'e' { 'export' }
-            'a' { 'archive' }
-            'h' { 'help' }
-            'q' { return }
-            default { '' }
+        $selectedCommand = if ($script:IsWorkspaceMode) {
+            switch ($choice) {
+                '1' { 'draft' }
+                '2' { 'strict' }
+                '3' { 'status' }
+                '4' { 'open' }
+                '5' { 'export' }
+                '6' { 'archive' }
+                'h' { 'help' }
+                'q' { return }
+                default { '' }
+            }
+        }
+        else {
+            switch ($choice) {
+                '1' { 'new' }
+                '2' { 'check' }
+                '3' { 'doctor' }
+                '4' { 'install' }
+                'h' { 'help' }
+                'q' { return }
+                default { '' }
+            }
         }
 
         if ([string]::IsNullOrWhiteSpace($selectedCommand)) {
@@ -683,7 +664,7 @@ try {
         Show-InteractiveMenu
     }
     else {
-        if ($CommandArguments.Count -gt 0 -and $Command -notin @('install', 'context', 'new', 'archive')) {
+        if ($CommandArguments.Count -gt 0 -and $Command -notin @('install', 'new', 'archive')) {
             Write-Host ("Примечание: дополнительные аргументы пока не используются: {0}" -f
                 ($CommandArguments -join ' ')) -ForegroundColor DarkYellow
         }

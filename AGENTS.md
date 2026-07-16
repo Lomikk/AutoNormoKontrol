@@ -1,7 +1,11 @@
 # Обязательный контракт для ИИ-агентов
 
-Перед чтением или изменением `content/*.md`, `metadata.yaml`,
-`bibliography.bib`, профиля оформления либо журналов приемки полностью прочитай:
+Корень этого репозитория содержит только движок, профили, нормативные
+источники, тесты и документацию. Не создавай в корне `content/`,
+`metadata.yaml`, `bibliography.bib`, `assets/`, `format-spec.yaml` или журналы
+приёмки. Живой документ существует только в `Workspaces/<name>/`.
+
+Перед изменением активного профиля полностью прочитай:
 
 1. `profiles/active-profile.txt`;
 2. указанный там `profile.yaml`;
@@ -9,10 +13,13 @@
    `compliance.requirements`;
 4. `README.md`.
 
-Инструкция из `compliance.system_prompt` активного профиля обязательна для всей
-работы с документом и действует как fail-closed контракт. Не выбирай профиль
-сканированием каталога: единственный источник выбора —
-`profiles/active-profile.txt` либо явно переданный `-ProfilePath`.
+Инструкция из `compliance.system_prompt` активного профиля действует как
+fail-closed контракт. Не выбирай профиль сканированием каталога:
+движок использует `profiles/active-profile.txt`, а конкретная работа — точную
+ссылку и digest из её `project.yaml`.
+
+Если задача явно затрагивает конкретную работу, сначала прочитай её
+`project.yaml`, локальные `AGENTS.md` и `GEMINI.md`, затем указанный профиль.
 
 Перед изменением архитектуры профилей, созданием нового типа документа,
 кафедрального режима или команды инициализации также полностью прочитай
@@ -32,10 +39,10 @@
 - новый/изменённый пункт должен оставаться зарегистрированным в файле
   `compliance.requirements` активного профиля; нельзя ослаблять его независимый
   `compliance.canonical_inventory` либо coverage gate ради зелёной сборки;
-- после изменения содержания запускай Draft-сборку; после изменения реализации,
-  реестра, тестов или сборочных скриптов запускай
-  `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-compliance.ps1`
-  и Draft-сборку; Strict-сборку считай готовой только при фактическом exit code 0.
+- после изменения содержания запускай `draft` в каталоге этой работы;
+  после изменения движка, профиля, реестра, тестов или скриптов запускай
+  центральную команду `check`; корневой Draft не существует;
+- Strict-сборку конкретной работы считай готовой только при фактическом exit code 0.
 
 Если требование нельзя достоверно проверить кодом или смысловым аудитом, оставь
 его внешним блокером. Успешная компиляция PDF не является разрешением объявлять
@@ -67,43 +74,18 @@
 
 ## Команды проекта
 
-Предпочтительный пользовательский и агентский интерфейс из корня репозитория:
+Канонический список и точное разделение команд на центральные и workspace-команды
+находятся в [`docs/PROJECT_STRUCTURE.md`](docs/PROJECT_STRUCTURE.md). Кратко:
 
-```powershell
-.\AutoNormoKontrol.cmd doctor   # проверить зависимости и PATH
-.\AutoNormoKontrol.cmd draft    # проверить содержание и собрать черновой PDF
-.\AutoNormoKontrol.cmd check    # тесты программы, затем Draft-сборка
-.\AutoNormoKontrol.cmd status   # показать состояние аудитов и последней сборки
-.\AutoNormoKontrol.cmd export   # опубликовать актуальный успешный PDF
-.\AutoNormoKontrol.cmd archive [метка] # сохранить явный архивный снимок
-.\AutoNormoKontrol.cmd context edit-content content/00-introduction.md # подготовить AI-контекст
-.\AutoNormoKontrol.cmd strict   # финальная fail-closed сборка
-```
+- из корня движка доступны `new`, `check`, `doctor`, `install`, `help`;
+- из `Workspaces/<name>/` доступны `draft`, `strict`, `status`, `open`,
+  `export`, `archive`, `help`.
 
-Новая работа создаётся только центральной командой
-`.\AutoNormoKontrol.cmd new <название>`. В отдельном workspace список и порядок
-глав берутся из `project.yaml: document.content`; не сканируй `content/` и не
-возвращай список из manifest профиля. Тонкий launcher внутри workspace не даёт
-права изменять центральный движок.
+В отдельном workspace список и порядок глав берутся из
+`project.yaml: document.content`; не сканируй `content/` и не возвращай
+список из manifest профиля. Команды сборки без `project.yaml` отклоняются.
 
-Команда `context` принимает только один из capabilities, зарегистрированных в
-`scripts/context-capabilities-v1.json`, и точный target из `inputs.content`
-активного профиля. Сгенерированный `context-plan-v1` ограничивает editable
-область Aider и служит рекомендацией области работы для локального агента, но не
-заменяет этот файл или системную инструкцию профиля и не даёт агенту права
-самостоятельно расширять полномочия.
-
-Для диагностики и разработки допустим прямой запуск отдельных этапов:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-compliance.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -Mode Draft
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -Mode Strict
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-traceability.ps1
-```
-
-После изменения содержания достаточно Draft, если реализация программы не
-затронута. После изменения фильтров, стилей, шаблона, реестра, тестов или
-скриптов обязательно выполни `check`. Strict запускай как критерий готовности
-только после смыслового аудита и внешней приёмки; ожидаемый отказ незакрытого
-Strict не является дефектом программы.
+Для внутренней диагностики разработчик может запустить отдельный скрипт
+из `scripts/`, но это не публичный CLI. Обычная проверка изменений движка —
+`.\AutoNormoKontrol.cmd check` из его корня. Ожидаемый отказ незакрытого Strict не
+является дефектом.

@@ -8,6 +8,7 @@
     "schema_version",
     "profile_id",
     "document_type",
+    "starter",
     "inputs",
     "compliance",
     "render",
@@ -26,12 +27,20 @@
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$"
     },
+    "starter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directory", "content"],
+      "properties": {
+        "directory": { "$ref": "#/$defs/projectPath" },
+        "content": { "$ref": "#/$defs/nonEmptyPathArray" }
+      }
+    },
     "inputs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["content", "metadata", "bibliography", "asset_manifest"],
+      "required": ["metadata", "bibliography", "asset_manifest"],
       "properties": {
-        "content": { "$ref": "#/$defs/nonEmptyPathArray" },
         "metadata": { "$ref": "#/$defs/projectPath" },
         "bibliography": { "$ref": "#/$defs/projectPath" },
         "asset_manifest": { "$ref": "#/$defs/projectPath" }

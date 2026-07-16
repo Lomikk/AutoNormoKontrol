@@ -2,14 +2,14 @@
 param(
     [ValidateSet('Draft', 'Strict')]
     [string]$Mode = 'Draft',
-    [string]$ProfilePath = '',
-    [string]$WorkspaceRoot = ''
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [string]$WorkspaceRoot
 )
 
 $ErrorActionPreference = 'Stop'
 
 $engineRoot = Split-Path -Parent $PSScriptRoot
-if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $engineRoot }
 $WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
 
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
@@ -19,22 +19,8 @@ $WorkspaceRoot = [System.IO.Path]::GetFullPath($WorkspaceRoot).TrimEnd('\', '/')
 $workspace = Resolve-AutoNormoKontrolWorkspace `
     -EngineRoot $engineRoot -WorkspaceRoot $WorkspaceRoot
 $profile = $workspace.Profile
-if (-not [string]::IsNullOrWhiteSpace($ProfilePath)) {
-    $normalizedProfilePath = $ProfilePath.Replace('\', '/')
-    if ($workspace.Legacy) {
-        # R2 migration diagnostic: the embedded legacy workspace may be probed
-        # with another manifest. A real workspace remains pinned by project.yaml.
-        $profile = Resolve-AutoNormoKontrolProfile -Root $engineRoot `
-            -WorkspaceRoot $WorkspaceRoot -ProfilePath $normalizedProfilePath
-    }
-    elseif ($normalizedProfilePath -ne $workspace.ProfilePath) {
-        throw ("Explicit profile '{0}' does not match workspace profile '{1}'." -f
-            $ProfilePath, $workspace.ProfilePath)
-    }
-}
 $config = $profile.Data
 $content = @($workspace.ContentPaths)
-if ($workspace.Legacy) { $content = @($config.inputs.content | ForEach-Object { [string]$_ }) }
 
 if (-not $workspace.ProfileDigestMatches) {
     Write-Warning (("Workspace was created with profile digest {0}, current digest is {1}. " +
@@ -66,17 +52,13 @@ $outputTexPath = [string]$config.outputs.tex
 $outputPdfPath = [string]$config.outputs.pdf
 
 & (Join-Path $PSScriptRoot 'check-coverage.ps1') `
-    -ProfilePath $profile.ManifestPath `
-    -WorkspaceRoot $WorkspaceRoot `
-    -ContentPaths $content
+    -ProfilePath $profile.ManifestPath
 if (-not $?) { exit 1 }
 
 # STO-TRACEABILITY: every normal build refreshes the human- and
 # machine-readable file:line ledger after the fail-closed coverage gate.
 & (Join-Path $PSScriptRoot 'report-traceability.ps1') `
-    -ProfilePath $profile.ManifestPath `
-    -WorkspaceRoot $WorkspaceRoot `
-    -ContentPaths $content
+    -WorkspaceRoot $WorkspaceRoot
 if (-not $?) { exit 1 }
 
 & (Join-Path $PSScriptRoot 'lint-content.ps1') `
@@ -106,11 +88,9 @@ $snapshotInputs = @($content) + @(
     $bibliographyPath,
     [string]$config.compliance.format_spec
 )
-if (-not $workspace.Legacy) {
-    # R1/workspace: project.yaml owns chapter order. Reordering or adding a
-    # chapter must invalidate both semantic review and a pending export.
-    $snapshotInputs += $script:AutoNormoKontrolWorkspaceManifest
-}
+# R1/workspace: project.yaml owns chapter order. Reordering or adding a chapter
+# must invalidate both semantic review and a pending export.
+$snapshotInputs += $script:AutoNormoKontrolWorkspaceManifest
 & (Join-Path $PSScriptRoot 'write-document-snapshot.ps1') `
     -ProjectRoot $WorkspaceRoot `
     -ProfileId $profile.ProfileId `

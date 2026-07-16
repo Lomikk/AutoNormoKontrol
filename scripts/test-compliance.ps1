@@ -274,7 +274,7 @@ try {
         [System.Text.Encoding]::UTF8
     ) | ConvertFrom-Json
     $manifest = Get-ProfileTestDocument
-    $schemaSections = @('<root>', 'inputs', 'compliance', 'render', 'assets',
+    $schemaSections = @('<root>', 'starter', 'inputs', 'compliance', 'render', 'assets',
         'outputs', 'reports', 'capabilities')
     foreach ($section in $schemaSections) {
         $schemaNode = if ($section -eq '<root>') { $schema } else { $schema.properties.$section }
@@ -476,7 +476,7 @@ foreach ($requiredLiteral in @(
 foreach ($forbiddenLiteral in @(
     [string]$profileConfig.render.template,
     [string]$profileConfig.outputs.pdf,
-    [string]@($profileConfig.inputs.content)[0]
+    [string]@($profileConfig.starter.content)[0]
 )) {
     if ($buildProfileText.Contains($forbiddenLiteral)) {
         $failures.Add("R2 build integration contract: profile path remains hard-coded: $forbiddenLiteral")
@@ -672,8 +672,8 @@ if ($coverageMutation.ExitCode -ne 0 -and
 
 # STO-AI-GATE: deleting one semantic rule must be reported as an exact-set
 # violation even though other strict-review fields are also intentionally open.
-$semanticSourcePath = Join-Path $root ([string]$profileConfig.compliance.semantic_review)
-$externalSourcePath = Join-Path $root ([string]$profileConfig.compliance.external_acceptance)
+$semanticSourcePath = Join-Path $root ([string]$profileConfig.compliance.semantic_review_template)
+$externalSourcePath = Join-Path $root ([string]$profileConfig.compliance.external_acceptance_template)
 $semanticMissingPath = Join-Path $testBuild 'semantic-review-missing-rule.yaml'
 $semanticText = [System.IO.File]::ReadAllText($semanticSourcePath, [System.Text.Encoding]::UTF8)
 $semanticPattern = '(?ms)^    # STO-5\.1\r?\n    - id: STO-5\.1\r?\n.*?(?=^    # STO-5\.4\r?$)'
@@ -908,11 +908,12 @@ else {
     foreach ($directory in @('assets', 'assets/data', 'assets/plots', 'content', 'build')) {
         New-Item -ItemType Directory -Force -Path (Join-Path $assetTestRootFull $directory) | Out-Null
     }
-    Copy-Item -LiteralPath (Join-Path $root 'assets/manifest.json') `
+    $assetFixtureRoot = Join-Path $root 'tests/fixtures/asset-pipeline'
+    Copy-Item -LiteralPath (Join-Path $assetFixtureRoot 'assets/manifest.json') `
         -Destination (Join-Path $assetTestRootFull 'assets/manifest.json')
-    Copy-Item -LiteralPath (Join-Path $root 'assets/data/extraction.csv') `
+    Copy-Item -LiteralPath (Join-Path $assetFixtureRoot 'assets/data/extraction.csv') `
         -Destination (Join-Path $assetTestRootFull 'assets/data/extraction.csv')
-    Copy-Item -LiteralPath (Join-Path $root 'assets/plots/extraction.tex') `
+    Copy-Item -LiteralPath (Join-Path $assetFixtureRoot 'assets/plots/extraction.tex') `
         -Destination (Join-Path $assetTestRootFull 'assets/plots/extraction.tex')
     [System.IO.File]::WriteAllText(
         (Join-Path $assetTestRootFull 'content/sample.md'),
@@ -1105,23 +1106,6 @@ if (Test-Path -LiteralPath $assetTestRootFull -PathType Container) {
     }
 }
 
-# R1.4a/context-plan-v1 is an engine contract, not a document fixture. Keep its
-# fail-closed permission and adapter tests in a focused script, but run them as
-# part of the normal compliance suite so `check` cannot skip them.
-$contextPlanTestPath = Join-Path $root 'scripts/test-context-plan.ps1'
-if (-not (Test-Path -LiteralPath $contextPlanTestPath -PathType Leaf)) {
-    $failures.Add('context-plan-v1 contract test script is missing')
-}
-else {
-    $contextPlanTestResult = Invoke-PowerShellFile -ScriptPath $contextPlanTestPath
-    if ($contextPlanTestResult.ExitCode -ne 0) {
-        $failures.Add("context-plan-v1 contract tests failed:`n$($contextPlanTestResult.Text)")
-    }
-    else {
-        Write-Host $contextPlanTestResult.Text.TrimEnd()
-    }
-}
-
 # The CLI is the public entry point for users who should not need to know the
 # internal PowerShell scripts. Keep a small smoke contract in the normal suite.
 $cliPath = Join-Path $root 'scripts/autonormokontrol.ps1'
@@ -1165,6 +1149,26 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
         $failures.Add('CLI smoke contract: launcher must not change the global console code page')
     }
 
+    # R1/workspace-only: the central launcher manages the engine. Document
+    # commands are accepted only through a thin launcher in a real workspace.
+    $rootDocumentArtifacts = @(
+        'build/coursework.pdf',
+        'build/coursework.tex',
+        'build/build-report.json',
+        'build/document-snapshot.json',
+        'build/compliance-report.json',
+        'output/document.pdf',
+        'output/export-report.json'
+    )
+    $rootArtifactState = @{}
+    foreach ($relative in $rootDocumentArtifacts) {
+        $full = Join-Path $root $relative
+        $rootArtifactState[$relative] = if (Test-Path -LiteralPath $full -PathType Leaf) {
+            (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash
+        }
+        else { '<missing>' }
+    }
+
     $previousErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
@@ -1174,47 +1178,116 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
         $invalidOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
             -File $cliPath does-not-exist 2>&1)
         $invalidExitCode = $LASTEXITCODE
-        $contextOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
-            -File $cliPath context edit-content ([string]@($profileConfig.inputs.content)[0]) 2>&1)
-        $contextExitCode = $LASTEXITCODE
-        $contextUsageOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
-            -File $cliPath context 2>&1)
-        $contextUsageExitCode = $LASTEXITCODE
+
+        $centralWrongModeResults = [ordered]@{}
+        foreach ($workspaceOnlyCommand in @(
+            'draft', 'strict', 'status', 'open', 'export', 'archive'
+        )) {
+            $commandOutput = @(& powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass `
+                -File $cliPath $workspaceOnlyCommand 2>&1)
+            $centralWrongModeResults[$workspaceOnlyCommand] = [pscustomobject]@{
+                ExitCode = $LASTEXITCODE
+                Text = ($commandOutput | Out-String)
+            }
+        }
+
+        $buildWithoutWorkspace = @(& powershell.exe -NoLogo -NoProfile -NonInteractive `
+            -ExecutionPolicy Bypass -File (Join-Path $root 'scripts/build.ps1') 2>&1)
+        $buildWithoutWorkspaceExitCode = $LASTEXITCODE
+        $buildAtEngineRoot = @(& powershell.exe -NoLogo -NoProfile -NonInteractive `
+            -ExecutionPolicy Bypass -File (Join-Path $root 'scripts/build.ps1') `
+            -WorkspaceRoot $root 2>&1)
+        $buildAtEngineRootExitCode = $LASTEXITCODE
     }
     finally {
         $ErrorActionPreference = $previousErrorActionPreference
     }
 
     $helpText = $helpOutput | Out-String
-    if ($helpExitCode -ne 0 -or $helpText -notmatch '(?m)^\s+check\s+' -or
-        $helpText -notmatch '(?m)^\s+draft\s+' -or
-        $helpText -notmatch '(?m)^\s+install\s+' -or
-        $helpText -notmatch '(?m)^\s+new\s+' -or
-        $helpText -notmatch '(?m)^\s+export\s+' -or
-        $helpText -notmatch '(?m)^\s+archive\s+' -or
-        $helpText -notmatch '(?m)^\s+context\s+') {
-        $failures.Add("CLI smoke contract: help failed or commands are missing`n$helpText")
+    $actualCentralCommands = @([regex]::Matches(
+        $helpText,
+        '(?m)^\s{2}([a-z][a-z0-9-]*)\s{2,}'
+    ) | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
+    $expectedCentralCommands = @('new', 'check', 'doctor', 'install', 'help') | Sort-Object
+    if ($helpExitCode -ne 0 -or
+        @(Compare-Object $expectedCentralCommands $actualCentralCommands).Count -ne 0) {
+        $failures.Add(("CLI central help must expose exactly [{0}], got [{1}]`n{2}" -f
+            ($expectedCentralCommands -join ', '), ($actualCentralCommands -join ', '), $helpText))
     }
     if ($invalidExitCode -ne 2) {
         $failures.Add(('CLI smoke contract: unknown command returned {0}, expected 2' -f
             $invalidExitCode))
     }
-    if ($contextExitCode -ne 0 -or
-        -not (Test-Path -LiteralPath (Join-Path $root 'build/ai/context-plan.json') -PathType Leaf)) {
-        $failures.Add("CLI smoke contract: context command failed`n$($contextOutput | Out-String)")
+    foreach ($entry in $centralWrongModeResults.GetEnumerator()) {
+        if ($entry.Value.ExitCode -ne 2 -or
+            $entry.Value.Text -notmatch '(?i)workspace') {
+            $failures.Add(("CLI central mode accepted workspace command '{0}' or omitted " +
+                "a mode diagnostic (exit {1}):`n{2}" -f
+                $entry.Key, $entry.Value.ExitCode, $entry.Value.Text))
+        }
     }
-    if ($contextUsageExitCode -ne 2) {
-        $failures.Add(('CLI smoke contract: invalid context usage returned {0}, expected 2' -f
-            $contextUsageExitCode))
+    if ($buildWithoutWorkspaceExitCode -eq 0) {
+        $failures.Add("build.ps1 accepted a missing WorkspaceRoot:`n$($buildWithoutWorkspace | Out-String)")
+    }
+    if ($buildAtEngineRootExitCode -eq 0) {
+        $failures.Add("build.ps1 accepted the engine root as a workspace:`n$($buildAtEngineRoot | Out-String)")
+    }
+
+    foreach ($relative in $rootDocumentArtifacts) {
+        $full = Join-Path $root $relative
+        $after = if (Test-Path -LiteralPath $full -PathType Leaf) {
+            (Get-FileHash -LiteralPath $full -Algorithm SHA256).Hash
+        }
+        else { '<missing>' }
+        if ($after -ne $rootArtifactState[$relative]) {
+            $failures.Add("central wrong-mode command modified engine-root document artifact: $relative")
+        }
     }
 
     if ($helpExitCode -eq 0 -and $invalidExitCode -eq 2 -and
-        $contextExitCode -eq 0 -and $contextUsageExitCode -eq 2 -and
+        @($centralWrongModeResults.Values | Where-Object ExitCode -ne 2).Count -eq 0 -and
+        $buildWithoutWorkspaceExitCode -ne 0 -and $buildAtEngineRootExitCode -ne 0 -and
         $parseErrors.Count -eq 0) {
-        Write-Host 'PASS AutoNormoKontrol CLI smoke contract'
+        Write-Host 'PASS AutoNormoKontrol central CLI mode contract'
     }
 
     $cliText = [System.IO.File]::ReadAllText($cliPath, [System.Text.Encoding]::UTF8)
+    $checkStart = $cliText.IndexOf("'check' {", [StringComparison]::Ordinal)
+    $checkEnd = if ($checkStart -ge 0) {
+        $cliText.IndexOf('default {', $checkStart, [StringComparison]::Ordinal)
+    }
+    else { -1 }
+    if ($checkStart -lt 0 -or $checkEnd -le $checkStart) {
+        $failures.Add('CLI central check contract: check dispatch block was not found')
+    }
+    else {
+        $checkDispatch = $cliText.Substring($checkStart, $checkEnd - $checkStart)
+        if ($checkDispatch -notmatch 'test-compliance\.ps1' -or
+            $checkDispatch -match 'build\.ps1|Get-ActiveWorkspace') {
+            $failures.Add('CLI central check must run engine tests without resolving or building a document workspace')
+        }
+    }
+    $strictStart = $cliText.IndexOf("'strict' {", [StringComparison]::Ordinal)
+    $strictEnd = if ($strictStart -ge 0) {
+        $cliText.IndexOf("'check' {", $strictStart, [StringComparison]::Ordinal)
+    }
+    else { -1 }
+    if ($strictStart -lt 0 -or $strictEnd -le $strictStart) {
+        $failures.Add('CLI workspace strict contract: strict dispatch block was not found')
+    }
+    else {
+        $strictDispatch = $cliText.Substring($strictStart, $strictEnd - $strictStart)
+        foreach ($literal in @(
+            "Invoke-ProjectScript 'build.ps1'",
+            "'-Mode', 'Strict'",
+            "'-WorkspaceRoot', `$workspaceRoot",
+            '-ExitCode $ExitCode'
+        )) {
+            if (-not $strictDispatch.Contains($literal)) {
+                $failures.Add("CLI workspace strict contract: missing $literal")
+            }
+        }
+    }
     foreach ($literal in @(
         'JohnMacFarlane.Pandoc',
         '--exact',
@@ -1268,6 +1341,20 @@ else {
     else {
         Write-Host 'PASS Pandoc UTF-8 stderr decoding contract'
     }
+}
+
+$testBuildFull = [System.IO.Path]::GetFullPath($testBuild)
+$expectedTestBuild = [System.IO.Path]::GetFullPath(
+    (Join-Path $root 'build/compliance-tests')
+)
+if ($testBuildFull.Equals($expectedTestBuild, [StringComparison]::OrdinalIgnoreCase) -and
+    (Test-Path -LiteralPath $testBuildFull -PathType Container)) {
+    Remove-Item -LiteralPath $testBuildFull -Recurse -Force
+}
+$engineBuild = Join-Path $root 'build'
+if ((Test-Path -LiteralPath $engineBuild -PathType Container) -and
+    @(Get-ChildItem -Force -LiteralPath $engineBuild).Count -eq 0) {
+    Remove-Item -LiteralPath $engineBuild -Force
 }
 
 if ($failures.Count -gt 0) {
