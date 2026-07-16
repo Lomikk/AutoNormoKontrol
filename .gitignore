@@ -10,3 +10,5 @@
 *.synctex.gz
 *.toc
 .aider*
+
+nppBackup
