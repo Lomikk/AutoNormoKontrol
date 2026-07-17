@@ -208,6 +208,7 @@ function Assert-OrderedLiterals {
 # an implicit alternative profile.
 $profileFullPath = Join-Path $root $profileRelativePath
 $profileSchemaPath = Join-Path $root 'schemas/profile-v1.schema.json'
+$profileCatalogSchemaPath = Join-Path $root 'schemas/profile-catalog-v1.schema.json'
 $profileTestEncoding = New-Object System.Text.UTF8Encoding($false)
 
 function Get-ProfileTestDocument {
@@ -266,6 +267,58 @@ try {
 }
 catch {
     $failures.Add("R2 profile contract: active profile did not resolve: $($_.Exception.Message)")
+}
+
+# R4/profile-catalog: profiles are explicitly registered trusted packages, not
+# executable directories discovered by scanning the filesystem.
+try {
+    $catalog = Get-AutoNormoKontrolProfileCatalog -Root $root
+    $catalogSchema = [System.IO.File]::ReadAllText(
+        $profileCatalogSchemaPath,
+        [System.Text.Encoding]::UTF8
+    ) | ConvertFrom-Json
+    $catalogDocument = [System.IO.File]::ReadAllText(
+        (Join-Path $root $catalog.CatalogPath),
+        [System.Text.Encoding]::UTF8
+    ) | ConvertFrom-Json
+    $rootFieldsMatch = @(
+        Compare-Object `
+            @($catalogSchema.required | Sort-Object) `
+            @($catalogDocument.PSObject.Properties.Name | Sort-Object)
+    ).Count -eq 0
+    $entrySchema = $catalogSchema.properties.profiles.items
+    $entryFieldsMatch = @(
+        Compare-Object `
+            @($entrySchema.required | Sort-Object) `
+            @($catalogDocument.profiles[0].PSObject.Properties.Name | Sort-Object)
+    ).Count -eq 0
+    $defaultEntries = @($catalog.Entries | Where-Object IsDefault)
+    if (-not $rootFieldsMatch -or -not $entryFieldsMatch -or
+        $catalogSchema.additionalProperties -ne $false -or
+        $entrySchema.additionalProperties -ne $false -or
+        $defaultEntries.Count -ne 1 -or
+        $defaultEntries[0].Manifest -cne $profileRelativePath) {
+        $failures.Add('R4 profile catalog schema/default contract is inconsistent')
+    }
+    else {
+        Write-Host 'PASS R4 explicit profile catalog and default pointer contract'
+    }
+
+    $unknownProfileFailed = $false
+    try {
+        [void](Get-AutoNormoKontrolCatalogProfile `
+            -Root $root -ProfileId 'missing-profile-v1')
+    }
+    catch { $unknownProfileFailed = $_.Exception.Message -match 'not registered' }
+    if (-not $unknownProfileFailed) {
+        $failures.Add('R4 profile catalog accepted an unregistered profile id')
+    }
+    else {
+        Write-Host 'PASS R4 unregistered profile id fails closed'
+    }
+}
+catch {
+    $failures.Add("R4 profile catalog could not be validated: $($_.Exception.Message)")
 }
 
 try {
@@ -1208,7 +1261,9 @@ if ((Test-Path -LiteralPath $cliPath -PathType Leaf) -and
         $helpText,
         '(?m)^\s{2}([a-z][a-z0-9-]*)\s{2,}'
     ) | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
-    $expectedCentralCommands = @('new', 'check', 'doctor', 'install', 'help') | Sort-Object
+    $expectedCentralCommands = @(
+        'new', 'list-profiles', 'check', 'doctor', 'install', 'help'
+    ) | Sort-Object
     if ($helpExitCode -ne 0 -or
         @(Compare-Object $expectedCentralCommands $actualCentralCommands).Count -ne 0) {
         $failures.Add(("CLI central help must expose exactly [{0}], got [{1}]`n{2}" -f

@@ -7,6 +7,8 @@ $launcher = Join-Path $engineRoot 'AutoNormoKontrol.cmd'
 $workspacesRoot = Join-Path $engineRoot 'Workspaces'
 $workspaceName = 'Lifecycle R1 ' + [guid]::NewGuid().ToString('N').Substring(0, 8)
 $workspaceRoot = Join-Path $workspacesRoot $workspaceName
+$selectedWorkspaceName = 'Selected profile ' + [guid]::NewGuid().ToString('N').Substring(0, 8)
+$selectedWorkspaceRoot = Join-Path $workspacesRoot $selectedWorkspaceName
 $encoding = New-Object System.Text.UTF8Encoding($false)
 
 . (Join-Path $PSScriptRoot 'profile.ps1')
@@ -82,6 +84,25 @@ try {
         $rootHashesBefore[$path] = Get-OptionalHash (Join-Path $engineRoot $path)
     }
 
+    $profilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $engineRoot
+    $activeProfile = Resolve-AutoNormoKontrolProfile `
+        -Root $engineRoot -ProfilePath $profilePath
+    $profileList = Invoke-LifecycleCli -FilePath $launcher `
+        -Arguments @('list-profiles') -WorkingDirectory $engineRoot
+    Assert-Lifecycle ($profileList.ExitCode -eq 0 -and
+        $profileList.Text.Contains($activeProfile.ProfileId)) `
+        ("list-profiles did not expose the active registered profile:`n" + $profileList.Text)
+
+    $explicit = Invoke-LifecycleCli -FilePath $launcher `
+        -Arguments @('new', '--profile', $activeProfile.ProfileId, $selectedWorkspaceName) `
+        -WorkingDirectory $engineRoot
+    Assert-Lifecycle ($explicit.ExitCode -eq 0) `
+        ("new --profile failed:`n" + $explicit.Text)
+    $explicitProject = Get-Content -Raw -Encoding UTF8 `
+        -LiteralPath (Join-Path $selectedWorkspaceRoot 'project.yaml') | ConvertFrom-Json
+    Assert-Lifecycle ([string]$explicitProject.profile.id -ceq $activeProfile.ProfileId) `
+        'new --profile pinned another profile'
+
     $created = Invoke-LifecycleCli -FilePath $launcher `
         -Arguments @('new', $workspaceName) -WorkingDirectory $engineRoot
     Assert-Lifecycle ($created.ExitCode -eq 0) ("new failed:`n" + $created.Text)
@@ -91,10 +112,10 @@ try {
         Where-Object Name -Like '.ank-new-*').Count -eq 0) `
         'new left a staging directory behind'
 
-    $profilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $engineRoot
     $manifestPath = Join-Path $workspaceRoot 'project.yaml'
     $requiredFiles = @(
-        'project.yaml', 'AutoNormoKontrol.cmd', '.gitignore', 'GEMINI.md', 'AGENTS.md',
+        'project.yaml', 'AutoNormoKontrol.cmd', 'gemini.cmd', '.gitignore', 'GEMINI.md', 'AGENTS.md',
+        'guide/profile-system-prompt.md',
         'metadata.yaml', 'format-spec.yaml', 'bibliography.bib', 'assets/manifest.json',
         'compliance/semantic-review.yaml', 'compliance/external-acceptance.yaml'
     )
@@ -103,6 +124,13 @@ try {
             "starter file is missing: $relative"
     }
     $localLauncher = Join-Path $workspaceRoot 'AutoNormoKontrol.cmd'
+    $geminiLauncher = Join-Path $workspaceRoot 'gemini.cmd'
+    $geminiLauncherText = Get-Content -Raw -Encoding UTF8 -LiteralPath $geminiLauncher
+    Assert-Lifecycle ($geminiLauncherText -match '(?m)^call gemini %[*]$' -and
+        $geminiLauncherText -match '(?m)^where[.]exe gemini' -and
+        $geminiLauncherText -match 'AutoNormoKontrol[.]cmd" status' -and
+        $geminiLauncherText -notmatch '(?i)api[_-]?key|--model') `
+        'gemini.cmd is not a credential-free thin workspace launcher'
 
     # R1/workspace-only: a document launcher exposes only the document lifecycle.
     $workspaceHelp = Invoke-LifecycleCli -FilePath $localLauncher `
@@ -122,6 +150,7 @@ try {
     $wrongWorkspacePath = Join-Path $workspacesRoot $wrongWorkspaceName
     $centralOnlyCases = @(
         [pscustomobject]@{ Name = 'new'; Arguments = @('new', $wrongWorkspaceName) },
+        [pscustomobject]@{ Name = 'list-profiles'; Arguments = @('list-profiles') },
         [pscustomobject]@{ Name = 'check'; Arguments = @('check') },
         [pscustomobject]@{ Name = 'doctor'; Arguments = @('doctor') },
         [pscustomobject]@{ Name = 'install'; Arguments = @('install', '--yes') }
@@ -179,12 +208,37 @@ try {
         ([string]$resolved.Profile.Data.compliance.semantic_review_template)
     $externalTemplate = Join-Path $engineRoot `
         ([string]$resolved.Profile.Data.compliance.external_acceptance_template)
+    $profilePrompt = Join-Path $engineRoot `
+        ([string]$resolved.Profile.Data.compliance.system_prompt)
+    $workspacePrompt = Join-Path $workspaceRoot 'guide/profile-system-prompt.md'
     Assert-Lifecycle ((Get-OptionalHash $semanticTemplate) -eq
         (Get-OptionalHash (Join-Path $workspaceRoot 'compliance/semantic-review.yaml'))) `
         'semantic review was not reset from the profile template'
     Assert-Lifecycle ((Get-OptionalHash $externalTemplate) -eq
         (Get-OptionalHash (Join-Path $workspaceRoot 'compliance/external-acceptance.yaml'))) `
         'external acceptance was not reset from the profile template'
+    Assert-Lifecycle ((Get-OptionalHash $profilePrompt) -eq
+        (Get-OptionalHash $workspacePrompt)) `
+        'workspace agent prompt is not an exact profile-specific snapshot'
+
+    $originalPromptBytes = [System.IO.File]::ReadAllBytes($workspacePrompt)
+    try {
+        [System.IO.File]::AppendAllText(
+            $workspacePrompt,
+            "`n<!-- prompt tampering probe -->`n",
+            $encoding
+        )
+        $failed = $false
+        try {
+            [void](Resolve-AutoNormoKontrolWorkspace `
+                -EngineRoot $engineRoot -WorkspaceRoot $workspaceRoot)
+        }
+        catch { $failed = $_.Exception.Message -match 'agent prompt does not match' }
+        Assert-Lifecycle $failed 'modified workspace agent prompt did not fail closed'
+    }
+    finally {
+        [System.IO.File]::WriteAllBytes($workspacePrompt, $originalPromptBytes)
+    }
 
     $marker = Join-Path $workspaceRoot 'do-not-overwrite.marker'
     [System.IO.File]::WriteAllText($marker, 'preserve', $encoding)
@@ -474,8 +528,9 @@ catch {
     exit 1
 }
 finally {
-    if (Test-Path -LiteralPath $workspaceRoot -PathType Container) {
-        $workspaceFull = [System.IO.Path]::GetFullPath($workspaceRoot)
+    foreach ($temporaryWorkspace in @($workspaceRoot, $selectedWorkspaceRoot)) {
+        if (Test-Path -LiteralPath $temporaryWorkspace -PathType Container) {
+        $workspaceFull = [System.IO.Path]::GetFullPath($temporaryWorkspace)
         $allowedPrefix = [System.IO.Path]::GetFullPath($workspacesRoot).TrimEnd('\', '/') +
             [System.IO.Path]::DirectorySeparatorChar
         if ($workspaceFull.StartsWith($allowedPrefix, [StringComparison]::OrdinalIgnoreCase) -and
@@ -483,6 +538,7 @@ finally {
                 [System.IO.Path]::GetFullPath($workspacesRoot),
                 [StringComparison]::OrdinalIgnoreCase)) {
             Remove-Item -LiteralPath $workspaceFull -Recurse -Force
+        }
         }
     }
 }

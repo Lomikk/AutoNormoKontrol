@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "id": "susu-hsem-ceit-coursework-v1",
+      "name": "ЮУрГУ — курсовая работа ВШЭУ ЦЭИТ",
+      "manifest": "profiles/susu-hsem-ceit-coursework-v1/profile.yaml",
+      "status": "stable"
+    }
+  ]
+}

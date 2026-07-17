@@ -257,7 +257,7 @@ function Show-Doctor {
     Write-Title 'Диагностика окружения'
 
     $required = @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext')
-    $optional = @('winget', 'git', 'code')
+    $optional = @('winget', 'git', 'code', 'gemini')
     $missingRequired = New-Object System.Collections.Generic.List[string]
 
     foreach ($name in $required) {
@@ -408,17 +408,70 @@ function Open-ResultPdf {
 function New-WorkspaceFromCli {
     param([string[]]$Arguments)
 
-    if ($Arguments.Count -ne 1 -or [string]::IsNullOrWhiteSpace([string]$Arguments[0])) {
-        Write-Failure 'Использование: AutoNormoKontrol.cmd new <название работы>'
+    $profilePath = ''
+    $name = ''
+    if ($Arguments.Count -eq 1) {
+        $name = [string]$Arguments[0]
+    }
+    elseif ($Arguments.Count -eq 3 -and [string]$Arguments[0] -ceq '--profile') {
+        $catalogEntry = Get-AutoNormoKontrolCatalogProfile `
+            -Root $engineRoot -ProfileId ([string]$Arguments[1])
+        $profilePath = $catalogEntry.Manifest
+        $name = [string]$Arguments[2]
+    }
+    else {
+        Write-Failure 'Использование: AutoNormoKontrol.cmd new [--profile <id>] <название работы>'
+        return 2
+    }
+    if ([string]::IsNullOrWhiteSpace($name)) {
+        Write-Failure 'Название работы не может быть пустым.'
         return 2
     }
     $created = New-AutoNormoKontrolWorkspace `
-        -EngineRoot $engineRoot -Name ([string]$Arguments[0])
+        -EngineRoot $engineRoot -Name $name -ProfilePath $profilePath
     Write-Success ("Создана новая работа: {0}" -f $created.WorkspaceRoot)
+    Write-Host ("Профиль: {0}" -f $created.Profile.ProfileId)
     Write-Host 'Следующий шаг:'
     Write-Host ("  cd `"{0}`"" -f $created.WorkspaceRoot)
+    Write-Host '  .\gemini.cmd'
+    Write-Host 'или без агента:'
     Write-Host '  .\AutoNormoKontrol.cmd draft'
     return 0
+}
+
+function Show-ProfileCatalog {
+    $catalog = Get-AutoNormoKontrolProfileCatalog -Root $engineRoot
+    Write-Title 'Доступные профили'
+    foreach ($entry in @($catalog.Entries)) {
+        $default = if ($entry.IsDefault) { ' [по умолчанию]' } else { '' }
+        Write-Host ("{0}{1}" -f $entry.Name, $default) -ForegroundColor Cyan
+        Write-Host ("  ID: {0}" -f $entry.Id)
+        Write-Host ("  Статус: {0}" -f $entry.Status)
+        Write-Host ("  Manifest: {0}" -f $entry.Manifest)
+    }
+    return 0
+}
+
+function Select-ProfileIdInteractive {
+    $entries = @((Get-AutoNormoKontrolProfileCatalog -Root $engineRoot).Entries)
+    if ($entries.Count -eq 1) {
+        Write-Host ("Профиль: {0}" -f $entries[0].Name)
+        return $entries[0].Id
+    }
+    Write-Host 'Выберите профиль:' -ForegroundColor DarkCyan
+    for ($index = 0; $index -lt $entries.Count; $index++) {
+        $default = if ($entries[$index].IsDefault) { ' [по умолчанию]' } else { '' }
+        Write-Host ("{0}  {1}{2}" -f ($index + 1), $entries[$index].Name, $default)
+    }
+    while ($true) {
+        $choice = (Read-Host 'Номер профиля').Trim()
+        $number = 0
+        if ([int]::TryParse($choice, [ref]$number) -and
+            $number -ge 1 -and $number -le $entries.Count) {
+            return $entries[$number - 1].Id
+        }
+        Write-Failure 'Укажите номер профиля из списка.'
+    }
 }
 
 function Export-WorkspacePdf {
@@ -464,7 +517,8 @@ function Show-Help {
         Write-Host 'CLI не меняет журналы приёмки и не обходит Strict-gate.'
     }
     else {
-        Write-Host '  new      создать новую курсовую: new <название>'
+        Write-Host '  new            создать работу: new [--profile <id>] <название>'
+        Write-Host '  list-profiles  показать зарегистрированные профили документов'
         Write-Host '  check    проверить код движка и полный жизненный цикл тестовой работы'
         Write-Host '  doctor   проверить Pandoc, TeX Live и PDF-инструменты'
         Write-Host '  install  установить доступные зависимости через WinGet'
@@ -486,7 +540,7 @@ function Invoke-CliCommand {
     $ExitCode.Value = 0
     $normalized = $Name.Trim().ToLowerInvariant()
     if ($normalized -in @('-h', '--help', '/?')) { $normalized = 'help' }
-    $centralCommands = @('new', 'check', 'doctor', 'install', 'help')
+    $centralCommands = @('new', 'list-profiles', 'check', 'doctor', 'install', 'help')
     $workspaceCommands = @('draft', 'strict', 'status', 'open', 'export', 'archive', 'help')
     $allowed = if ($script:IsWorkspaceMode) { $workspaceCommands } else { $centralCommands }
     if ($normalized -notin $allowed) {
@@ -517,8 +571,12 @@ function Invoke-CliCommand {
             break
         }
         'new' {
-            Write-Title 'Новая курсовая работа'
+            Write-Title 'Новая работа'
             $ExitCode.Value = New-WorkspaceFromCli -Arguments $Arguments
+            break
+        }
+        'list-profiles' {
+            $ExitCode.Value = Show-ProfileCatalog
             break
         }
         'install' {
@@ -595,10 +653,11 @@ function Show-InteractiveMenu {
             Write-Host '6  Создать архивный снимок'
         }
         else {
-            Write-Host '1  Создать новую курсовую'
-            Write-Host '2  Проверить движок'
-            Write-Host '3  Проверить окружение'
-            Write-Host '4  Установить зависимости'
+            Write-Host '1  Создать новую работу'
+            Write-Host '2  Показать профили документов'
+            Write-Host '3  Проверить движок'
+            Write-Host '4  Проверить окружение'
+            Write-Host '5  Установить зависимости'
         }
         Write-Host 'H  Справка'
         Write-Host 'Q  Выход'
@@ -621,9 +680,10 @@ function Show-InteractiveMenu {
         else {
             switch ($choice) {
                 '1' { 'new' }
-                '2' { 'check' }
-                '3' { 'doctor' }
-                '4' { 'install' }
+                '2' { 'list-profiles' }
+                '3' { 'check' }
+                '4' { 'doctor' }
+                '5' { 'install' }
                 'h' { 'help' }
                 'q' { return }
                 default { '' }
@@ -636,7 +696,12 @@ function Show-InteractiveMenu {
         else {
             $menuArguments = @()
             if ($selectedCommand -eq 'new') {
-                $menuArguments = @((Read-Host 'Название новой работы').Trim())
+                $profileId = Select-ProfileIdInteractive
+                $menuArguments = @(
+                    '--profile',
+                    $profileId,
+                    (Read-Host 'Название новой работы').Trim()
+                )
             }
             elseif ($selectedCommand -eq 'archive') {
                 $archiveLabel = (Read-Host 'Метка архива (можно оставить пустой)').Trim()

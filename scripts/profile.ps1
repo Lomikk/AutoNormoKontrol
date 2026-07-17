@@ -1,4 +1,5 @@
 $script:AutoNormoKontrolProfilePointer = 'profiles/active-profile.txt'
+$script:AutoNormoKontrolProfileCatalog = 'profiles/catalog.json'
 
 function Get-AutoNormoKontrolDefaultProfilePath {
     param(
@@ -344,4 +345,116 @@ function Resolve-AutoNormoKontrolProfile {
         EngineRoot = $rootFull
         Data = $document
     }
+}
+
+function Get-AutoNormoKontrolProfileCatalog {
+    [CmdletBinding()]
+    param(
+        [string]$Root = (Split-Path -Parent $PSScriptRoot),
+        [string]$CatalogPath = $script:AutoNormoKontrolProfileCatalog
+    )
+
+    $rootFull = [System.IO.Path]::GetFullPath($Root)
+    $catalogFull = Resolve-ProfileProjectPath -Root $rootFull -Path $CatalogPath `
+        -Location 'profile_catalog' -Kind File
+    try {
+        $document = [System.IO.File]::ReadAllText(
+            $catalogFull,
+            [System.Text.Encoding]::UTF8
+        ) | ConvertFrom-Json
+    }
+    catch {
+        throw "Profile catalog is not valid JSON-compatible YAML: $($_.Exception.Message)"
+    }
+
+    Assert-ProfileObjectShape -Object $document -Location 'profile_catalog' -Required @(
+        'schema_version', 'profiles'
+    )
+    if ($document.schema_version -isnot [int] -or $document.schema_version -ne 1) {
+        throw "Unsupported profile catalog schema_version: $($document.schema_version)"
+    }
+    if ($document.profiles -is [string] -or
+        $document.profiles -isnot [System.Array] -or
+        $document.profiles.Count -eq 0) {
+        throw 'Profile catalog must contain a non-empty profiles array.'
+    }
+
+    $defaultPath = Get-AutoNormoKontrolDefaultProfilePath -Root $rootFull
+    $seenIds = @{}
+    $seenManifests = @{}
+    $entries = @()
+    foreach ($entry in @($document.profiles)) {
+        Assert-ProfileObjectShape -Object $entry -Location 'profile_catalog.profiles[]' -Required @(
+            'id', 'name', 'manifest', 'status'
+        )
+        foreach ($field in @('id', 'name', 'manifest', 'status')) {
+            Assert-ProfileString -Value $entry.$field -Location "profile_catalog.$field"
+        }
+
+        $id = [string]$entry.id
+        $name = [string]$entry.name
+        $manifest = ([string]$entry.manifest).Replace('\', '/')
+        $status = [string]$entry.status
+        if ($id -notmatch '^[a-z0-9]+(?:-[a-z0-9]+)*-v[0-9]+$') {
+            throw "Profile catalog contains invalid id: $id"
+        }
+        if ($manifest -notmatch '^profiles/[a-z0-9]+(?:-[a-z0-9]+)*/profile\.yaml$') {
+            throw "Profile catalog contains invalid manifest path: $manifest"
+        }
+        if ($status -notin @('stable', 'experimental', 'deprecated')) {
+            throw "Profile catalog contains unsupported status '$status' for '$id'."
+        }
+
+        $idKey = $id.ToLowerInvariant()
+        $manifestKey = $manifest.ToLowerInvariant()
+        if ($seenIds.ContainsKey($idKey)) {
+            throw "Profile catalog contains duplicate id: $id"
+        }
+        if ($seenManifests.ContainsKey($manifestKey)) {
+            throw "Profile catalog contains duplicate manifest: $manifest"
+        }
+        $seenIds[$idKey] = $true
+        $seenManifests[$manifestKey] = $true
+
+        $profile = Resolve-AutoNormoKontrolProfile -Root $rootFull -ProfilePath $manifest
+        if ($profile.ProfileId -cne $id) {
+            throw ("Profile catalog id '{0}' does not match manifest id '{1}'." -f
+                $id, $profile.ProfileId)
+        }
+        $entries += [pscustomobject][ordered]@{
+            Id = $id
+            Name = $name
+            Manifest = $manifest
+            Status = $status
+            IsDefault = $manifest -ceq $defaultPath
+            Profile = $profile
+        }
+    }
+
+    if (@($entries | Where-Object IsDefault).Count -ne 1) {
+        throw 'Active profile pointer must select exactly one registered catalog profile.'
+    }
+    return [pscustomobject][ordered]@{
+        SchemaVersion = 1
+        CatalogPath = $CatalogPath.Replace('\', '/')
+        Entries = @($entries)
+    }
+}
+
+function Get-AutoNormoKontrolCatalogProfile {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)][string]$Root,
+        [Parameter(Mandatory = $true)][string]$ProfileId
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ProfileId)) {
+        throw 'Profile id must not be empty.'
+    }
+    $catalog = Get-AutoNormoKontrolProfileCatalog -Root $Root
+    $matches = @($catalog.Entries | Where-Object { $_.Id -ceq $ProfileId })
+    if ($matches.Count -ne 1) {
+        throw "Profile is not registered in profiles/catalog.json: $ProfileId"
+    }
+    return $matches[0]
 }

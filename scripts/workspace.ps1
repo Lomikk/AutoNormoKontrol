@@ -2,6 +2,8 @@ $script:AutoNormoKontrolWorkspaceManifest = 'project.yaml'
 $script:AutoNormoKontrolPublishedPdf = 'output/document.pdf'
 $script:AutoNormoKontrolExportReport = 'output/export-report.json'
 $script:AutoNormoKontrolArchiveDirectory = 'output/archive'
+$script:AutoNormoKontrolAgentPrompt = 'guide/profile-system-prompt.md'
+$script:AutoNormoKontrolGeminiLauncher = 'gemini.cmd'
 
 function Get-AutoNormoKontrolEngineVersion {
     param([Parameter(Mandatory = $true)][string]$EngineRoot)
@@ -142,6 +144,20 @@ function Resolve-AutoNormoKontrolWorkspace {
             $document.document.type, $profile.DocumentType)
     }
 
+    # R1/agent-contract: the writing agent stays inside its workspace, so it
+    # receives an exact snapshot of the selected profile prompt. The immutable
+    # profile remains the source of truth; a missing or modified local copy is
+    # rejected instead of silently weakening the authoring contract.
+    $agentPromptFull = Resolve-WorkspaceOwnedPath `
+        $workspaceFull $script:AutoNormoKontrolAgentPrompt File
+    $profilePromptFull = Resolve-ProfileProjectPath -Root $engineFull `
+        -Path ([string]$profile.Data.compliance.system_prompt) `
+        -Location 'compliance.system_prompt' -Kind File
+    if ((Get-ProfileSha256 $agentPromptFull) -cne (Get-ProfileSha256 $profilePromptFull)) {
+        throw ("Workspace agent prompt does not match the selected profile: {0}" -f
+            $script:AutoNormoKontrolAgentPrompt)
+    }
+
     # The profile only declares these workspace-owned paths. Resolve every
     # concrete input and output here, against the selected project root.
     $workspaceInputs = @(
@@ -190,6 +206,7 @@ function Resolve-AutoNormoKontrolWorkspace {
         ProfileDigestMatches = $pinnedDigest -eq $profile.ProfileDigest
         Profile = $profile
         ContentPaths = $contentPaths
+        AgentPromptPath = $agentPromptFull
     }
 }
 
@@ -240,7 +257,12 @@ function New-AutoNormoKontrolWorkspace {
     }
 
     if ([string]::IsNullOrWhiteSpace($ProfilePath)) {
-        $ProfilePath = Get-AutoNormoKontrolDefaultProfilePath -Root $engineFull
+        $catalog = Get-AutoNormoKontrolProfileCatalog -Root $engineFull
+        $defaultProfiles = @($catalog.Entries | Where-Object IsDefault)
+        if ($defaultProfiles.Count -ne 1) {
+            throw 'Profile catalog did not resolve exactly one default profile.'
+        }
+        $ProfilePath = $defaultProfiles[0].Manifest
     }
     $profile = Resolve-AutoNormoKontrolProfile -Root $engineFull -ProfilePath $ProfilePath
     $profileData = $profile.Data
@@ -293,6 +315,14 @@ function New-AutoNormoKontrolWorkspace {
         Copy-Item -LiteralPath $externalTemplate `
             -Destination (Join-Path $compliance 'external-acceptance.yaml')
 
+        $guide = Join-Path $staging 'guide'
+        New-Item -ItemType Directory -Force -Path $guide | Out-Null
+        $profilePrompt = Resolve-ProfileProjectPath -Root $engineFull `
+            -Path ([string]$profileData.compliance.system_prompt) `
+            -Location 'compliance.system_prompt' -Kind File
+        Copy-Item -LiteralPath $profilePrompt `
+            -Destination (Join-Path $staging $script:AutoNormoKontrolAgentPrompt) -Force
+
         $launcher = @'
 @echo off
 setlocal
@@ -307,6 +337,34 @@ exit /b %ERRORLEVEL%
         [System.IO.File]::WriteAllText(
             (Join-Path $staging 'AutoNormoKontrol.cmd'),
             $launcher.TrimStart(),
+            (New-Object System.Text.UTF8Encoding($false))
+        )
+
+        # R1/agent-contract: this launcher contains no model, credentials or
+        # prompt text. Gemini discovers the profile-specific GEMINI.md inside
+        # the concrete workspace and receives any optional CLI arguments as-is.
+        $geminiLauncher = @'
+@echo off
+setlocal
+cd /d "%~dp0"
+call "%~dp0AutoNormoKontrol.cmd" status >nul
+if errorlevel 1 (
+  echo ERR Workspace agent contract validation failed.
+  call "%~dp0AutoNormoKontrol.cmd" status
+  exit /b 2
+)
+where.exe gemini >nul 2>nul
+if errorlevel 1 (
+  echo ERR Gemini CLI was not found in PATH.
+  echo Install Gemini CLI, open a new terminal and run gemini.cmd again.
+  exit /b 127
+)
+call gemini %*
+exit /b %ERRORLEVEL%
+'@
+        [System.IO.File]::WriteAllText(
+            (Join-Path $staging $script:AutoNormoKontrolGeminiLauncher),
+            $geminiLauncher.TrimStart(),
             (New-Object System.Text.UTF8Encoding($false))
         )
 

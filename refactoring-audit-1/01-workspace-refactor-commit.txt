@@ -1,0 +1,7 @@
+﻿commit 4743d3acd241343d0aae50f2776bde87be9abda0
+Author:     Lomikk <92258604+Lomikk@users.noreply.github.com>
+AuthorDate: Thu Jul 16 22:33:11 2026 +0500
+Commit:     Lomikk <92258604+Lomikk@users.noreply.github.com>
+CommitDate: Thu Jul 16 22:33:11 2026 +0500
+
+    Add workspace lifecycle docs and ignore generated outputs

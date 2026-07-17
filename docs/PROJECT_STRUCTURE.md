@@ -14,6 +14,8 @@
 
 ```powershell
 .\AutoNormoKontrol.cmd new <название работы>
+.\AutoNormoKontrol.cmd new --profile <id> <название работы>
+.\AutoNormoKontrol.cmd list-profiles
 .\AutoNormoKontrol.cmd check
 .\AutoNormoKontrol.cmd doctor
 .\AutoNormoKontrol.cmd install [--yes]
@@ -21,7 +23,10 @@
 ```
 
 - `new` создаёт Draft-valid работу в `Workspaces/<название>` и никогда не
-  перезаписывает существующую папку.
+  перезаписывает существующую папку. Без `--profile` используется явно
+  зарегистрированный профиль по умолчанию.
+- `list-profiles` показывает только доверенные записи `profiles/catalog.json`;
+  каталоги на диске автоматически не исполняются.
 - `check` проверяет сам движок, профиль и полный жизненный цикл на
   одноразовом тестовом workspace. Он не собирает «корневую курсовую».
 - `doctor` проверяет Pandoc, TeX Live и PDF-инструменты.
@@ -69,8 +74,8 @@
 | Область | Что содержит | Правило |
 |---|---|---|
 | engine | `AutoNormoKontrol.cmd`, `scripts/`, `schemas/`, `VERSION` | Реализация программы; не изменять при написании курсовой |
-| profile | `profiles/`, `profiles/active-profile.txt` | Нормативный и оформительский контракт; не изменять в обычной работе |
-| workspace | `Workspaces/<name>/`: `project.yaml`, `content/`, `metadata.yaml`, `bibliography.bib`, `assets/`, `format-spec.yaml`, `compliance/`, `guide/` | Единственные живые данные одной работы; `project.yaml` задаёт точный порядок глав |
+| profile | `profiles/`, `profiles/catalog.json`, `profiles/active-profile.txt` | Доверенный нормативный и оформительский контракт; не изменять в обычной работе |
+| workspace | `Workspaces/<name>/`: `project.yaml`, `gemini.cmd`, `content/`, `metadata.yaml`, `bibliography.bib`, `assets/`, `format-spec.yaml`, `compliance/`, `guide/` | Единственные живые данные одной работы; `project.yaml` задаёт точный порядок глав |
 | sources | `sources/` | Канонические нормативные исходники; read-only при написании работы |
 | tests | `tests/` | Искусственные fixture для проверки движка; не являются данными курсовой |
 | docs | `README.md`, `AGENTS.md`, `docs/` | Документация и контракт разработчика |
@@ -96,12 +101,19 @@
 Изменившийся digest профиля показывается как предупреждение; тихого
 обновления нет. `project.yaml` входит в document snapshot, поэтому изменение
 порядка глав после Draft делает прежний export устаревшим.
+Отдельно локальный `guide/profile-system-prompt.md` обязан точно совпадать с
+системной инструкцией закреплённого профиля: его отсутствие или изменение
+останавливает workspace-команду, поскольку агентский контракт нельзя обновлять
+неявно.
 
 ## Агенты и контекст
 
-Пишущий агент запускается в корне конкретного workspace и сначала читает
-локальные `AGENTS.md`, `GEMINI.md`, `metadata.yaml` и при необходимости
-`guide/notation-examples.md`. В обычной задаче ему не нужны `scripts/`, `profiles/`,
+Пишущий агент запускается в корне конкретного workspace через `gemini.cmd` и
+сначала полностью читает локальные `AGENTS.md`, `GEMINI.md`,
+`guide/profile-system-prompt.md`, `metadata.yaml` и при необходимости
+`guide/notation-examples.md`. Системная инструкция имеет стабильное локальное
+имя, но профильное содержимое; resolver проверяет её точное совпадение с
+закреплённым профилем. В обычной задаче агенту не нужны `scripts/`, `profiles/`,
 `sources/` и `tests/` центрального движка.
 
 Проект не управляет контекстом Gemini CLI, Aider или OpenCode в MVP. Подобный
