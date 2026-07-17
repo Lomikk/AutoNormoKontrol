@@ -1,0 +1,73 @@
+\documentclass[a4paper,14pt]{extarticle}
+
+\usepackage{practice-article}
+
+\usepackage{calc}
+\usepackage{hyperref}
+\hypersetup{
+  unicode=true,
+  hidelinks,
+  pdfauthor={$author$},
+  pdftitle={$title$}
+}
+\urlstyle{same}
+
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>0.78\textheight 0.78\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=gost-numeric,
+  sorting=none,
+  language=auto,
+  autolang=other,
+  doi=true,
+  url=false
+]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+\defbibheading{practicebibliography}{%
+  \section*{Библиографический список}%
+}
+
+$if(numbersections)$
+\setcounter{secnumdepth}{3}
+$else$
+\setcounter{secnumdepth}{-\maxdimen}
+$endif$
+
+\begin{document}
+
+\begin{center}
+  {\bfseries $title$\par}
+  \vspace{0.65\baselineskip}
+  {$author$\par}
+  \vspace{0.25\baselineskip}
+  {\itshape $organization$\par}
+\end{center}
+
+$if(show-summary-block)$
+\vspace{0.65\baselineskip}
+\noindent\textbf{Аннотация.} $abstract$
+
+\vspace{0.35\baselineskip}
+\noindent\textbf{Ключевые слова:}
+$for(keywords)$$keywords$$sep$, $endfor$.
+$endif$
+
+\vspace{0.65\baselineskip}
+
+$body$
+
+$if(bibliography)$
+\printbibliography[heading=practicebibliography]
+$endif$
+
+\end{document}

@@ -1,11 +1,17 @@
 {
-  "schema_version": 1,
-  "profiles": [
-    {
-      "id": "susu-hsem-ceit-coursework-v1",
-      "name": "ЮУрГУ — курсовая работа ВШЭУ ЦЭИТ",
-      "manifest": "profiles/susu-hsem-ceit-coursework-v1/profile.yaml",
-      "status": "stable"
-    }
-  ]
+    "schema_version":  1,
+    "profiles":  [
+                     {
+                         "id":  "susu-hsem-ceit-coursework-v1",
+                         "name":  "ЮУрГУ — курсовая работа ВШЭУ ЦЭИТ",
+                         "manifest":  "profiles/susu-hsem-ceit-coursework-v1/profile.yaml",
+                         "status":  "stable"
+                     },
+                     {
+                         "id":  "susu-practice-article-v1",
+                         "name":  "ЮУрГУ — научная статья по практике",
+                         "manifest":  "profiles/susu-practice-article-v1/profile.yaml",
+                         "status":  "experimental"
+                     }
+                 ]
 }

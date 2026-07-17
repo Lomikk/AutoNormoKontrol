@@ -1,0 +1,86 @@
+{
+    "schema_version":  1,
+    "profile_id":  "susu-practice-article-v1",
+    "document_type":  "practice-article",
+    "starter":  {
+                    "directory":  "profiles/susu-practice-article-v1/starter",
+                    "content":  [
+                                    "content/article.md"
+                                ]
+                },
+    "inputs":  {
+                   "metadata":  "metadata.yaml",
+                   "bibliography":  "bibliography.bib",
+                   "asset_manifest":  "assets/manifest.json"
+               },
+    "compliance":  {
+                       "canonical_inventory":  "profiles/susu-practice-article-v1/compliance/canonical-requirement-ids.json",
+                       "requirements":  "profiles/susu-practice-article-v1/compliance/requirements.json",
+                       "review_inventory":  "profiles/susu-practice-article-v1/compliance/review-inventory.yaml",
+                       "semantic_review":  "compliance/semantic-review.yaml",
+                       "external_acceptance":  "compliance/external-acceptance.yaml",
+                       "semantic_review_template":  "profiles/susu-practice-article-v1/review-templates/semantic-review.yaml",
+                       "external_acceptance_template":  "profiles/susu-practice-article-v1/review-templates/external-acceptance.yaml",
+                       "system_prompt":  "profiles/susu-practice-article-v1/prompts/SYSTEM_PROMPT_PRACTICE_ARTICLE.md",
+                       "format_spec":  "format-spec.yaml",
+                       "research_notes":  "profiles/susu-practice-article-v1/compliance/research-notes.md",
+                       "implementation_paths":  [
+                                                    "profiles/susu-practice-article-v1/filters",
+                                                    "profiles/susu-practice-article-v1/styles",
+                                                    "profiles/susu-practice-article-v1/templates",
+                                                    "profiles/susu-practice-article-v1/postflight",
+                                                    "scripts/build.ps1",
+                                                    "scripts/lint-content.ps1"
+                                                ],
+                       "test_paths":  [
+                                          "profiles/susu-practice-article-v1/postflight/validate-article-pdf.ps1"
+                                      ],
+                       "prompt_paths":  [
+                                            "profiles/susu-practice-article-v1/prompts/SYSTEM_PROMPT_PRACTICE_ARTICLE.md"
+                                        ],
+                       "semantic_paths":  [
+                                              "profiles/susu-practice-article-v1/review-templates/semantic-review.yaml"
+                                          ],
+                       "external_paths":  [
+                                              "profiles/susu-practice-article-v1/review-templates/external-acceptance.yaml"
+                                          ]
+                   },
+    "render":  {
+                   "pandoc_from":  "markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute",
+                   "template":  "profiles/susu-practice-article-v1/templates/practice-article.tex",
+                   "style_files":  [
+                                       "profiles/susu-practice-article-v1/styles/practice-article.sty"
+                                   ],
+                   "lua_filters":  [
+                                       "profiles/susu-practice-article-v1/filters/article-validate.lua"
+                                   ],
+                   "tex_input_paths":  [
+                                           ".",
+                                           "profiles/susu-practice-article-v1/styles"
+                                       ],
+                   "postflight":  "profiles/susu-practice-article-v1/postflight/validate-article-pdf.ps1"
+               },
+    "assets":  {
+                   "report":  "build/asset-report.json",
+                   "output_directory":  "build/assets"
+               },
+    "outputs":  {
+                    "tex":  "build/article.tex",
+                    "pdf":  "build/article.pdf"
+                },
+    "reports":  {
+                    "document_snapshot":  "build/document-snapshot.json",
+                    "build_report":  "build/build-report.json",
+                    "postflight":  "build/article-postflight.json",
+                    "traceability_json":  "build/article-traceability.json",
+                    "traceability_markdown":  "build/article-traceability.md"
+                },
+    "capabilities":  {
+                         "assignment":  "forbidden",
+                         "abstract":  "required",
+                         "figures":  "optional",
+                         "tables":  "optional",
+                         "equations":  "optional",
+                         "appendices":  "forbidden"
+                     }
+}

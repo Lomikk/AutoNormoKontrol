@@ -1,0 +1,105 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{practice-article}[2026/07/14 temporary SUSU practice article]
+
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\RequirePackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\newfontfamily\cyrillicfonttt{Courier New}
+
+% Temporary R4-spike: copy the stable page/text parameters of the current
+% coursework PDF profile without importing its title pages or compliance gates.
+\RequirePackage[
+  a4paper,
+  top=20mm,
+  bottom=26mm,
+  left=25mm,
+  right=10mm,
+  headheight=17pt,
+  headsep=0pt,
+  footskip=6mm
+]{geometry}
+
+\RequirePackage{setspace}
+\singlespacing
+\AtBeginDocument{\fontsize{14pt}{17pt}\selectfont}
+\setlength{\parindent}{0.7cm}
+\setlength{\parskip}{0pt}
+\RequirePackage{microtype}
+\microtypesetup{protrusion=false}
+\setlength{\emergencystretch}{2em}
+
+\RequirePackage{fancyhdr}
+\fancypagestyle{practicearticle}{%
+  \fancyhf{}%
+  \fancyfootoffset[L]{25mm}%
+  \fancyfootoffset[R]{10mm}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+\pagestyle{practicearticle}
+
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+
+\RequirePackage{titlesec}
+\RequirePackage{needspace}
+\RequirePackage{etoolbox}
+\titleformat{\section}[block]
+  {\normalfont\bfseries\filcenter\fontsize{14pt}{17pt}\selectfont}
+  {\thesection}{0.6em}{}
+\titleformat{\subsection}[block]
+  {\normalfont\bfseries\fontsize{14pt}{17pt}\selectfont}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}[block]
+  {\normalfont\itshape\fontsize{14pt}{17pt}\selectfont}
+  {\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{\baselineskip}{0.55\baselineskip}
+\titlespacing*{\subsection}{\parindent}{0.75\baselineskip}{0.35\baselineskip}
+\titlespacing*{\subsubsection}{\parindent}{0.5\baselineskip}{0.25\baselineskip}
+\pretocmd{\section}{\Needspace{7\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{6\baselineskip}}{}{}
+
+\RequirePackage{enumitem}
+\setlist{nosep,leftmargin=\parindent,labelsep=0.5em}
+\setlist[itemize,1]{label=\textendash}
+\setlist[enumerate,1]{label=\arabic*)}
+
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\floatplacement{figure}{H}
+\RequirePackage{caption}
+\captionsetup[figure]{
+  name=Рисунок,
+  labelsep=endash,
+  justification=centering,
+  singlelinecheck=false,
+  position=bottom,
+  font=normalsize
+}
+\captionsetup[table]{
+  name=Таблица,
+  labelsep=endash,
+  justification=raggedright,
+  singlelinecheck=false,
+  position=top,
+  font=normalsize
+}
+
+\RequirePackage{amsmath}
+\RequirePackage{unicode-math}
+\setmathfont{Latin Modern Math}
+\RequirePackage{longtable}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{xcolor}
+\RequirePackage{xurl}

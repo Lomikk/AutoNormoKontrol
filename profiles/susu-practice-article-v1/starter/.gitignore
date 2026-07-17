@@ -1,0 +1,11 @@
+﻿build/
+output/
+archive/
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.bcf
+*.blg
+*.run.xml

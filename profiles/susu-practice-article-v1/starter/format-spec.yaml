@@ -1,0 +1,22 @@
+profile:
+  id: susu-practice-article-v1
+  document_type: practice-article
+  status: experimental
+
+layout:
+  page_size: A4
+  main_font: Times New Roman
+  font_size: 14pt
+  paragraph_indent: 0.7cm
+  line_spacing: 1.0
+
+content_policy:
+  semantic_markdown_only: true
+  forbidden_commands:
+    - vspace
+    - hspace
+    - fontsize
+    - setlength
+    - newgeometry
+    - pagebreak
+    - newpage
