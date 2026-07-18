@@ -75,7 +75,10 @@ try {
     $report = [ordered]@{
         version = 1
         profile_id = "susu-practice-article-v1"
-        status = "passed"
+        # R1/publish: workspace export accepts the shared postflight status
+        # value `pass`. Keep pages at the top level like the stable profile.
+        status = "pass"
+        pages = $pages
         pdf = [ordered]@{
             path = $PdfPath.Replace("\", "/")
             sha256 = (

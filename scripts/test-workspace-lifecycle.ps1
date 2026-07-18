@@ -126,11 +126,13 @@ try {
     $localLauncher = Join-Path $workspaceRoot 'AutoNormoKontrol.cmd'
     $geminiLauncher = Join-Path $workspaceRoot 'gemini.cmd'
     $geminiLauncherText = Get-Content -Raw -Encoding UTF8 -LiteralPath $geminiLauncher
-    Assert-Lifecycle ($geminiLauncherText -match '(?m)^call gemini %[*]$' -and
-        $geminiLauncherText -match '(?m)^where[.]exe gemini' -and
-        $geminiLauncherText -match 'AutoNormoKontrol[.]cmd" status' -and
+    Assert-Lifecycle ($geminiLauncherText.Contains('where.exe gemini.cmd') -and
+        $geminiLauncherText.Contains('where.exe gemini.exe') -and
+        $geminiLauncherText.Contains('call "%GEMINI_CLI%" %*') -and
+        $geminiLauncherText.Contains('if /I not "%%~fG"=="%~f0"') -and
+        $geminiLauncherText.Contains('guide\profile-system-prompt.md') -and
         $geminiLauncherText -notmatch '(?i)api[_-]?key|--model') `
-        'gemini.cmd is not a credential-free thin workspace launcher'
+        'gemini.cmd is not a credential-free, non-recursive workspace launcher'
 
     # R1/workspace-only: a document launcher exposes only the document lifecycle.
     $workspaceHelp = Invoke-LifecycleCli -FilePath $localLauncher `

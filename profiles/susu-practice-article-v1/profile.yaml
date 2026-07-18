@@ -33,7 +33,8 @@
                                                     "scripts/lint-content.ps1"
                                                 ],
                        "test_paths":  [
-                                          "profiles/susu-practice-article-v1/postflight/validate-article-pdf.ps1"
+                                          "profiles/susu-practice-article-v1/postflight/validate-article-pdf.ps1",
+                                          "profiles/susu-practice-article-v1/tests"
                                       ],
                        "prompt_paths":  [
                                             "profiles/susu-practice-article-v1/prompts/SYSTEM_PROMPT_PRACTICE_ARTICLE.md"

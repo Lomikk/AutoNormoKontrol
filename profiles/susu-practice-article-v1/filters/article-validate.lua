@@ -9,6 +9,17 @@ local required_metadata = {
 }
 
 function Pandoc(document)
+  local compliance_mode = pandoc.utils.stringify(
+    document.meta["compliance-mode"] or "draft"
+  ):lower()
+
+  if compliance_mode == "strict" then
+    error(
+      "ARTICLE-STRICT-UNSUPPORTED: профиль статьи пока поддерживает только Draft; " ..
+      "нормативный Strict-контракт не реализован."
+    )
+  end
+
   for _, key in ipairs(required_metadata) do
     local value = document.meta[key]
 

@@ -360,7 +360,26 @@ function Show-Status {
     if (Test-Path -LiteralPath $reportPath -PathType Leaf) {
         try {
             $report = Get-Content -Raw -Encoding UTF8 -LiteralPath $reportPath | ConvertFrom-Json
-            Write-Host ("PDF postflight:         {0} ({1} стр.)" -f $report.status, $report.pages)
+            # R1/workspace: profile postflight reports use a common status, but
+            # older experimental reports stored the page count below pdf.pages.
+            # Accept both layouts so status remains useful across profile v1.
+            $pageCount = $null
+            if ($null -ne $report.PSObject.Properties['pages']) {
+                $pageCount = $report.pages
+            }
+            elseif ($null -ne $report.PSObject.Properties['pdf'] -and
+                $null -ne $report.pdf -and
+                $null -ne $report.pdf.PSObject.Properties['pages']) {
+                $pageCount = $report.pdf.pages
+            }
+            $pageSummary = if ($null -eq $pageCount -or
+                [string]::IsNullOrWhiteSpace([string]$pageCount)) {
+                'число страниц не указано'
+            }
+            else {
+                '{0} стр.' -f $pageCount
+            }
+            Write-Host ("PDF postflight:         {0} ({1})" -f $report.status, $pageSummary)
         }
         catch {
             Write-Host 'PDF postflight:         отчёт повреждён или несовместим' -ForegroundColor DarkYellow
