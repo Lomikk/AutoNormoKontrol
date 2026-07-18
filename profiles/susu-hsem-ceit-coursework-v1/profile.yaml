@@ -26,7 +26,7 @@
     "external_acceptance": "compliance/external-acceptance.yaml",
     "semantic_review_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml",
     "external_acceptance_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/external-acceptance.yaml",
-    "system_prompt": "profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md",
+    "system_prompt": "profiles/susu-hsem-ceit-coursework-v1/starter/guide/profile-system-prompt.md",
     "format_spec": "format-spec.yaml",
     "research_notes": "profiles/susu-hsem-ceit-coursework-v1/compliance/research-notes.md",
     "implementation_paths": [
@@ -40,10 +40,11 @@
     "test_paths": [
       "tests",
       "scripts/test-compliance.ps1",
+      "scripts/tests",
       "profiles/susu-hsem-ceit-coursework-v1/postflight/validate-pdf.ps1"
     ],
     "prompt_paths": [
-      "profiles/susu-hsem-ceit-coursework-v1/prompts/SYSTEM_PROMPT_SUSU_COURSEWORK.md"
+      "profiles/susu-hsem-ceit-coursework-v1/starter/guide/profile-system-prompt.md"
     ],
     "semantic_paths": [
       "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml"

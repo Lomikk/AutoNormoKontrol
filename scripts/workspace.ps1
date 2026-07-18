@@ -309,13 +309,10 @@ function New-AutoNormoKontrolWorkspace {
         Copy-Item -LiteralPath $externalTemplate `
             -Destination (Join-Path $compliance 'external-acceptance.yaml')
 
-        $guide = Join-Path $staging 'guide'
-        New-Item -ItemType Directory -Force -Path $guide | Out-Null
-        $profilePrompt = Resolve-ProfileProjectPath -Root $engineFull `
-            -Path ([string]$profileData.compliance.system_prompt) `
-            -Location 'compliance.system_prompt' -Kind File
-        Copy-Item -LiteralPath $profilePrompt `
-            -Destination (Join-Path $staging $script:AutoNormoKontrolAgentPrompt) -Force
+        # R1/agent-contract: the profile starter owns the local agent prompt.
+        # It was copied with the rest of starter and may be adapted in workspace.
+        [void](Resolve-WorkspaceOwnedPath -WorkspaceRoot $staging `
+            -RelativePath $script:AutoNormoKontrolAgentPrompt -Kind File)
 
         # R1/agent-contract: launchers are engine resources, not executable
         # source embedded in PowerShell or duplicated by every profile starter.

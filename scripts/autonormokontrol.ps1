@@ -599,7 +599,7 @@ function Show-Help {
     else {
         Write-Host '  new            создать работу: new [--profile <id>] <название>'
         Write-Host '  list-profiles  показать зарегистрированные профили документов'
-        Write-Host '  check    проверить код движка и полный жизненный цикл тестовой работы'
+        Write-Host '  check [--fast]  проверить движок; без --fast также полный lifecycle'
         Write-Host '  doctor   проверить Pandoc, TeX Live и PDF-инструменты'
         Write-Host '  install  установить доступные зависимости через WinGet'
         Write-Host '  help     показать эту справку'
@@ -719,12 +719,21 @@ function Invoke-CliCommand {
             break
         }
         'check' {
-            Write-Title 'Полная локальная проверка'
+            $fast = $Arguments.Count -eq 1 -and [string]$Arguments[0] -ceq '--fast'
+            if ($Arguments.Count -gt 0 -and -not $fast) {
+                Write-Failure 'Использование: AutoNormoKontrol.cmd check [--fast]'
+                $ExitCode.Value = 2
+                break
+            }
+            if ($fast) { Write-Title 'Быстрая проверка движка' }
+            else { Write-Title 'Полная локальная проверка' }
             if (-not (Assert-Tools @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext'))) {
                 $ExitCode.Value = 127
                 break
             }
-            Invoke-ProjectScript 'test-compliance.ps1' -ExitCode $ExitCode
+            $testArguments = if ($fast) { @('-Suite', 'fast') } else { @() }
+            Invoke-ProjectScript 'test-compliance.ps1' `
+                -Arguments $testArguments -ExitCode $ExitCode
             break
         }
         default {
@@ -828,6 +837,8 @@ try {
         if ($CommandArguments.Count -gt 0 -and
             -not ($Command -in @('draft', 'strict') -and
                 $CommandArguments.Count -eq 1 -and $CommandArguments[0] -ceq '--quiet') -and
+            -not ($Command -eq 'check' -and
+                $CommandArguments.Count -eq 1 -and $CommandArguments[0] -ceq '--fast') -and
             $Command -notin @('install', 'new', 'archive')) {
             Write-Host ("Примечание: дополнительные аргументы пока не используются: {0}" -f
                 ($CommandArguments -join ' ')) -ForegroundColor DarkYellow

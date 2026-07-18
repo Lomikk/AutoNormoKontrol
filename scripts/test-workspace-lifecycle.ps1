@@ -223,7 +223,7 @@ try {
         'external acceptance was not reset from the profile template'
     Assert-Lifecycle ((Get-OptionalHash $profilePrompt) -eq
         (Get-OptionalHash $workspacePrompt)) `
-        'workspace agent prompt is not an exact profile-specific snapshot'
+        'workspace starter did not preserve its profile-specific agent prompt'
 
     # R1/agent-contract: the profile provides the initial prompt, while a user
     # may adapt the local copy for one concrete document.
