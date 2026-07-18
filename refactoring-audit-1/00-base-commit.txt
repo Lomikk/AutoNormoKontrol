@@ -1,7 +1,0 @@
-﻿commit 0e1b6a120eb152e4b32601d57a9509e59620a338
-Author:     Lomikk <92258604+Lomikk@users.noreply.github.com>
-AuthorDate: Thu Jul 16 21:09:02 2026 +0500
-Commit:     Lomikk <92258604+Lomikk@users.noreply.github.com>
-CommitDate: Thu Jul 16 21:09:02 2026 +0500
-
-    Clarify roadmap for profile composition and backend boundaries

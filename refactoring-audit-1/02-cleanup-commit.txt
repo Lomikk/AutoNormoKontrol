@@ -1,7 +1,0 @@
-﻿commit f00592ca1f7c35a0415a10365cf2896aa72ce4bd
-Author:     Lomikk <92258604+Lomikk@users.noreply.github.com>
-AuthorDate: Thu Jul 16 23:19:25 2026 +0500
-Commit:     Lomikk <92258604+Lomikk@users.noreply.github.com>
-CommitDate: Thu Jul 16 23:19:25 2026 +0500
-
-    Refactor document pipeline to align profile-driven workflow
