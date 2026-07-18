@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "profile_id": "susu-hsem-ceit-coursework-v1",
   "document_type": "coursework",
   "starter": {
@@ -19,13 +19,10 @@
     "asset_manifest": "assets/manifest.json"
   },
   "compliance": {
-    "canonical_inventory": "profiles/susu-hsem-ceit-coursework-v1/compliance/canonical-requirement-ids.json",
+    "inventory": "sources/susu/sto-21-2008/inventory.json",
     "requirements": "profiles/susu-hsem-ceit-coursework-v1/compliance/requirements.json",
-    "review_inventory": "profiles/susu-hsem-ceit-coursework-v1/compliance/review-inventory.yaml",
     "semantic_review": "compliance/semantic-review.yaml",
     "external_acceptance": "compliance/external-acceptance.yaml",
-    "semantic_review_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml",
-    "external_acceptance_template": "profiles/susu-hsem-ceit-coursework-v1/review-templates/external-acceptance.yaml",
     "system_prompt": "profiles/susu-hsem-ceit-coursework-v1/starter/guide/profile-system-prompt.md",
     "format_spec": "format-spec.yaml",
     "research_notes": "profiles/susu-hsem-ceit-coursework-v1/compliance/research-notes.md",
@@ -45,12 +42,6 @@
     ],
     "prompt_paths": [
       "profiles/susu-hsem-ceit-coursework-v1/starter/guide/profile-system-prompt.md"
-    ],
-    "semantic_paths": [
-      "profiles/susu-hsem-ceit-coursework-v1/review-templates/semantic-review.yaml"
-    ],
-    "external_paths": [
-      "profiles/susu-hsem-ceit-coursework-v1/review-templates/external-acceptance.yaml"
     ]
   },
   "render": {

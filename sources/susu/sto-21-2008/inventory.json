@@ -1,0 +1,1730 @@
+{
+  "schema_version": 2,
+  "source": {
+    "id": "STO-21-2008",
+    "title": "СТО ЮУрГУ 21–2008. Курсовая и выпускная квалификационная работа",
+    "manifest": "sources/susu/sto-21-2008/manifest.json"
+  },
+  "entries": [
+    {
+      "id": "STO-1",
+      "kind": "requirement",
+      "summary": "Область применения: требования к курсовым и ВКР студентов нетехнических специальностей ЮУрГУ.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-2",
+      "kind": "requirement",
+      "summary": "Нормативные ссылки на ГОСТ Р 1.0–2004, ГОСТ 1.1–2002, ГОСТ Р 1.4–2004, ГОСТ 1.5–2001, ГОСТ Р 1.5–2004, ГОСТ Р 1.12–2004 и ГОСТ 7.32–2001.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3",
+      "kind": "group",
+      "summary": "Раздел терминов и определений.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3.1",
+      "kind": "definition",
+      "summary": "Аннотация — краткая характеристика содержания, назначения, формы и иных особенностей работы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3.2",
+      "kind": "definition",
+      "summary": "Стандарт организации — утвержденный и применяемый организацией стандарт для стандартизации и совершенствования деятельности.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3.3",
+      "kind": "definition",
+      "summary": "Положение — логическая единица нормативного документа, содержащая требование, правило, рекомендацию или комментарий.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3.4",
+      "kind": "definition",
+      "summary": "Требование — положение с критериями, которые должны быть соблюдены.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-3.5",
+      "kind": "definition",
+      "summary": "Реферат — краткое точное изложение содержания работы, основных фактических сведений и выводов.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "3.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-4",
+      "kind": "group",
+      "summary": "Сокращения стандарта: БЖД, ГОС, НИР, НИОКР, ЮУрГУ.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5",
+      "kind": "group",
+      "summary": "Основные нормативные положения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.1",
+      "kind": "requirement",
+      "summary": "Курсовая работа систематизирует и углубляет знания по конкретной дисциплине учебного плана.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.2",
+      "kind": "requirement",
+      "summary": "ВКР является итоговой комплексной работой по специальности и должна иметь практическую направленность.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.3",
+      "kind": "requirement",
+      "summary": "Курсовая работа состоит из пояснительной записки; иллюстративный материал включается при необходимости по решению кафедры и руководителя.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.4",
+      "kind": "requirement",
+      "summary": "Требуются научный язык, точная профессиональная терминология; запрещены разговорная речь, сленг и произвольные словообразования.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.5",
+      "kind": "requirement",
+      "summary": "Запрещено личное местоимение «я»; допускаются «мы», третье лицо и страдательный залог.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-5.6",
+      "kind": "requirement",
+      "summary": "ВКР проходит обязательный нормоконтроль выпускающей кафедры по внешним стандартам [1–3].",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "5.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-6",
+      "kind": "requirement",
+      "summary": "Состав курсовой: титульный лист, задание, аннотация, оглавление, введение, основной материал, заключение и библиографический список обязательны; обзор литературы и приложения условны.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7",
+      "kind": "group",
+      "summary": "Требования к содержанию структурных элементов работ.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.1",
+      "kind": "group",
+      "summary": "Титульный лист.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.1.1",
+      "kind": "requirement",
+      "summary": "Обязательные реквизиты и расположение титульного листа курсовой работы, включая дисциплину, шифр, руководителя, нормоконтролера, автора, подписи, город и год.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.1.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.1.2",
+      "kind": "requirement",
+      "summary": "Обязательные реквизиты титульного листа ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.1.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.1.3",
+      "kind": "requirement",
+      "summary": "Формы и примеры титульных листов находятся в приложениях А1, А2, Б1 и Б2.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.1.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.2",
+      "kind": "group",
+      "summary": "Задание на работу.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.2.1",
+      "kind": "requirement",
+      "summary": "Задание на курсовую содержит официальные реквизиты, ФИО и группу студента, дисциплину, тему, срок, вопросы, календарный план и подписи.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.2.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.2.2",
+      "kind": "requirement",
+      "summary": "Обязательные реквизиты задания на ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.2.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.2.3",
+      "kind": "requirement",
+      "summary": "Форма задания на курсовую дана в приложении В, форма задания на ВКР — в приложении Г.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.2.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3",
+      "kind": "group",
+      "summary": "Аннотация и реферат.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3.1",
+      "kind": "requirement",
+      "summary": "Аннотация или реферат размещается после задания; содержание должно учитывать ГОСТ 7.9–95.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3.2",
+      "kind": "requirement",
+      "summary": "Аннотация характеризует тему, проблему объекта, цель и задачи, результаты и новизну; реферат имеет расширенный набор содержательных частей.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3.3",
+      "kind": "requirement",
+      "summary": "Отсутствующие по существу части аннотации/реферата разрешено опустить, сохраняя последовательность остальных.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3.4",
+      "kind": "requirement",
+      "summary": "Рекомендуемый средний объем: аннотация 500 печатных знаков, реферат 850 знаков.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.3.5",
+      "kind": "group",
+      "summary": "Примеры реферата курсовой, аннотации ВКР и реферата НИР находятся в приложениях Д, Е1 и Е2.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.3.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.4",
+      "kind": "group",
+      "summary": "Оглавление.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.4.1",
+      "kind": "requirement",
+      "summary": "Оглавление перечисляет введение, все уровни разделов, заключение, библиографию и приложения с начальными страницами и отточиями.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.4.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.4.2",
+      "kind": "requirement",
+      "summary": "Начертание заголовков в оглавлении соответствует заголовкам в тексте, включая прописные буквы первого уровня.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.4.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.5",
+      "kind": "requirement",
+      "summary": "Обозначения и сокращения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.5.1",
+      "kind": "requirement",
+      "summary": "Элемент «Обозначения и сокращения» содержит перечень примененных обозначений и сокращений.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.5.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.5.2",
+      "kind": "requirement",
+      "summary": "Обозначения и сокращения записываются в алфавитном порядке с расшифровками и пояснениями.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.5.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.5.3",
+      "kind": "requirement",
+      "summary": "Сокращения русских слов регулируются ГОСТ 7.12–93; иные сокращения допускаются по правилам текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.5.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.5.4",
+      "kind": "requirement",
+      "summary": "Аббревиатура расшифровывается при первом упоминании.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.5.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.6",
+      "kind": "requirement",
+      "summary": "Введение раскрывает актуальность, цель, задачи, объект, предмет и практическую применимость; заключение дает выводы, оценку достижения, рекомендации и эффективность.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.7",
+      "kind": "requirement",
+      "summary": "Сравнение отечественных и передовых зарубежных технологий с доказательными выводами о применении достижений.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.8",
+      "kind": "group",
+      "summary": "Основная часть.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.8.1",
+      "kind": "requirement",
+      "summary": "Основная часть отражает сущность, методику и основные результаты выполненной работы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.8.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.8.2",
+      "kind": "requirement",
+      "summary": "Содержание основной части определяется задачами из введения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.8.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.8.3",
+      "kind": "requirement",
+      "summary": "Основная часть включает направление исследования, обзор источников, методику, обоснование и оценку результатов, сравнение и исчерпывающие выводы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.8.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.9",
+      "kind": "requirement",
+      "summary": "Условный организационно-экономический раздел: рекомендации руководителя, экономическое обоснование, стоимость, источники данных, эффект и окупаемость.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.10",
+      "kind": "requirement",
+      "summary": "Условный раздел БЖД: рекомендации руководителя, безопасность труда, пожарная безопасность и параметры среды.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.10",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11",
+      "kind": "group",
+      "summary": "Библиографический список.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.1",
+      "kind": "requirement",
+      "summary": "Библиографический список содержит сведения обо всех использованных информационных источниках.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.2",
+      "kind": "requirement",
+      "summary": "Библиография оформляется сносками либо списком в конце работы; профиль выбирает конечный список.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.3",
+      "kind": "requirement",
+      "summary": "Допустимые порядки списка; номера арабскими цифрами без точки и с абзацного отступа; описание по ГОСТ 7.1–2003.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.4",
+      "kind": "requirement",
+      "summary": "На каждый источник списка должна быть ссылка; ссылки оформляются сноской или номером в квадратных скобках, включая диапазоны и страницы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.5",
+      "kind": "requirement",
+      "summary": "Если используются сноски, они размещаются на странице или в конце записки, имеют указатели и уменьшенный шрифт.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.6",
+      "kind": "requirement",
+      "summary": "Допускается раздел библиографии «Тематические источники».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.11.7",
+      "kind": "group",
+      "summary": "Примеры библиографического описания по ГОСТ 7.12–93 приведены в приложении К.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.11.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12",
+      "kind": "requirement",
+      "summary": "Приложения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.1",
+      "kind": "requirement",
+      "summary": "В приложения рекомендуется выносить связанные с работой материалы, не включенные в основную часть.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.2",
+      "kind": "requirement",
+      "summary": "Перечень допустимых материалов приложений: обзоры, документы, вспомогательные таблицы, авторские методики и иллюстрации.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.3",
+      "kind": "requirement",
+      "summary": "Каждое приложение начинается с новой страницы, имеет обозначение и заголовок; допустимые буквы, продолжение и локальная нумерация объектов заданы стандартом.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.4",
+      "kind": "requirement",
+      "summary": "Приложения классифицируются как обязательные или информационные; на каждое должна быть ссылка в тексте.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.5",
+      "kind": "requirement",
+      "summary": "Все приложения перечисляются в оглавлении с обозначениями и заголовками.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.6",
+      "kind": "requirement",
+      "summary": "Приложения располагаются в порядке первых ссылок на них в тексте.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.7",
+      "kind": "requirement",
+      "summary": "Нумерация страниц основной работы и входящих в нее приложений сквозная.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.8",
+      "kind": "requirement",
+      "summary": "Разделы, подразделы, пункты и подпункты приложения нумеруются в пределах каждого приложения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-7.12.9",
+      "kind": "requirement",
+      "summary": "Отдельный альбом приложений имеет собственный титульный лист, основную надпись и самостоятельную нумерацию.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "7.12.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8",
+      "kind": "group",
+      "summary": "Общие правила оформления курсовых и выпускных квалификационных работ.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1",
+      "kind": "group",
+      "summary": "Общие требования к носителю, набору и странице.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.1",
+      "kind": "requirement",
+      "summary": "Работа оформляется в соответствии с настоящим стандартом.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.2",
+      "kind": "requirement",
+      "summary": "Работа выполняется на белых листах формата А4 210×297 мм по ГОСТ 9327–60.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.3",
+      "kind": "requirement",
+      "summary": "СТО требует Microsoft Word, Times New Roman 14 пт, по умолчанию одинарный интервал и абзац 0,7 см; 1,5/1,5 см допускаются только решением кафедры.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.4",
+      "kind": "requirement",
+      "summary": "Поля: верх 20 мм, низ 26 мм, номер страницы в 20 мм от края, слева 25 мм, справа 10 мм; рамка и штамп не выполняются.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.5",
+      "kind": "requirement",
+      "summary": "В начале страницы не допускаются висячие неполные строки.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.6",
+      "kind": "requirement",
+      "summary": "Правила ручного исправления опечаток и запрет повреждений, помарок и следов прежнего текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.1.7",
+      "kind": "requirement",
+      "summary": "Имена собственные приводятся на языке оригинала; перевод или транслитерация сопровождается оригиналом при первом упоминании.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.1.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2",
+      "kind": "group",
+      "summary": "Разделы и нумерация работы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.1",
+      "kind": "requirement",
+      "summary": "Основная часть делится на части, разделы, главы, подразделы, пункты или параграфы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.2",
+      "kind": "requirement",
+      "summary": "Разделы, подразделы, пункты и подпункты нумеруются арабскими цифрами с абзацного отступа; приложения исключены; после номера нет точки.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.3",
+      "kind": "requirement",
+      "summary": "Иерархические номера подразделов, пунктов и подпунктов состоят из номеров уровней, разделенных точками, без завершающей точки.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.4",
+      "kind": "requirement",
+      "summary": "Подразделение уровня вводится только если на этом уровне выделяется более одного элемента.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.5",
+      "kind": "requirement",
+      "summary": "Заголовки кратко и точно отражают содержание; разделы прописными, подразделы строчными; введение, заключение, библиография и выводы не нумеруются; каждый раздел завершается «Выводы по разделу [словом]».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.6",
+      "kind": "requirement",
+      "summary": "Структурные элементы имеют заголовки первого уровня; первый уровень набирается прописными, подразделы — строчными либо единообразно отличным начертанием.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.7",
+      "kind": "requirement",
+      "summary": "Заголовки подразделов, пунктов и подпунктов печатаются с абзацного отступа и начинаются с прописной буквы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.8",
+      "kind": "requirement",
+      "summary": "В заголовке разрешены предложения, но нет переноса слов, висячих союзов/предлогов, конечной точки, разрыва страницы или отрыва от текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.9",
+      "kind": "requirement",
+      "summary": "После заголовка внизу страницы должно оставаться не менее трех строк текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.10",
+      "kind": "requirement",
+      "summary": "Пункты и подпункты внутри параграфа рекомендуется оформлять без нумерации, но единообразно; заголовки допускаются.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.10",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.2.11",
+      "kind": "requirement",
+      "summary": "Перечисления идут с абзацного отступа; допустимы маркеры, дефис, ограниченный русский буквенный список или арабские цифры с круглой скобкой.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.2.11",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.3",
+      "kind": "group",
+      "summary": "Нумерация страниц.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.3.1",
+      "kind": "requirement",
+      "summary": "Нумерация страниц сквозная; титульный лист считается первой страницей, но номер на нем не печатается.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.3.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.3.2",
+      "kind": "requirement",
+      "summary": "Титульный лист, задание, аннотация и оглавление учитываются в общей нумерации, но номера на них скрыты.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.3.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.3.3",
+      "kind": "requirement",
+      "summary": "Рекомендуется арабский номер в нижнем колонтитуле с выравниванием по середине.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.3.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4",
+      "kind": "group",
+      "summary": "Оформление текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.1",
+      "kind": "requirement",
+      "summary": "Сокращения регулируются ГОСТ 7.12–93; СТО перечисляет допустимые общеупотребительные сокращения и контексты их использования.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.2",
+      "kind": "requirement",
+      "summary": "Запрещены переносы внутри аббревиатур; инициалы не отрываются от фамилии; числа не отрываются от единиц, №/§ — от чисел, маркер списка — от текста.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.3",
+      "kind": "requirement",
+      "summary": "Правила записи интервалов, допусков, единиц измерения, диапазонов дат и страниц.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.4",
+      "kind": "requirement",
+      "summary": "Правила одно- и двухбуквенного наращения падежных окончаний порядковых числительных и исключение для процентов.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.5",
+      "kind": "requirement",
+      "summary": "Правила пробелов: инициалы, сокращения, группы цифр, кавычки/скобки, ссылки, единицы, проценты и валюты.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.6",
+      "kind": "requirement",
+      "summary": "Цитаты заключаются в кавычки и снабжаются ссылкой; языковая единица выделяется курсивом; для эпиграфа задано расположение и пунктуация.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.7",
+      "kind": "requirement",
+      "summary": "Правила точек, запятой в десятичных дробях, пробелов при пунктуации, тире, кавычек и скобок.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.8",
+      "kind": "requirement",
+      "summary": "Дефис применяется внутри сложных слов без пробелов; тире диапазона также набирается без пробелов.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.4.9",
+      "kind": "requirement",
+      "summary": "Цифровая дата записывается в одной строке как день.месяц.год.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.4.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5",
+      "kind": "group",
+      "summary": "Иллюстрации.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.1",
+      "kind": "requirement",
+      "summary": "Все эскизы, схемы, графики и фотографии называются рисунками, нумеруются в пределах раздела; цвет допускается.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.2",
+      "kind": "requirement",
+      "summary": "Подпись включает слово «Рисунок», номер и наименование через пробел и тире; обычная нумерация — по разделам, сквозная допускается при малом числе рисунков.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.3",
+      "kind": "requirement",
+      "summary": "Рисунки, схемы, графики и таблицы располагаются после первого упоминания; обозначения и номера соответствуют тексту.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.4",
+      "kind": "requirement",
+      "summary": "На каждый рисунок есть ссылка; первая — «рисунок N», повторные — «см. рисунок N»; слово пишется полностью.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.5",
+      "kind": "requirement",
+      "summary": "Наименование/поясняющие данные рисунка и расшифровка всех обозначений находятся в подписи или тексте.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.6",
+      "kind": "requirement",
+      "summary": "На осях графиков используются буквенные обозначения величин и/или их наименования.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.7",
+      "kind": "requirement",
+      "summary": "Разрешенный поворот рисунка — 90° против часовой стрелки.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.8",
+      "kind": "requirement",
+      "summary": "Иллюстрации А3 допускаются только на разворотах или вкладках; вкладка считается одной страницей.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.9",
+      "kind": "requirement",
+      "summary": "Фотографии не больше А4, с установленными полями, наклеиваются на белый лист без коробления и отслоения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.10",
+      "kind": "requirement",
+      "summary": "Единственный рисунок в работе имеет номер «Рисунок 1».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.10",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.11",
+      "kind": "requirement",
+      "summary": "Рисунки приложения нумеруются обозначением приложения и локальным номером, например А.1.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.11",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.5.12",
+      "kind": "group",
+      "summary": "Пример оформления рисунков приведен в приложении Л.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.5.12",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6",
+      "kind": "group",
+      "summary": "Таблицы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.1",
+      "kind": "requirement",
+      "summary": "Цифровой материал пояснительной записки оформляется таблицами.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.2",
+      "kind": "requirement",
+      "summary": "Таблица располагается после первого упоминания, но не далее следующей страницы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.3",
+      "kind": "requirement",
+      "summary": "Слово «Таблица» и номер ставятся слева над таблицей; арабская нумерация, единственная таблица — 1; допускается нумерация по разделам.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.4",
+      "kind": "requirement",
+      "summary": "На все таблицы есть ссылки; первая — «таблица N», повторные — «см. таблицу N».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.5",
+      "kind": "requirement",
+      "summary": "Необязательный заголовок таблицы начинается с прописной, находится после слова и номера, должен быть кратким и точно отражать содержание.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.6",
+      "kind": "requirement",
+      "summary": "Заголовки и подзаголовки граф имеют заданный регистр, без конечных точек и в единственном числе.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.7",
+      "kind": "requirement",
+      "summary": "Таблица, как правило, ограничена линиями слева, справа и снизу; диагональные линии в головке запрещены.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.8",
+      "kind": "requirement",
+      "summary": "Длинные/широкие таблицы делятся с повтором головки; первая часть имеет обычную подпись, следующие — «Продолжение», последняя — «Окончание»; графа «№ п/п» не используется.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.9",
+      "kind": "requirement",
+      "summary": "Повторяющийся текст заменяется кавычками/«То же» по правилам; для отсутствующих данных ставится прочерк, но цифры, марки и символы кавычками не заменяются.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.10",
+      "kind": "requirement",
+      "summary": "Единицы разных величин указываются в подзаголовках граф; общая единица — над таблицей справа; смешанный случай комбинирует оба способа.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.10",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.11",
+      "kind": "requirement",
+      "summary": "«Более», «не более», «менее», «не менее» помещаются с названием показателя, если относятся ко всей строке/графе.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.11",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.12",
+      "kind": "requirement",
+      "summary": "Числа одной графы имеют одинаковое число десятичных знаков; значения длиннее четырех цифр выравниваются вправо.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.12",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.13",
+      "kind": "requirement",
+      "summary": "В таблице допускается шрифт 13 или 12 пт.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.13",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.14",
+      "kind": "requirement",
+      "summary": "Для последовательных интервалов в таблице применяются «От … до … включ.», «Св. … до … включ.» или тире между крайними числами.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.14",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.15",
+      "kind": "requirement",
+      "summary": "Табличные числа длиннее четырех знаков группируются по три цифры пробелами; исключены номера и даты; четырехзначные группируются рядом с многозначными.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.15",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.6.16",
+      "kind": "group",
+      "summary": "Пример оформления таблиц приведен в приложении М.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.6.16",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7",
+      "kind": "group",
+      "summary": "Формулы и уравнения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.1",
+      "kind": "requirement",
+      "summary": "Рекомендуется набирать формулы встроенным редактором Word Microsoft Equation 3.0.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.2",
+      "kind": "requirement",
+      "summary": "Формулы выделяются в отдельную строку с не менее чем одной свободной строкой сверху и снизу.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.3",
+      "kind": "requirement",
+      "summary": "Длинная формула переносится после знака операции с повтором знака; при переносе на умножении используется косой крест.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.4",
+      "kind": "requirement",
+      "summary": "Пояснения символов и числовых коэффициентов идут сразу под формулой в порядке появления.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.5",
+      "kind": "requirement",
+      "summary": "Формулы нумеруются сквозными арабскими цифрами в круглых скобках справа; единственная формула — (1).",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.5",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.6",
+      "kind": "requirement",
+      "summary": "Номер системы уравнений располагается напротив середины группы формул.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.6",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.7",
+      "kind": "requirement",
+      "summary": "После формулы с новыми обозначениями ставится запятая; «где» без отступа и двоеточия; пояснения столбиком, разделены точкой с запятой, последнее заканчивается точкой.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.7",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.8",
+      "kind": "requirement",
+      "summary": "Точка на средней линии является основным знаком умножения и используется/опускается в перечисленных математических контекстах.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.8",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.9",
+      "kind": "requirement",
+      "summary": "Косой крест умножения применяется для размеров, векторного произведения и переноса на знаке умножения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.10",
+      "kind": "requirement",
+      "summary": "Формулы приложения имеют отдельную нумерацию с обозначением приложения, например (В.1).",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.10",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.11",
+      "kind": "requirement",
+      "summary": "Ссылка на формулу содержит номер в круглых скобках.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.11",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.12",
+      "kind": "requirement",
+      "summary": "Допускается нумерация формул в пределах раздела с номером вида 3.1.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.12",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.13",
+      "kind": "requirement",
+      "summary": "Математические уравнения излагаются по тем же правилам, что формулы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.13",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.14",
+      "kind": "requirement",
+      "summary": "Формулы и уравнения допускается выполнять вручную черными чернилами.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.14",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.15",
+      "kind": "requirement",
+      "summary": "Латинские скаляры набираются курсивом, греческие/русские — прямо; векторы, скалярное и векторное произведения имеют заданные обозначения.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.15",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.16",
+      "kind": "requirement",
+      "summary": "Если индекс образован сокращениями двух и более слов, после каждого сокращения, кроме последнего, ставятся точка и пробел.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.16",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.17",
+      "kind": "requirement",
+      "summary": "Цифры, химические элементы, единицы и математические/тригонометрические функции набираются прямым шрифтом.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.17",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-8.7.18",
+      "kind": "requirement",
+      "summary": "Одни и те же обозначения в формулах, рисунках и основном тексте имеют идентичные начертание и размер.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "8.7.18",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-9",
+      "kind": "requirement",
+      "summary": "Оформление иллюстраций при защите ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "9",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-9.1",
+      "kind": "requirement",
+      "summary": "На защите ВКР допускаются плакаты, альбомы, макеты и иной иллюстративный материал.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "9.1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-9.2",
+      "kind": "requirement",
+      "summary": "Титульный лист альбома иллюстраций к защите ВКР приведен в приложении Н.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "9.2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-9.3",
+      "kind": "requirement",
+      "summary": "Плакаты защиты ВКР выполняются на А1/А2 с пропорциональным масштабированием и маркировкой на обороте; примеры штампа в приложении П.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "9.3",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-9.4",
+      "kind": "requirement",
+      "summary": "Плакаты без рамки; трафареты допускаются; не более шести цветов.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "9.4",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-A1",
+      "kind": "form",
+      "summary": "Обязательная форма титульного листа курсовой работы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "A1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-A2",
+      "kind": "form",
+      "summary": "Справочный пример заполненного титульного листа курсовой работы.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "A2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-B1",
+      "kind": "form",
+      "summary": "Обязательная форма титульного листа ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "B1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-B2",
+      "kind": "form",
+      "summary": "Справочный пример заполненного титульного листа ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "B2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-V",
+      "kind": "form",
+      "summary": "Рекомендуемая двухстраничная форма задания на курсовую работу.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "V",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-G",
+      "kind": "form",
+      "summary": "Обязательная форма задания на ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "G",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-D",
+      "kind": "form",
+      "summary": "Справочный пример оформления реферата на курсовую работу.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "D",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-E1",
+      "kind": "form",
+      "summary": "Справочный пример аннотации на ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "E1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-E2",
+      "kind": "form",
+      "summary": "Справочный пример реферата научно-исследовательской ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "E2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-ZH",
+      "kind": "form",
+      "summary": "Справочный пример оформления оглавления.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "ZH",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-I1",
+      "kind": "form",
+      "summary": "Справочный пример раздела «Введение».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "I1",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-I2",
+      "kind": "form",
+      "summary": "Справочный пример раздела «Заключение».",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "I2",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-K",
+      "kind": "form",
+      "summary": "Справочные примеры библиографических описаний.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "K",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-L",
+      "kind": "form",
+      "summary": "Справочный пример оформления иллюстраций.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "L",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-M",
+      "kind": "form",
+      "summary": "Справочный пример оформления таблиц, включая полную сетку и продолжение.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "M",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-N",
+      "kind": "form",
+      "summary": "Обязательный титульный лист альбома иллюстраций к докладу на защите ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "N",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    },
+    {
+      "id": "STO-P",
+      "kind": "form",
+      "summary": "Рекомендуемые примеры оформления плакатов для защиты ВКР.",
+      "source": {
+        "document_id": "STO-21-2008",
+        "clause": "P",
+        "locator": "sources/susu/sto-21-2008/derived/standard.layout.txt"
+      }
+    }
+  ]
+}

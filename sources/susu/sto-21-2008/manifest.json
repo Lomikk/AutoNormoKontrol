@@ -15,6 +15,13 @@
                                      "text_bytes":  185027
                                  }
                  },
+    "inventory":  {
+                      "role":  "canonical-clause-inventory",
+                      "file":  "sto-21-2008/inventory.json",
+                      "schema_version":  2,
+                      "entries":  172,
+                      "sha256":  "1599facb8d83ce2f223229d1c5656ed747b2f5c062e2123831e618eb02634296"
+                  },
     "attachments":  [
                         {
                             "file":  "sto-21-2008/attachments/original/cto_21_pril_a1.doc",
@@ -143,7 +150,7 @@
                     ],
     "interpretation_status":  "not-a-profile",
     "notes":  [
-                  "This manifest identifies files and reproducible derivatives only.",
-                  "It does not classify normative requirements or determine document-profile applicability."
+                  "This manifest identifies source files, reproducible derivatives and the neutral canonical clause inventory.",
+                  "The inventory records what the source contains; it does not determine profile applicability or verification."
               ]
 }

@@ -208,19 +208,26 @@ try {
             "declared content file is missing: $relative"
     }
 
-    $semanticTemplate = Join-Path $engineRoot `
-        ([string]$resolved.Profile.Data.compliance.semantic_review_template)
-    $externalTemplate = Join-Path $engineRoot `
-        ([string]$resolved.Profile.Data.compliance.external_acceptance_template)
+    $expectedReviewRoot = Join-Path $engineRoot ('build/lifecycle-review-' + [guid]::NewGuid().ToString('N'))
+    $semanticTemplate = Join-Path $expectedReviewRoot 'semantic-review.yaml'
+    $externalTemplate = Join-Path $expectedReviewRoot 'external-acceptance.yaml'
+    $reviewContract = Get-AutoNormoKontrolRequirementContract `
+        -Root $engineRoot -Profile $resolved.Profile
+    New-AutoNormoKontrolReviewJournals `
+        -Contract $reviewContract `
+        -DocumentType $resolved.Profile.DocumentType `
+        -SemanticPath $semanticTemplate `
+        -ExternalPath $externalTemplate
     $profilePrompt = Join-Path $engineRoot `
         ([string]$resolved.Profile.Data.compliance.system_prompt)
     $workspacePrompt = Join-Path $workspaceRoot 'guide/profile-system-prompt.md'
     Assert-Lifecycle ((Get-OptionalHash $semanticTemplate) -eq
         (Get-OptionalHash (Join-Path $workspaceRoot 'compliance/semantic-review.yaml'))) `
-        'semantic review was not reset from the profile template'
+        'semantic review was not generated from requirements v2'
     Assert-Lifecycle ((Get-OptionalHash $externalTemplate) -eq
         (Get-OptionalHash (Join-Path $workspaceRoot 'compliance/external-acceptance.yaml'))) `
-        'external acceptance was not reset from the profile template'
+        'external acceptance was not generated from requirements v2'
+    Remove-Item -LiteralPath $expectedReviewRoot -Recurse -Force
     Assert-Lifecycle ((Get-OptionalHash $profilePrompt) -eq
         (Get-OptionalHash $workspacePrompt)) `
         'workspace starter did not preserve its profile-specific agent prompt'

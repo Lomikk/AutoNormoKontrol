@@ -3,6 +3,8 @@
 
 local errors = {}
 local warnings = {}
+local profile_diagnostics = {}
+local profile_structure = {}
 
 local function add_error(clause, message)
   errors[#errors + 1] = clause .. ': ' .. message
@@ -26,6 +28,30 @@ local function text(value)
     return ''
   end
   return pandoc.utils.stringify(value)
+end
+
+local function load_profile_contract(doc)
+  profile_structure = doc.meta['profile-structure'] or {}
+  profile_diagnostics = {}
+  for _, diagnostic in ipairs(doc.meta['profile-diagnostics'] or {}) do
+    local code = text(diagnostic.code)
+    if code ~= '' then
+      profile_diagnostics[code] = {
+        message = text(diagnostic.message),
+        hint = text(diagnostic.hint),
+      }
+    end
+  end
+end
+
+local function add_contract_error(code, detail)
+  local diagnostic = profile_diagnostics[code]
+  if diagnostic == nil then
+    add_error(code, detail)
+    return
+  end
+  add_error(code, diagnostic.message .. ': ' .. detail ..
+    '. Подсказка: ' .. diagnostic.hint)
 end
 
 local function trim(value)
@@ -424,6 +450,9 @@ local function scan_blocks(blocks, context)
 end
 
 local function validate_metadata(doc, mode)
+  -- R0/requirements-v2: exact review sets, structural obligations and
+  -- diagnostic wording are compiled from inventory.json + requirements.json.
+  load_profile_contract(doc)
   -- STO-AI-GATE, STO-EXT-GATE: exact review inventories are profile data,
   -- never hard-coded renderer state and never inferred from mutable journals.
   local profile_inventory = doc.meta['profile-inventory'] or {}
@@ -594,19 +623,37 @@ local function validate_headers()
     end
   end
 
-  -- STO-6, STO-7.6, STO-8.2.5, STO-8.2.6.
-  if introduction == nil then add_error('STO-6', 'отсутствует обязательное введение') end
-  if conclusion == nil then add_error('STO-6', 'отсутствует обязательное заключение') end
-  if #numbered_sections == 0 then add_error('STO-6', 'отсутствует основной материал') end
-  if state.bibliography_block == nil then add_error('STO-6', 'отсутствует библиографический список') end
-  if introduction and #numbered_sections > 0 and introduction > numbered_sections[1].block then
-    add_error('STO-6', 'введение должно предшествовать основной части')
+  -- STO-6, STO-7.11.2; R0/requirements-v2: the profile declares required
+  -- content elements and before/after edges. The handler only maps semantic
+  -- AST objects to stable element IDs and executes the generic constraints.
+  local positions = {
+    introduction = introduction and {first = introduction, last = introduction} or nil,
+    ['main-matter'] = #numbered_sections > 0 and {
+      first = numbered_sections[1].block,
+      last = numbered_sections[#numbered_sections].block,
+    } or nil,
+    conclusion = conclusion and {first = conclusion, last = conclusion} or nil,
+    bibliography = state.bibliography_block and {
+      first = state.bibliography_block,
+      last = state.bibliography_block,
+    } or nil,
+  }
+  for _, required in ipairs(profile_structure['required-elements'] or {}) do
+    local element_id = text(required.id)
+    if positions[element_id] == nil then
+      add_contract_error(text(required.diagnostic),
+        'отсутствует элемент «' .. element_id .. '»')
+    end
   end
-  if conclusion and #numbered_sections > 0 and conclusion < numbered_sections[#numbered_sections].block then
-    add_error('STO-6', 'заключение должно следовать после основной части')
-  end
-  if conclusion and state.bibliography_block and conclusion > state.bibliography_block then
-    add_error('STO-6', 'библиография должна следовать после заключения')
+  for _, edge in ipairs(profile_structure['element-order'] or {}) do
+    local first = text(edge.first)
+    local then_element = text(edge['then'])
+    local first_position = positions[first]
+    local then_position = positions[then_element]
+    if first_position and then_position and first_position.last > then_position.first then
+      add_contract_error(text(edge.diagnostic),
+        '«' .. first .. '» должно находиться перед «' .. then_element .. '»')
+    end
   end
 
   local number_words = {

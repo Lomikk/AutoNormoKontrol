@@ -4,7 +4,8 @@
     [string]$PdfPath,
     [Parameter(Mandatory = $true)]
     [string]$TexPath,
-    [string]$ReportPath = ''
+    [string]$ReportPath = '',
+    [string]$ContractPath = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -21,9 +22,36 @@ $build = Split-Path -Parent $pdf
 $bbox = Join-Path $env:TEMP ("autonormokontrol-bbox-{0}.html" -f $PID)
 $plain = Join-Path $env:TEMP ("autonormokontrol-text-{0}.txt" -f $PID)
 $failures = New-Object System.Collections.Generic.List[string]
+$requirementContract = $null
+if (-not [string]::IsNullOrWhiteSpace($ContractPath)) {
+    $contractFull = if ([System.IO.Path]::IsPathRooted($ContractPath)) {
+        $ContractPath
+    }
+    else { Join-Path $root $ContractPath }
+    if (-not (Test-Path -LiteralPath $contractFull -PathType Leaf)) {
+        throw "Effective requirements contract was not found: $contractFull"
+    }
+    $requirementContract = [System.IO.File]::ReadAllText(
+        $contractFull,
+        [System.Text.Encoding]::UTF8
+    ) | ConvertFrom-Json
+}
 
 function Add-Failure([string]$Clause, [string]$Message) {
     $failures.Add(("{0}: {1}" -f $Clause, $Message))
+}
+
+function Add-ContractFailure([string]$Code, [string]$Detail) {
+    $diagnostic = if ($null -eq $requirementContract) {
+        $null
+    }
+    else { $requirementContract.diagnostics.PSObject.Properties[$Code].Value }
+    if ($null -eq $diagnostic) {
+        Add-Failure $Code $Detail
+        return
+    }
+    Add-Failure $Code (("{0}: {1}. Подсказка: {2}" -f
+        $diagnostic.message, $Detail, $diagnostic.hint))
 }
 
 # STO-8.1.2: every physical page is A4 and unrotated.
@@ -134,34 +162,36 @@ if ($null -eq $firstNumberedPage -or $firstNumberedPage -le 1) {
     Add-Failure 'STO-8.3.2' 'front matter page numbers were not hidden or main numbering was not found'
 }
 
-# STO-6, STO-7.3.1, STO-7.4.1, STO-7.4.2, STO-7.11.2, STO-7.11.3,
-# STO-7.12.5: postflight checks the mandatory visible sequence and selected
-# numbering forms.
+# STO-6, STO-7.1.1, STO-7.2.1, STO-7.3.1, STO-7.4.1, STO-7.4.2, STO-7.11.2,
+# STO-7.11.3,
+# STO-7.12.5; R0/requirements-v2: visible elements and ordering come from the
+# compiled profile contract. An optional appendix is never made mandatory by
+# a hard-coded postflight sequence.
 & pdftotext -layout -enc UTF-8 $pdf $plain
 if ($LASTEXITCODE -ne 0) { Add-Failure 'STO-6' 'plain-text PDF extraction failed' }
 $pdfText = [System.IO.File]::ReadAllText($plain, [Text.Encoding]::UTF8)
 $texText = [System.IO.File]::ReadAllText($tex, [Text.Encoding]::UTF8)
-$requiredSequence = @(
-    @{ Clause = 'STO-7.1.1'; Text = 'ПОЯСНИТЕЛЬНАЯ ЗАПИСКА К КУРСОВОЙ РАБОТЕ' },
-    @{ Clause = 'STO-7.2.1'; Text = 'ЗАДАНИЕ' },
-    @{ Clause = 'STO-7.3.1'; Text = 'АННОТАЦИЯ' },
-    @{ Clause = 'STO-7.4.1'; Text = 'ОГЛАВЛЕНИЕ' },
-    @{ Clause = 'STO-6'; Text = 'ВВЕДЕНИЕ' },
-    @{ Clause = 'STO-6'; Text = 'ЗАКЛЮЧЕНИЕ' },
-    @{ Clause = 'STO-7.11.2'; Text = 'БИБЛИОГРАФИЧЕСКИЙ СПИСОК' },
-    @{ Clause = 'STO-7.12.5'; Text = 'ПРИЛОЖЕНИЕ А' }
-)
-$lastPosition = -1
-foreach ($required in $requiredSequence) {
-    $position = $pdfText.IndexOf($required.Text, [StringComparison]::Ordinal)
-    if ($position -lt 0) {
-        Add-Failure $required.Clause ("missing visible element: {0}" -f $required.Text)
+$visiblePositions = @{}
+if ($null -ne $requirementContract) {
+    foreach ($element in @($requirementContract.structure.visible_elements)) {
+        $position = $pdfText.IndexOf([string]$element.text, [StringComparison]::Ordinal)
+        if ($position -lt 0 -and [bool]$element.required) {
+            Add-ContractFailure ([string]$element.diagnostic) `
+                ("не найдено «{0}»" -f $element.text)
+        }
+        elseif ($position -ge 0) {
+            $visiblePositions[[string]$element.element] = $position
+        }
     }
-    elseif ($position -lt $lastPosition) {
-        Add-Failure $required.Clause ("visible element is out of order: {0}" -f $required.Text)
-    }
-    else {
-        $lastPosition = $position
+    foreach ($edge in @($requirementContract.structure.order)) {
+        $first = [string]$edge.first
+        $then = [string]$edge.then
+        if ($visiblePositions.ContainsKey($first) -and
+            $visiblePositions.ContainsKey($then) -and
+            $visiblePositions[$first] -gt $visiblePositions[$then]) {
+            Add-ContractFailure ([string]$edge.diagnostic) `
+                ("«{0}» должно находиться перед «{1}»" -f $first, $then)
+        }
     }
 }
 # STO-8.5.10: the integration fixture has exactly one main figure, so its

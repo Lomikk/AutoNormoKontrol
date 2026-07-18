@@ -1,0 +1,20 @@
+{
+  "schema_version": 2,
+  "source": {
+    "id": "ARTICLE-BASELINE",
+    "title": "Локальная спецификация экспериментальной статьи",
+    "manifest": "profiles/susu-practice-article-v1/profile.yaml"
+  },
+  "entries": [
+    {
+      "id": "ARTICLE-BASELINE",
+      "kind": "requirement",
+      "summary": "Профиль собирает восстановленную научную статью через Pandoc и LuaLaTeX.",
+      "source": {
+        "document_id": "ARTICLE-BASELINE",
+        "clause": "baseline",
+        "locator": "profiles/susu-practice-article-v1/profile.yaml"
+      }
+    }
+  ]
+}

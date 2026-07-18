@@ -1,5 +1,5 @@
 {
-    "schema_version":  1,
+    "schema_version":  2,
     "profile_id":  "susu-practice-article-v1",
     "document_type":  "practice-article",
     "starter":  {
@@ -14,13 +14,10 @@
                    "asset_manifest":  "assets/manifest.json"
                },
     "compliance":  {
-                       "canonical_inventory":  "profiles/susu-practice-article-v1/compliance/canonical-requirement-ids.json",
+                       "inventory":  "profiles/susu-practice-article-v1/compliance/inventory.json",
                        "requirements":  "profiles/susu-practice-article-v1/compliance/requirements.json",
-                       "review_inventory":  "profiles/susu-practice-article-v1/compliance/review-inventory.yaml",
                        "semantic_review":  "compliance/semantic-review.yaml",
                        "external_acceptance":  "compliance/external-acceptance.yaml",
-                       "semantic_review_template":  "profiles/susu-practice-article-v1/review-templates/semantic-review.yaml",
-                       "external_acceptance_template":  "profiles/susu-practice-article-v1/review-templates/external-acceptance.yaml",
                        "system_prompt":  "profiles/susu-practice-article-v1/starter/guide/profile-system-prompt.md",
                        "format_spec":  "format-spec.yaml",
                        "research_notes":  "profiles/susu-practice-article-v1/compliance/research-notes.md",
@@ -38,13 +35,7 @@
                                       ],
                        "prompt_paths":  [
                                             "profiles/susu-practice-article-v1/starter/guide/profile-system-prompt.md"
-                                        ],
-                       "semantic_paths":  [
-                                              "profiles/susu-practice-article-v1/review-templates/semantic-review.yaml"
-                                          ],
-                       "external_paths":  [
-                                              "profiles/susu-practice-article-v1/review-templates/external-acceptance.yaml"
-                                          ]
+                                        ]
                    },
     "render":  {
                    "pandoc_from":  "markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute",

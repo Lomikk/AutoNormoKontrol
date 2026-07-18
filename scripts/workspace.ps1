@@ -7,6 +7,8 @@ $script:AutoNormoKontrolGeminiLauncher = 'gemini.cmd'
 $script:AutoNormoKontrolWorkspaceLauncherTemplate = 'resources/workspace-launchers/AutoNormoKontrol.cmd'
 $script:AutoNormoKontrolGeminiLauncherTemplate = 'resources/workspace-launchers/gemini.cmd'
 
+. (Join-Path $PSScriptRoot 'requirements.ps1')
+
 function Get-AutoNormoKontrolEngineVersion {
     param([Parameter(Mandatory = $true)][string]$EngineRoot)
 
@@ -298,16 +300,16 @@ function New-AutoNormoKontrolWorkspace {
 
         $compliance = Join-Path $staging 'compliance'
         New-Item -ItemType Directory -Force -Path $compliance | Out-Null
-        $semanticTemplate = Resolve-ProfileProjectPath -Root $engineFull `
-            -Path ([string]$profileData.compliance.semantic_review_template) `
-            -Location 'semantic_review_template' -Kind File
-        $externalTemplate = Resolve-ProfileProjectPath -Root $engineFull `
-            -Path ([string]$profileData.compliance.external_acceptance_template) `
-            -Location 'external_acceptance_template' -Kind File
-        Copy-Item -LiteralPath $semanticTemplate `
-            -Destination (Join-Path $compliance 'semantic-review.yaml')
-        Copy-Item -LiteralPath $externalTemplate `
-            -Destination (Join-Path $compliance 'external-acceptance.yaml')
+        # R0/requirements-v2: review journals are generated from the canonical
+        # inventory plus this profile's verification declarations. Their
+        # statuses and evidence remain workspace-owned and are never regenerated.
+        $requirementContract = Get-AutoNormoKontrolRequirementContract `
+            -Root $engineFull -Profile $profile
+        New-AutoNormoKontrolReviewJournals `
+            -Contract $requirementContract `
+            -DocumentType ([string]$profileData.document_type) `
+            -SemanticPath (Join-Path $compliance 'semantic-review.yaml') `
+            -ExternalPath (Join-Path $compliance 'external-acceptance.yaml')
 
         # R1/agent-contract: the profile starter owns the local agent prompt.
         # It was copied with the rest of starter and may be adapted in workspace.

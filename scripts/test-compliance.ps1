@@ -20,6 +20,7 @@ $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
 . (Join-Path $PSScriptRoot 'profile.ps1')
+. (Join-Path $PSScriptRoot 'requirements.ps1')
 $profileRelativePath = Get-AutoNormoKontrolDefaultProfilePath -Root $root
 $activeProfile = Resolve-AutoNormoKontrolProfile -Root $root -ProfilePath $profileRelativePath
 $profileConfig = $activeProfile.Data
@@ -27,7 +28,11 @@ $activeProfileId = $activeProfile.ProfileId
 
 if (-not $SkipCoverage -and $Suite -in @('all', 'fast')) {
     & (Join-Path $PSScriptRoot 'check-coverage.ps1') -ProfilePath $profileRelativePath
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    # R0/requirements-v2: check-coverage.ps1 is invoked in this PowerShell
+    # process. On success it does not run a native executable and therefore
+    # does not assign $LASTEXITCODE. Treating $null as a non-zero native exit
+    # code used to stop the complete test run early with a false exit code 0.
+    # A coverage failure is already fail-closed: the child script calls exit 1.
 }
 
 $pandoc = $null
@@ -49,9 +54,15 @@ $styleSourcePath = [string]@($profileConfig.render.style_files)[0]
 $postflightSourcePath = [string]$profileConfig.render.postflight
 $validatorPath = Join-Path $root $validatorSourcePath
 $rendererPath = Join-Path $root $rendererSourcePath
-$reviewInventoryPath = Join-Path $root ([string]$profileConfig.compliance.review_inventory)
 $testBuild = Join-Path $root 'build/compliance-tests'
 New-Item -ItemType Directory -Force -Path $testBuild | Out-Null
+$requirementContract = Get-AutoNormoKontrolRequirementContract `
+    -Root $root -Profile $activeProfile
+$reviewInventoryPath = Join-Path $testBuild 'effective-requirements.yaml'
+Write-AutoNormoKontrolRequirementMetadata `
+    -Contract $requirementContract `
+    -JsonPath (Join-Path $testBuild 'effective-requirements.json') `
+    -YamlPath $reviewInventoryPath
 
 if ($Suite -in @('all', 'fast', 'semantic-validator', 'engine-integration') -and
     -not (Test-Path -LiteralPath $basePath -PathType Leaf)) {
@@ -113,13 +124,22 @@ function Invoke-Renderer {
 }
 
 function Invoke-CoverageGate {
-    param([string]$RegistryPath)
+    param(
+        [string]$RequirementsPath = '',
+        [string]$InventoryPath = ''
+    )
 
     $coveragePath = Join-Path $root 'scripts/check-coverage.ps1'
     $arguments = @(
         '-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass',
-        '-File', $coveragePath, '-RegistryPath', $RegistryPath
+        '-File', $coveragePath, '-ProfilePath', $profileRelativePath
     )
+    if (-not [string]::IsNullOrWhiteSpace($RequirementsPath)) {
+        $arguments += @('-RequirementsPath', $RequirementsPath)
+    }
+    if (-not [string]::IsNullOrWhiteSpace($InventoryPath)) {
+        $arguments += @('-InventoryPath', $InventoryPath)
+    }
     $previousErrorActionPreference = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {

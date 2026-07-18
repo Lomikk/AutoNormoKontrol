@@ -1,551 +1,3079 @@
 {
-  "metadata": {
-    "standard": "СТО ЮУрГУ 21–2008",
-    "source": "sources/susu/sto-21-2008/derived/standard.layout.txt",
-    "profile": "Курсовая работа; ВШЭУ; кафедра ЦЭиИТ; 09.03.02",
-    "scope_warning": "Пункт 1 формально ограничивает стандарт нетехническими специальностями. Применимость к направлению 09.03.02 не доказана и требует письменного подтверждения кафедры или нормоконтролера.",
-    "registry_policy": "Каждый нумерованный пункт и каждое приложение зарегистрированы. Один основной mechanism задает release-gate; смешанные детерминированные и семантические аспекты поясняются в notes.",
-    "mechanisms": {
-      "programmatic": "Проверяется генератором, AST-валидатором или PDF postflight.",
-      "ai": "Проверяется семантической инструкцией и подписанным semantic-review, привязанным к хэшу содержания.",
-      "external": "Требует внешнего стандарта, официальных данных, подписи, решения кафедры или физической проверки.",
-      "informational": "Определение, навигационный раздел, пример или разрешенная опция без обязательного действия.",
-      "not-applicable": "Не применяется к выбранному профилю курсовой работы.",
-      "conflict": "Требование конфликтует с выбранным LaTeX-процессом или область применения не подтверждена; нужен явно утвержденный допуск."
-    },
-    "mechanism_statuses": {
-      "programmatic": "specified",
-      "ai": "semantic-review-required",
-      "external": "external-evidence-required",
-      "conflict": "blocked-pending-resolution",
-      "informational": "indexed",
-      "not-applicable": "not-applicable-coursework"
-    },
-    "status_values": [
-      "indexed",
-      "specified",
-      "semantic-review-required",
-      "external-evidence-required",
-      "blocked-pending-resolution",
-      "not-applicable-coursework"
-    ]
-  },
+  "schema_version": 2,
+  "profile_id": "susu-hsem-ceit-coursework-v1",
   "requirements": [
     {
-      "id": "STO-1", "summary": "Область применения: требования к курсовым и ВКР студентов нетехнических специальностей ЮУрГУ.", "applicability": "requires-written-confirmation-for-09.03.02", "mechanism": "conflict", "status": "blocked-pending-resolution", "implementation_markers": ["STO-1"], "test_markers": [], "notes": "09.03.02 обычно относится к техническому направлению; нельзя заявлять формальную применимость без решения кафедры/нормоконтролера. СТО используется только как выбранная базовая спецификация."
-    },
-    {
-      "id": "STO-2", "summary": "Нормативные ссылки на ГОСТ Р 1.0–2004, ГОСТ 1.1–2002, ГОСТ Р 1.4–2004, ГОСТ 1.5–2001, ГОСТ Р 1.5–2004, ГОСТ Р 1.12–2004 и ГОСТ 7.32–2001.", "applicability": "all-documents-under-standard", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-2"], "test_markers": [], "notes": "Полная связанная нормативная совместимость не доказуема по одному PDF СТО; нужны тексты и актуальность ссылочных стандартов."
-    },
-    {
-      "id": "STO-3", "summary": "Раздел терминов и определений.", "applicability": "reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Групповой навигационный пункт; определения зарегистрированы отдельно."
-    },
-    {
-      "id": "STO-3.1", "summary": "Аннотация — краткая характеристика содержания, назначения, формы и иных особенностей работы.", "applicability": "terminology", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Определение используется при проверке STO-7.3."
-    },
-    {
-      "id": "STO-3.2", "summary": "Стандарт организации — утвержденный и применяемый организацией стандарт для стандартизации и совершенствования деятельности.", "applicability": "terminology", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Терминологическое определение."
-    },
-    {
-      "id": "STO-3.3", "summary": "Положение — логическая единица нормативного документа, содержащая требование, правило, рекомендацию или комментарий.", "applicability": "terminology", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Терминологическое определение."
-    },
-    {
-      "id": "STO-3.4", "summary": "Требование — положение с критериями, которые должны быть соблюдены.", "applicability": "terminology", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Основание fail-closed трактовки обязательных формулировок."
-    },
-    {
-      "id": "STO-3.5", "summary": "Реферат — краткое точное изложение содержания работы, основных фактических сведений и выводов.", "applicability": "terminology", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Определение используется при проверке STO-7.3."
-    },
-    {
-      "id": "STO-4", "summary": "Сокращения стандарта: БЖД, ГОС, НИР, НИОКР, ЮУрГУ.", "applicability": "reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Не предписывает автоматически использовать эти сокращения в курсовой работе."
-    },
-    {
-      "id": "STO-5", "summary": "Основные нормативные положения.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Групповой навигационный пункт."
-    },
-    {
-      "id": "STO-5.1", "summary": "Курсовая работа систематизирует и углубляет знания по конкретной дисциплине учебного плана.", "applicability": "coursework", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-5.1"], "test_markers": [], "notes": "Название дисциплины является обязательным исходным фактом; пользователь его пока не предоставил. Семантическое соответствие содержания дисциплине дополнительно проверяется ИИ."
-    },
-    {
-      "id": "STO-5.2", "summary": "ВКР является итоговой комплексной работой по специальности и должна иметь практическую направленность.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-5.3", "summary": "Курсовая работа состоит из пояснительной записки; иллюстративный материал включается при необходимости по решению кафедры и руководителя.", "applicability": "coursework; vkr-paragraph-not-applicable", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-5.3"], "test_markers": [], "notes": "Первая часть пункта о составе ВКР не применяется. Пояснительная записка закрывается структурой документа, но необходимость отдельного иллюстративного материала определяют кафедра и руководитель; это решение нельзя вывести из разметки."
-    },
-    {
-      "id": "STO-5.4", "summary": "Требуются научный язык, точная профессиональная терминология; запрещены разговорная речь, сленг и произвольные словообразования.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-5.4"], "test_markers": ["STO-5.4"], "notes": "Формат проверяется отдельно; научность и точность терминов требуют контекстной семантической проверки."
-    },
-    {
-      "id": "STO-5.5", "summary": "Запрещено личное местоимение «я»; допускаются «мы», третье лицо и страдательный залог.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-5.5"], "test_markers": ["STO-5.5"], "notes": "AST-валидатор блокирует отдельное слово «я»; естественность выбранной безличной конструкции остается семантической задачей."
-    },
-    {
-      "id": "STO-5.6", "summary": "ВКР проходит обязательный нормоконтроль выпускающей кафедры по внешним стандартам [1–3].", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Не отменяет возможный кафедральный нормоконтроль курсовой, но данный пункт требует его только для ВКР."
-    },
-    {
-      "id": "STO-6", "summary": "Состав курсовой: титульный лист, задание, аннотация, оглавление, введение, основной материал, заключение и библиографический список обязательны; обзор литературы и приложения условны.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-6"], "test_markers": ["STO-6"], "notes": "Обязательность восстановлена по полужирному начертанию оригинального PDF, а не только по плоскому извлеченному тексту."
-    },
-    {
-      "id": "STO-7", "summary": "Требования к содержанию структурных элементов работ.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Групповой навигационный пункт."
-    },
-    {
-      "id": "STO-7.1", "summary": "Титульный лист.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.1.1–STO-7.1.3."
-    },
-    {
-      "id": "STO-7.1.1", "summary": "Обязательные реквизиты и расположение титульного листа курсовой работы, включая дисциплину, шифр, руководителя, нормоконтролера, автора, подписи, город и год.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.1.1"], "test_markers": ["STO-7.1.1"], "notes": "Шаблон и metadata-gate закрывают структуру; актуальные официальные наименования, ФИО, должности, подписи и даты должны быть подтверждены извне. Указанные в СТО Федеральное агентство и статус ГОУ устарели."
-    },
-    {
-      "id": "STO-7.1.2", "summary": "Обязательные реквизиты титульного листа ВКР.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-7.1.3", "summary": "Формы и примеры титульных листов находятся в приложениях А1, А2, Б1 и Б2.", "applicability": "coursework-form-A1-and-example-A2", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.1.3"], "test_markers": ["STO-7.1.3"], "notes": "Для курсовой реализуется обязательная форма А1; А2 служит визуальным образцом. Б1/Б2 относятся к ВКР."
-    },
-    {
-      "id": "STO-7.2", "summary": "Задание на работу.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.2.1–STO-7.2.3."
-    },
-    {
-      "id": "STO-7.2.1", "summary": "Задание на курсовую содержит официальные реквизиты, ФИО и группу студента, дисциплину, тему, срок, вопросы, календарный план и подписи.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.2.1"], "test_markers": ["STO-7.2.1"], "notes": "Структура и обязательность полей проверяются; значения, подписи, даты и утверждение являются внешними фактами. Отсутствующая дисциплина блокирует строгий выпуск."
-    },
-    {
-      "id": "STO-7.2.2", "summary": "Обязательные реквизиты задания на ВКР.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-7.2.3", "summary": "Форма задания на курсовую дана в приложении В, форма задания на ВКР — в приложении Г.", "applicability": "coursework-reference-to-form-V", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Самостоятельного правила верстки не добавляет: реализация формы отслеживается STO-V, обязательные реквизиты — STO-7.2.1. Приложение Г не применяется."
-    },
-    {
-      "id": "STO-7.3", "summary": "Аннотация и реферат.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.3.1–STO-7.3.5."
-    },
-    {
-      "id": "STO-7.3.1", "summary": "Аннотация или реферат размещается после задания; содержание должно учитывать ГОСТ 7.9–95.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.3.1"], "test_markers": ["STO-7.3.1"], "notes": "Порядок элементов контролируется программно; полнота соответствия внешнему ГОСТ 7.9–95 учитывается отдельно в STO-2."
-    },
-    {
-      "id": "STO-7.3.2", "summary": "Аннотация характеризует тему, проблему объекта, цель и задачи, результаты и новизну; реферат имеет расширенный набор содержательных частей.", "applicability": "coursework-annotation", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.3.2"], "test_markers": ["STO-7.3.2"], "notes": "Наличие секций можно подсчитать, но достоверность и содержательность проверяются семантически."
-    },
-    {
-      "id": "STO-7.3.3", "summary": "Отсутствующие по существу части аннотации/реферата разрешено опустить, сохраняя последовательность остальных.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.3.3"], "test_markers": ["STO-7.3.3"], "notes": "ИИ должен обосновать каждое опущение; нельзя автоматически добавлять вымышленные сведения."
-    },
-    {
-      "id": "STO-7.3.4", "summary": "Рекомендуемый средний объем: аннотация 500 печатных знаков, реферат 850 знаков.", "applicability": "coursework-recommendation", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.3.4"], "test_markers": ["STO-7.3.4"], "notes": "Рекомендация проверяется как предупреждение, а не безусловная ошибка."
-    },
-    {
-      "id": "STO-7.3.5", "summary": "Примеры реферата курсовой, аннотации ВКР и реферата НИР находятся в приложениях Д, Е1 и Е2.", "applicability": "reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Для выбранного профиля релевантно приложение Д как образец; это не подмена требований 7.3.2."
-    },
-    {
-      "id": "STO-7.4", "summary": "Оглавление.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.4.1–STO-7.4.2."
-    },
-    {
-      "id": "STO-7.4.1", "summary": "Оглавление перечисляет введение, все уровни разделов, заключение, библиографию и приложения с начальными страницами и отточиями.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.4.1"], "test_markers": ["STO-7.4.1"], "notes": "Формируется автоматически из структуры документа; список приложений обязателен, если приложения присутствуют."
-    },
-    {
-      "id": "STO-7.4.2", "summary": "Начертание заголовков в оглавлении соответствует заголовкам в тексте, включая прописные буквы первого уровня.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.4.2"], "test_markers": ["STO-7.4.2"], "notes": "Проверяется стилем и извлеченным текстом PDF."
-    },
-    {
-      "id": "STO-7.5", "summary": "Обозначения и сокращения.", "applicability": "conditional-grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Сам элемент условен для курсовой; правила действуют, если он включен или сокращения используются."
-    },
-    {
-      "id": "STO-7.5.1", "summary": "Элемент «Обозначения и сокращения» содержит перечень примененных обозначений и сокращений.", "applicability": "conditional-if-list-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.5.1"], "test_markers": ["STO-7.5.1"], "notes": "Пустой раздел блокируется программно, но полноту перечня относительно всех реально примененных авторских обозначений и сокращений устанавливает semantic review."
-    },
-    {
-      "id": "STO-7.5.2", "summary": "Обозначения и сокращения записываются в алфавитном порядке с расшифровками и пояснениями.", "applicability": "conditional-if-list-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.5.2"], "test_markers": ["STO-7.5.2"], "notes": "Сортировка и непустые поля проверяются программно; корректность и достаточность расшифровок/пояснений требуют semantic review."
-    },
-    {
-      "id": "STO-7.5.3", "summary": "Сокращения русских слов регулируются ГОСТ 7.12–93; иные сокращения допускаются по правилам текста.", "applicability": "conditional-if-abbreviations-used", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-7.5.3"], "test_markers": [], "notes": "Нужен полный текст ГОСТ 7.12–93 или утвержденный словарь допустимых сокращений."
-    },
-    {
-      "id": "STO-7.5.4", "summary": "Аббревиатура расшифровывается при первом упоминании.", "applicability": "conditional-if-abbreviations-used", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.5.4"], "test_markers": ["STO-7.5.4"], "notes": "Лексический precheck возможен, но различение общеизвестных имен и авторских аббревиатур требует контекста."
-    },
-    {
-      "id": "STO-7.6", "summary": "Введение раскрывает актуальность, цель, задачи, объект, предмет и практическую применимость; заключение дает выводы, оценку достижения, рекомендации и эффективность.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.6"], "test_markers": ["STO-7.6"], "notes": "Структурное наличие введения/заключения проверяет STO-6; достоверность и полнота их содержания — semantic review."
-    },
-    {
-      "id": "STO-7.7", "summary": "Сравнение отечественных и передовых зарубежных технологий с доказательными выводами о применении достижений.", "applicability": "vkr-structure; optional-only-by-explicit-agreement-for-coursework", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "В перечне структурных элементов курсовой этот раздел отсутствует; включать только по явному требованию руководителя."
-    },
-    {
-      "id": "STO-7.8", "summary": "Основная часть.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.8.1–STO-7.8.3."
-    },
-    {
-      "id": "STO-7.8.1", "summary": "Основная часть отражает сущность, методику и основные результаты выполненной работы.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.8.1"], "test_markers": ["STO-7.8.1"], "notes": "Требуется содержательная оценка, а не поиск ключевых слов."
-    },
-    {
-      "id": "STO-7.8.2", "summary": "Содержание основной части определяется задачами из введения.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.8.2"], "test_markers": ["STO-7.8.2"], "notes": "Semantic review строит трассировку «задача → раздел/результат»."
-    },
-    {
-      "id": "STO-7.8.3", "summary": "Основная часть включает направление исследования, обзор источников, методику, обоснование и оценку результатов, сравнение и исчерпывающие выводы.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.8.3"], "test_markers": ["STO-7.8.3"], "notes": "Каждый компонент должен иметь свидетельство в semantic-review; несуществующие результаты запрещено выдумывать."
-    },
-    {
-      "id": "STO-7.9", "summary": "Условный организационно-экономический раздел: рекомендации руководителя, экономическое обоснование, стоимость, источники данных, эффект и окупаемость.", "applicability": "conditional-only-if-assigned", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.9"], "test_markers": ["STO-7.9"], "notes": "По умолчанию не включается; факт назначения и требования руководителя должны поступить извне."
-    },
-    {
-      "id": "STO-7.10", "summary": "Условный раздел БЖД: рекомендации руководителя, безопасность труда, пожарная безопасность и параметры среды.", "applicability": "conditional-only-if-assigned", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.10"], "test_markers": ["STO-7.10"], "notes": "По умолчанию не включается; факт назначения и требования руководителя должны поступить извне."
-    },
-    {
-      "id": "STO-7.11", "summary": "Библиографический список.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-7.11.1–STO-7.11.7."
-    },
-    {
-      "id": "STO-7.11.1", "summary": "Библиографический список содержит сведения обо всех использованных информационных источниках.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.11.1"], "test_markers": ["STO-7.11.1"], "notes": "Программно проверяется цитируемость записей; факт реального использования и качество источника требуют семантической проверки."
-    },
-    {
-      "id": "STO-7.11.2", "summary": "Библиография оформляется сносками либо списком в конце работы; профиль выбирает конечный список.", "applicability": "coursework-selected-end-list", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.11.2"], "test_markers": ["STO-7.11.2"], "notes": "Одновременное смешение двух схем не допускается конфигурацией."
-    },
-    {
-      "id": "STO-7.11.3", "summary": "Допустимые порядки списка; номера арабскими цифрами без точки и с абзацного отступа; описание по ГОСТ 7.1–2003.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.11.3"], "test_markers": ["STO-7.11.3"], "notes": "Нумерация и выбранный порядок контролируются программно. Полное соответствие описаний внешнему ГОСТ 7.1–2003 требует отдельного аудита и учитывается STO-2."
-    },
-    {
-      "id": "STO-7.11.4", "summary": "На каждый источник списка должна быть ссылка; ссылки оформляются сноской или номером в квадратных скобках, включая диапазоны и страницы.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.11.4"], "test_markers": ["STO-7.11.4"], "notes": "Citation processor и AST-проверка обеспечивают двустороннюю целостность ссылок."
-    },
-    {
-      "id": "STO-7.11.5", "summary": "Если используются сноски, они размещаются на странице или в конце записки, имеют указатели и уменьшенный шрифт.", "applicability": "conditional-if-footnote-scheme-selected", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.11.5"], "test_markers": ["STO-7.11.5"], "notes": "Текущий профиль выбирает библиографический список, поэтому ветвь сносок не активна; raw footnotes должны быть запрещены либо оформлены отдельным профилем."
-    },
-    {
-      "id": "STO-7.11.6", "summary": "Допускается раздел библиографии «Тематические источники».", "applicability": "optional", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Разрешение, а не обязательное требование."
-    },
-    {
-      "id": "STO-7.11.7", "summary": "Примеры библиографического описания по ГОСТ 7.12–93 приведены в приложении К.", "applicability": "reference", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-7.11.7"], "test_markers": [], "notes": "Примеры не доказывают полное соответствие; нужен исходный ГОСТ и проверка актуальности."
-    },
-    {
-      "id": "STO-7.12", "summary": "Приложения.", "applicability": "conditional-grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Приложения для курсовой условны; если включены, действуют STO-7.12.1–STO-7.12.8."
-    },
-    {
-      "id": "STO-7.12.1", "summary": "В приложения рекомендуется выносить связанные с работой материалы, не включенные в основную часть.", "applicability": "conditional-if-appendices-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-7.12.1"], "test_markers": ["STO-7.12.1"], "notes": "Релевантность и обоснованность вынесения материала — семантические свойства."
-    },
-    {
-      "id": "STO-7.12.2", "summary": "Перечень допустимых материалов приложений: обзоры, документы, вспомогательные таблицы, авторские методики и иллюстрации.", "applicability": "conditional-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Открытый перечень примеров, не исчерпывающий обязательный список."
-    },
-    {
-      "id": "STO-7.12.3", "summary": "Каждое приложение начинается с новой страницы, имеет обозначение и заголовок; допустимые буквы, продолжение и локальная нумерация объектов заданы стандартом.", "applicability": "conditional-if-appendices-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.3"], "test_markers": ["STO-7.12.3"], "notes": "Валидатор запрещает исключенные буквы, стиль оформляет заголовок/продолжение и локальные номера рисунков/таблиц."
-    },
-    {
-      "id": "STO-7.12.4", "summary": "Приложения классифицируются как обязательные или информационные; на каждое должна быть ссылка в тексте.", "applicability": "conditional-if-appendices-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.4"], "test_markers": ["STO-7.12.4"], "notes": "Тип приложения задается атрибутом; отсутствие ссылки блокирует строгую сборку."
-    },
-    {
-      "id": "STO-7.12.5", "summary": "Все приложения перечисляются в оглавлении с обозначениями и заголовками.", "applicability": "conditional-if-appendices-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.5"], "test_markers": ["STO-7.12.5"], "notes": "Генерируется автоматически."
-    },
-    {
-      "id": "STO-7.12.6", "summary": "Приложения располагаются в порядке первых ссылок на них в тексте.", "applicability": "conditional-if-appendices-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.6"], "test_markers": ["STO-7.12.6"], "notes": "AST-валидатор сравнивает порядок ссылок и блоков приложений."
-    },
-    {
-      "id": "STO-7.12.7", "summary": "Нумерация страниц основной работы и входящих в нее приложений сквозная.", "applicability": "conditional-if-appendices-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.7"], "test_markers": ["STO-7.12.7"], "notes": "Счетчик страниц не сбрасывается при начале приложения."
-    },
-    {
-      "id": "STO-7.12.8", "summary": "Разделы, подразделы, пункты и подпункты приложения нумеруются в пределах каждого приложения.", "applicability": "conditional-if-structured-appendix", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-7.12.8"], "test_markers": ["STO-7.12.8"], "notes": "Локальная нумерация активируется окружением приложения."
-    },
-    {
-      "id": "STO-7.12.9", "summary": "Отдельный альбом приложений имеет собственный титульный лист, основную надпись и самостоятельную нумерацию.", "applicability": "separate-appendix-album-not-used", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Текущий профиль включает приложения внутрь единого документа, а отдельный альбом не генерирует."
-    },
-    {
-      "id": "STO-8", "summary": "Общие правила оформления курсовых и выпускных квалификационных работ.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Групповой навигационный пункт."
-    },
-    {
-      "id": "STO-8.1", "summary": "Общие требования к носителю, набору и странице.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.1.1–STO-8.1.7."
-    },
-    {
-      "id": "STO-8.1.1", "summary": "Работа оформляется в соответствии с настоящим стандартом.", "applicability": "coursework-if-scope-confirmed", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Мета-требование; полнота покрытия доказывается этим реестром и coverage-gate, но формальная область применения остается заблокированной STO-1."
-    },
-    {
-      "id": "STO-8.1.2", "summary": "Работа выполняется на белых листах формата А4 210×297 мм по ГОСТ 9327–60.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.1.2"], "test_markers": ["STO-8.1.2"], "notes": "PDF postflight проверяет геометрию каждой страницы; белизна и фактический формат бумаги при печати требуют физической проверки."
-    },
-    {
-      "id": "STO-8.1.3", "summary": "СТО требует Microsoft Word, Times New Roman 14 пт, по умолчанию одинарный интервал и абзац 0,7 см; 1,5/1,5 см допускаются только решением кафедры.", "applicability": "coursework-with-unconfirmed-department-option", "mechanism": "conflict", "status": "blocked-pending-resolution", "implementation_markers": ["STO-8.1.3"], "test_markers": [], "notes": "LaTeX конфликтует с буквальным требованием редактора Word. Визуальные параметры воспроизводятся; без документированного решения кафедры профиль обязан использовать 1,0 и 0,7 см. Любое иное значение требует внешнего допуска."
-    },
-    {
-      "id": "STO-8.1.4", "summary": "Поля: верх 20 мм, низ 26 мм, номер страницы в 20 мм от края, слева 25 мм, справа 10 мм; рамка и штамп не выполняются.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.1.4"], "test_markers": ["STO-8.1.4"], "notes": "Геометрия задается стилем и измеряется PDF postflight; номер центрируется по физическому листу."
-    },
-    {
-      "id": "STO-8.1.5", "summary": "В начале страницы не допускаются висячие неполные строки.", "applicability": "coursework", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-8.1.5"], "test_markers": [], "notes": "TeX widow/orphan penalties снижают риск, но надежный универсальный postflight не отличает смысловую неполную строку от допустимой короткой строки. Финальный PDF требует визуальной приемки."
-    },
-    {
-      "id": "STO-8.1.6", "summary": "Правила ручного исправления опечаток и запрет повреждений, помарок и следов прежнего текста.", "applicability": "conditional-physical-copy", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-8.1.6"], "test_markers": [], "notes": "Цифровая сборка не выполняет ручные исправления; состояние напечатанного экземпляра проверяется человеком перед сдачей."
-    },
-    {
-      "id": "STO-8.1.7", "summary": "Имена собственные приводятся на языке оригинала; перевод или транслитерация сопровождается оригиналом при первом упоминании.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.1.7"], "test_markers": ["STO-8.1.7"], "notes": "Требует знания оригинального наименования и контекста первого употребления."
-    },
-    {
-      "id": "STO-8.2", "summary": "Разделы и нумерация работы.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.2.1–STO-8.2.11."
-    },
-    {
-      "id": "STO-8.2.1", "summary": "Основная часть делится на части, разделы, главы, подразделы, пункты или параграфы.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.2.1"], "test_markers": ["STO-8.2.1"], "notes": "Максимальная глубина проверяется программно, но осмысленность декомпозиции — семантически."
-    },
-    {
-      "id": "STO-8.2.2", "summary": "Разделы, подразделы, пункты и подпункты нумеруются арабскими цифрами с абзацного отступа; приложения исключены; после номера нет точки.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.2"], "test_markers": ["STO-8.2.2"], "notes": "В оригинале OCR распознал «I», но контекст и примеры однозначно указывают арабские 1, 2, 3."
-    },
-    {
-      "id": "STO-8.2.3", "summary": "Иерархические номера подразделов, пунктов и подпунктов состоят из номеров уровней, разделенных точками, без завершающей точки.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.3"], "test_markers": ["STO-8.2.3"], "notes": "Счетчики и шаблоны заголовков формируют номера автоматически."
-    },
-    {
-      "id": "STO-8.2.4", "summary": "Подразделение уровня вводится только если на этом уровне выделяется более одного элемента.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.4"], "test_markers": ["STO-8.2.4"], "notes": "AST-валидатор блокирует одиночный подраздел, пункт или подпункт."
-    },
-    {
-      "id": "STO-8.2.5", "summary": "Заголовки кратко и точно отражают содержание; разделы прописными, подразделы строчными; введение, заключение, библиография и выводы не нумеруются; каждый раздел завершается «Выводы по разделу [словом]».", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.2.5"], "test_markers": ["STO-8.2.5"], "notes": "Нумерация, регистр и обязательный ненумерованный вывод проверяются программно; точность/краткость заголовка и качество вывода — семантически."
-    },
-    {
-      "id": "STO-8.2.6", "summary": "Структурные элементы имеют заголовки первого уровня; первый уровень набирается прописными, подразделы — строчными либо единообразно отличным начертанием.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.6"], "test_markers": ["STO-8.2.6"], "notes": "Стиль централизованно задает регистр и начертание."
-    },
-    {
-      "id": "STO-8.2.7", "summary": "Заголовки подразделов, пунктов и подпунктов печатаются с абзацного отступа и начинаются с прописной буквы.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.7"], "test_markers": ["STO-8.2.7"], "notes": "Оформление контролируется стилем; начальная буква — AST-валидатором."
-    },
-    {
-      "id": "STO-8.2.8", "summary": "В заголовке разрешены предложения, но нет переноса слов, висячих союзов/предлогов, конечной точки, разрыва страницы или отрыва от текста.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.8"], "test_markers": ["STO-8.2.8"], "notes": "Рендерер защищает короткие служебные слова неразрывными пробелами, запрещает переносы и удерживает заголовок с последующим текстом."
-    },
-    {
-      "id": "STO-8.2.9", "summary": "После заголовка внизу страницы должно оставаться не менее трех строк текста.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.9"], "test_markers": ["STO-8.2.9"], "notes": "Перед заголовками резервируется место; PDF regression проверяет критические разрывы."
-    },
-    {
-      "id": "STO-8.2.10", "summary": "Пункты и подпункты внутри параграфа рекомендуется оформлять без нумерации, но единообразно; заголовки допускаются.", "applicability": "coursework-recommendation", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.2.10"], "test_markers": ["STO-8.2.10"], "notes": "Стиль обеспечивает единообразие, но решение о том, является ли фрагмент пунктом/подпунктом внутри параграфа и нужна ли ему нумерация, зависит от структуры смысла."
-    },
-    {
-      "id": "STO-8.2.11", "summary": "Перечисления идут с абзацного отступа; допустимы маркеры, дефис, ограниченный русский буквенный список или арабские цифры с круглой скобкой.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.2.11"], "test_markers": ["STO-8.2.11"], "notes": "Markdown-списки рендерятся только в разрешенные варианты; пользовательские raw-маркеры запрещены."
-    },
-    {
-      "id": "STO-8.3", "summary": "Нумерация страниц.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.3.1–STO-8.3.3."
-    },
-    {
-      "id": "STO-8.3.1", "summary": "Нумерация страниц сквозная; титульный лист считается первой страницей, но номер на нем не печатается.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.3.1"], "test_markers": ["STO-8.3.1"], "notes": "Проверяется шаблоном и PDF postflight."
-    },
-    {
-      "id": "STO-8.3.2", "summary": "Титульный лист, задание, аннотация и оглавление учитываются в общей нумерации, но номера на них скрыты.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.3.2"], "test_markers": ["STO-8.3.2"], "notes": "Номер впервые отображается после фронтальной части без сброса счетчика."
-    },
-    {
-      "id": "STO-8.3.3", "summary": "Рекомендуется арабский номер в нижнем колонтитуле с выравниванием по середине.", "applicability": "coursework-recommendation-selected", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.3.3"], "test_markers": ["STO-8.3.3"], "notes": "Профиль выбирает рекомендуемую схему; физический центр листа проверяется bbox postflight."
-    },
-    {
-      "id": "STO-8.4", "summary": "Оформление текста.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.4.1–STO-8.4.9."
-    },
-    {
-      "id": "STO-8.4.1", "summary": "Сокращения регулируются ГОСТ 7.12–93; СТО перечисляет допустимые общеупотребительные сокращения и контексты их использования.", "applicability": "coursework", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-8.4.1"], "test_markers": [], "notes": "Для полной проверки нужен внешний ГОСТ и утвержденный лексикон; известные запрещенные формы могут проверяться локально."
-    },
-    {
-      "id": "STO-8.4.2", "summary": "Запрещены переносы внутри аббревиатур; инициалы не отрываются от фамилии; числа не отрываются от единиц, №/§ — от чисел, маркер списка — от текста.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.4.2"], "test_markers": ["STO-8.4.2"], "notes": "Известные конструкции рендерятся с неразрывными пробелами, но распознавание всех аббревиатур, фамилий, единиц и обозначений в произвольном тексте требует semantic review и визуальной проверки."
-    },
-    {
-      "id": "STO-8.4.3", "summary": "Правила записи интервалов, допусков, единиц измерения, диапазонов дат и страниц.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.4.3"], "test_markers": ["STO-8.4.3"], "notes": "Разрешенная нотация задается semantic Markdown-контрактом; неоднозначные «от/до» дополнительно оцениваются семантически."
-    },
-    {
-      "id": "STO-8.4.4", "summary": "Правила одно- и двухбуквенного наращения падежных окончаний порядковых числительных и исключение для процентов.", "applicability": "coursework", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.4.4"], "test_markers": ["STO-8.4.4"], "notes": "Правильное окончание зависит от грамматического контекста; regex может дать только предварительные предупреждения."
-    },
-    {
-      "id": "STO-8.4.5", "summary": "Правила пробелов: инициалы, сокращения, группы цифр, кавычки/скобки, ссылки, единицы, проценты и валюты.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.4.5"], "test_markers": ["STO-8.4.5"], "notes": "Ключевые пары рендерятся с неразрывными пробелами; длинные числа и пунктуация валидируются."
-    },
-    {
-      "id": "STO-8.4.6", "summary": "Цитаты заключаются в кавычки и снабжаются ссылкой; языковая единица выделяется курсивом; для эпиграфа задано расположение и пунктуация.", "applicability": "conditional-if-quotes-or-epigraphs-used", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.4.6"], "test_markers": ["STO-8.4.6"], "notes": "Источник и статус фрагмента как цитаты/языковой единицы/эпиграфа требуют контекста; формат ссылок проверяется программно."
-    },
-    {
-      "id": "STO-8.4.7", "summary": "Правила точек, запятой в десятичных дробях, пробелов при пунктуации, тире, кавычек и скобок.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.4.7"], "test_markers": ["STO-8.4.7"], "notes": "Валидатор закрывает формализуемые шаблоны; орфографический/пунктуационный semantic review остается дополнительным."
-    },
-    {
-      "id": "STO-8.4.8", "summary": "Дефис применяется внутри сложных слов без пробелов; тире диапазона также набирается без пробелов.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.4.8"], "test_markers": ["STO-8.4.8"], "notes": "Различение синтаксического тире и диапазона частично контекстно, но запрещенные пробельные шаблоны проверяются."
-    },
-    {
-      "id": "STO-8.4.9", "summary": "Цифровая дата записывается в одной строке как день.месяц.год.", "applicability": "coursework", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.4.9"], "test_markers": ["STO-8.4.9"], "notes": "Метаданные дат нормализуются и выводятся неразрывно."
-    },
-    {
-      "id": "STO-8.5", "summary": "Иллюстрации.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.5.1–STO-8.5.12."
-    },
-    {
-      "id": "STO-8.5.1", "summary": "Все эскизы, схемы, графики и фотографии называются рисунками, нумеруются в пределах раздела; цвет допускается.", "applicability": "conditional-if-figures-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.1"], "test_markers": ["STO-8.5.1"], "notes": "Единый semantic figure-блок исключает альтернативные типы подписей."
-    },
-    {
-      "id": "STO-8.5.2", "summary": "Подпись включает слово «Рисунок», номер и наименование через пробел и тире; обычная нумерация — по разделам, сквозная допускается при малом числе рисунков.", "applicability": "conditional-if-figures-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.2"], "test_markers": ["STO-8.5.2"], "notes": "Стиль формирует подпись; выбор глобальной схемы при малом числе объектов централизован и не задается в контенте."
-    },
-    {
-      "id": "STO-8.5.3", "summary": "Рисунки, схемы, графики и таблицы располагаются после первого упоминания; обозначения и номера соответствуют тексту.", "applicability": "conditional-if-objects-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.3"], "test_markers": ["STO-8.5.3"], "notes": "AST-валидатор сравнивает позиции ссылок и объектов; принудительное [H] не позволяет float переместиться до ссылки."
-    },
-    {
-      "id": "STO-8.5.4", "summary": "На каждый рисунок есть ссылка; первая — «рисунок N», повторные — «см. рисунок N»; слово пишется полностью.", "applicability": "conditional-if-figures-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.4"], "test_markers": ["STO-8.5.4"], "notes": "Ссылки создаются semantic citation-синтаксисом; контекст перед ссылкой валидируется."
-    },
-    {
-      "id": "STO-8.5.5", "summary": "Наименование/поясняющие данные рисунка и расшифровка всех обозначений находятся в подписи или тексте.", "applicability": "conditional-if-figures-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.5.5"], "test_markers": ["STO-8.5.5"], "notes": "Наличие подписи формализуется; полноту расшифровки обозначений можно установить только с учетом содержания изображения."
-    },
-    {
-      "id": "STO-8.5.6", "summary": "На осях графиков используются буквенные обозначения величин и/или их наименования.", "applicability": "conditional-if-graph-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.6"], "test_markers": ["STO-8.5.6"], "notes": "График обязан иметь semantic-атрибуты осей; честность соответствия атрибутов пикселям изображения дополнительно проверяется AI/человеком."
-    },
-    {
-      "id": "STO-8.5.7", "summary": "Разрешенный поворот рисунка — 90° против часовой стрелки.", "applicability": "conditional-if-rotation-requested", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.7"], "test_markers": ["STO-8.5.7"], "notes": "Иные углы и направления блокируются атрибутным контрактом."
-    },
-    {
-      "id": "STO-8.5.8", "summary": "Иллюстрации А3 допускаются только на разворотах или вкладках; вкладка считается одной страницей.", "applicability": "conditional-A3-unsupported-in-v1", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.8"], "test_markers": ["STO-8.5.8"], "notes": "Профиль v1 fail-closed запрещает А3 вместо попытки неверной автоматической верстки; поддержка возможна отдельным протестированным backend-профилем."
-    },
-    {
-      "id": "STO-8.5.9", "summary": "Фотографии не больше А4, с установленными полями, наклеиваются на белый лист без коробления и отслоения.", "applicability": "conditional-physical-photograph", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-8.5.9"], "test_markers": [], "notes": "Размер цифрового изображения ограничивается программно; состояние физически наклеенной фотографии проверяется только на печатном экземпляре."
-    },
-    {
-      "id": "STO-8.5.10", "summary": "Единственный рисунок в работе имеет номер «Рисунок 1».", "applicability": "conditional-exactly-one-figure", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.10"], "test_markers": ["STO-8.5.10"], "notes": "Фильтр подсчитывает рисунки до рендера и переключает схему нумерации."
-    },
-    {
-      "id": "STO-8.5.11", "summary": "Рисунки приложения нумеруются обозначением приложения и локальным номером, например А.1.", "applicability": "conditional-figure-in-appendix", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.5.11"], "test_markers": ["STO-8.5.11"], "notes": "Окружение приложения локально перенастраивает счетчик и формат номера."
-    },
-    {
-      "id": "STO-8.5.12", "summary": "Пример оформления рисунков приведен в приложении Л.", "applicability": "reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Визуальный образец, не дополнительное самостоятельное требование."
-    },
-    {
-      "id": "STO-8.6", "summary": "Таблицы.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.6.1–STO-8.6.16."
-    },
-    {
-      "id": "STO-8.6.1", "summary": "Цифровой материал пояснительной записки оформляется таблицами.", "applicability": "conditional-if-structured-digital-material", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.1"], "test_markers": ["STO-8.6.1"], "notes": "Определить, является ли фрагмент цифровым материалом, требующим таблицы, можно только по смыслу."
-    },
-    {
-      "id": "STO-8.6.2", "summary": "Таблица располагается после первого упоминания, но не далее следующей страницы.", "applicability": "conditional-if-tables-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.2"], "test_markers": ["STO-8.6.2"], "notes": "AST контролирует порядок, long table renderer и PDF postflight — дистанцию страницы."
-    },
-    {
-      "id": "STO-8.6.3", "summary": "Слово «Таблица» и номер ставятся слева над таблицей; арабская нумерация, единственная таблица — 1; допускается нумерация по разделам.", "applicability": "conditional-if-tables-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.3"], "test_markers": ["STO-8.6.3"], "notes": "Единственная таблица автоматически переключает глобальный номер; таблица приложения сохраняет A.1."
-    },
-    {
-      "id": "STO-8.6.4", "summary": "На все таблицы есть ссылки; первая — «таблица N», повторные — «см. таблицу N».", "applicability": "conditional-if-tables-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.4"], "test_markers": ["STO-8.6.4"], "notes": "Текст СТО ошибочно говорит «на этот рисунок», но примеры и контекст однозначно относятся к таблице."
-    },
-    {
-      "id": "STO-8.6.5", "summary": "Необязательный заголовок таблицы начинается с прописной, находится после слова и номера, должен быть кратким и точно отражать содержание.", "applicability": "conditional-if-table-caption-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.5"], "test_markers": ["STO-8.6.5"], "notes": "Позиция и регистр проверяются программно; краткость и соответствие содержанию — semantic review. Пустой заголовок допустим по самому пункту."
-    },
-    {
-      "id": "STO-8.6.6", "summary": "Заголовки и подзаголовки граф имеют заданный регистр, без конечных точек и в единственном числе.", "applicability": "conditional-if-tables-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.6"], "test_markers": ["STO-8.6.6"], "notes": "Регистр/точка проверяются AST; самостоятельность подзаголовка и грамматическое число требуют языка/контекста."
-    },
-    {
-      "id": "STO-8.6.7", "summary": "Таблица, как правило, ограничена линиями слева, справа и снизу; диагональные линии в головке запрещены.", "applicability": "conditional-if-tables-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.7"], "test_markers": ["STO-8.6.7"], "notes": "Единый renderer использует полную сетку без диагоналей, что соответствует образцу приложения М."
-    },
-    {
-      "id": "STO-8.6.8", "summary": "Длинные/широкие таблицы делятся с повтором головки; первая часть имеет обычную подпись, следующие — «Продолжение», последняя — «Окончание»; графа «№ п/п» не используется.", "applicability": "conditional-if-table-spans-parts", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.8"], "test_markers": ["STO-8.6.8"], "notes": "longtblr повторяет головку и формирует продолжение/окончание; запрещенный заголовок проверяется."
-    },
-    {
-      "id": "STO-8.6.9", "summary": "Повторяющийся текст заменяется кавычками/«То же» по правилам; для отсутствующих данных ставится прочерк, но цифры, марки и символы кавычками не заменяются.", "applicability": "conditional-if-repeated-or-missing-table-data", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.9"], "test_markers": ["STO-8.6.9"], "notes": "Нужно различить повтор, отсутствие данных и допустимый повторяемый символ."
-    },
-    {
-      "id": "STO-8.6.10", "summary": "Единицы разных величин указываются в подзаголовках граф; общая единица — над таблицей справа; смешанный случай комбинирует оба способа.", "applicability": "conditional-if-physical-quantities-in-table", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.10"], "test_markers": ["STO-8.6.10"], "notes": "Renderer поддерживает semantic units, но корректная размерность и преобладающая единица требуют предметной проверки."
-    },
-    {
-      "id": "STO-8.6.11", "summary": "«Более», «не более», «менее», «не менее» помещаются с названием показателя, если относятся ко всей строке/графе.", "applicability": "conditional-if-limit-qualifiers-used", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.11"], "test_markers": ["STO-8.6.11"], "notes": "Область действия слов определяется по смыслу таблицы."
-    },
-    {
-      "id": "STO-8.6.12", "summary": "Числа одной графы имеют одинаковое число десятичных знаков; значения длиннее четырех цифр выравниваются вправо.", "applicability": "conditional-if-numeric-table-columns", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.12"], "test_markers": ["STO-8.6.12"], "notes": "Тип числовой колонки и нормализованные значения задаются атрибутами/AST."
-    },
-    {
-      "id": "STO-8.6.13", "summary": "В таблице допускается шрифт 13 или 12 пт.", "applicability": "conditional-if-tables-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.13"], "test_markers": ["STO-8.6.13"], "notes": "Тело таблицы централизованно набирается 12 пт; подпись остается основного размера, поскольку пункт разрешает уменьшение именно в таблице."
-    },
-    {
-      "id": "STO-8.6.14", "summary": "Для последовательных интервалов в таблице применяются «От … до … включ.», «Св. … до … включ.» или тире между крайними числами.", "applicability": "conditional-if-intervals-in-table", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.6.14"], "test_markers": ["STO-8.6.14"], "notes": "Правильная открытость/закрытость границы зависит от смысла данных."
-    },
-    {
-      "id": "STO-8.6.15", "summary": "Табличные числа длиннее четырех знаков группируются по три цифры пробелами; исключены номера и даты; четырехзначные группируются рядом с многозначными.", "applicability": "conditional-if-large-numbers-in-table", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.6.15"], "test_markers": ["STO-8.6.15"], "notes": "Нужен semantic тип ячейки number/date/id, чтобы исключения не определялись догадкой."
-    },
-    {
-      "id": "STO-8.6.16", "summary": "Пример оформления таблиц приведен в приложении М.", "applicability": "reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Визуальный образец, не дополнительное самостоятельное требование."
-    },
-    {
-      "id": "STO-8.7", "summary": "Формулы и уравнения.", "applicability": "grouping", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Детали зарегистрированы в STO-8.7.1–STO-8.7.18."
-    },
-    {
-      "id": "STO-8.7.1", "summary": "Рекомендуется набирать формулы встроенным редактором Word Microsoft Equation 3.0.", "applicability": "coursework-recommendation-conflicting-with-latex", "mechanism": "conflict", "status": "blocked-pending-resolution", "implementation_markers": ["STO-8.7.1"], "test_markers": [], "notes": "Это рекомендация устаревшего инструмента, а не визуальное требование; LaTeX math является сознательной заменой и должен быть принят в external-acceptance вместе с STO-8.1.3."
-    },
-    {
-      "id": "STO-8.7.2", "summary": "Формулы выделяются в отдельную строку с не менее чем одной свободной строкой сверху и снизу.", "applicability": "conditional-if-display-equations-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.2"], "test_markers": ["STO-8.7.2"], "notes": "Display math renderer централизованно задает интервалы."
-    },
-    {
-      "id": "STO-8.7.3", "summary": "Длинная формула переносится после знака операции с повтором знака; при переносе на умножении используется косой крест.", "applicability": "conditional-if-equation-wraps", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.3"], "test_markers": ["STO-8.7.3"], "notes": "TeX не гарантирует правильный смысловой перенос автоматически; автор/ИИ должен использовать разрешенную многострочную нотацию, postflight блокирует переполнение."
-    },
-    {
-      "id": "STO-8.7.4", "summary": "Пояснения символов и числовых коэффициентов идут сразу под формулой в порядке появления.", "applicability": "conditional-if-new-symbols-in-equation", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.4"], "test_markers": ["STO-8.7.4"], "notes": "Equation block декларирует symbols и связанный equation-where; порядок сравнивается AST-валидатором."
-    },
-    {
-      "id": "STO-8.7.5", "summary": "Формулы нумеруются сквозными арабскими цифрами в круглых скобках справа; единственная формула — (1).", "applicability": "conditional-if-equations-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.5"], "test_markers": ["STO-8.7.5"], "notes": "Сквозная схема выбрана по умолчанию; единственная формула явно проверяется."
-    },
-    {
-      "id": "STO-8.7.6", "summary": "Номер системы уравнений располагается напротив середины группы формул.", "applicability": "conditional-if-equation-system-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.6"], "test_markers": ["STO-8.7.6"], "notes": "Разрешенное окружение системы центрирует tag относительно группы."
-    },
-    {
-      "id": "STO-8.7.7", "summary": "После формулы с новыми обозначениями ставится запятая; «где» без отступа и двоеточия; пояснения столбиком, разделены точкой с запятой, последнее заканчивается точкой.", "applicability": "conditional-if-new-symbols-in-equation", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.7"], "test_markers": ["STO-8.7.7"], "notes": "Специальное окружение SUSUWhere генерирует пунктуацию и запрещает ручную имитацию."
-    },
-    {
-      "id": "STO-8.7.8", "summary": "Точка на средней линии является основным знаком умножения и используется/опускается в перечисленных математических контекстах.", "applicability": "conditional-if-multiplication-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.8"], "test_markers": ["STO-8.7.8"], "notes": "Разрешенные semantic math-макросы помогают, но выбор знака зависит от математического контекста."
-    },
-    {
-      "id": "STO-8.7.9", "summary": "Косой крест умножения применяется для размеров, векторного произведения и переноса на знаке умножения.", "applicability": "conditional-if-cross-multiplication-context", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.9"], "test_markers": ["STO-8.7.9"], "notes": "Нужно различать размер, скалярное и векторное произведение."
-    },
-    {
-      "id": "STO-8.7.10", "summary": "Формулы приложения имеют отдельную нумерацию с обозначением приложения, например (В.1).", "applicability": "conditional-equation-in-appendix", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.10"], "test_markers": ["STO-8.7.10"], "notes": "Окружение приложения локально меняет формат equation counter."
-    },
-    {
-      "id": "STO-8.7.11", "summary": "Ссылка на формулу содержит номер в круглых скобках.", "applicability": "conditional-if-equation-referenced", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.11"], "test_markers": ["STO-8.7.11"], "notes": "Renderer использует eqref, raw-ссылки запрещены."
-    },
-    {
-      "id": "STO-8.7.12", "summary": "Допускается нумерация формул в пределах раздела с номером вида 3.1.", "applicability": "optional-alternative-not-selected", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Профиль выбирает основную сквозную схему STO-8.7.5; разрешенная альтернатива не обязательна."
-    },
-    {
-      "id": "STO-8.7.13", "summary": "Математические уравнения излагаются по тем же правилам, что формулы.", "applicability": "conditional-if-equations-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.13"], "test_markers": ["STO-8.7.13"], "notes": "Единый equation block не различает формулы и уравнения по оформлению."
-    },
-    {
-      "id": "STO-8.7.14", "summary": "Формулы и уравнения допускается выполнять вручную черными чернилами.", "applicability": "optional-physical-method-not-selected", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Разрешение, а не обязанность; цифровой профиль им не пользуется."
-    },
-    {
-      "id": "STO-8.7.15", "summary": "Латинские скаляры набираются курсивом, греческие/русские — прямо; векторы, скалярное и векторное произведения имеют заданные обозначения.", "applicability": "conditional-if-math-symbols-present", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.15"], "test_markers": ["STO-8.7.15"], "notes": "Math font обеспечивает базовое начертание; корректный выбор семантики scalar/vector/product проверяется по смыслу."
-    },
-    {
-      "id": "STO-8.7.16", "summary": "Если индекс образован сокращениями двух и более слов, после каждого сокращения, кроме последнего, ставятся точка и пробел.", "applicability": "conditional-if-compound-abbreviated-index", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.16"], "test_markers": ["STO-8.7.16"], "notes": "Нужно знать расшифровку и структуру индекса; визуальный regex ненадежен."
-    },
-    {
-      "id": "STO-8.7.17", "summary": "Цифры, химические элементы, единицы и математические/тригонометрические функции набираются прямым шрифтом.", "applicability": "conditional-if-relevant-math-present", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-8.7.17"], "test_markers": ["STO-8.7.17"], "notes": "Semantic macros для units/functions/chemistry дают прямое начертание; raw TeX запрещен, чтобы не обходить контракт."
-    },
-    {
-      "id": "STO-8.7.18", "summary": "Одни и те же обозначения в формулах, рисунках и основном тексте имеют идентичные начертание и размер.", "applicability": "conditional-if-symbol-crosses-representations", "mechanism": "ai", "status": "semantic-review-required", "implementation_markers": ["STO-8.7.18"], "test_markers": ["STO-8.7.18"], "notes": "Единый math font закрывает текст/формулы, но обозначения внутри растрового/векторного рисунка требуют визуальной семантической проверки."
-    },
-    {
-      "id": "STO-9", "summary": "Оформление иллюстраций при защите ВКР.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Групповой раздел полностью вне профиля курсовой работы."
-    },
-    {
-      "id": "STO-9.1", "summary": "На защите ВКР допускаются плакаты, альбомы, макеты и иной иллюстративный материал.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа без комплекта защиты ВКР."
-    },
-    {
-      "id": "STO-9.2", "summary": "Титульный лист альбома иллюстраций к защите ВКР приведен в приложении Н.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-9.3", "summary": "Плакаты защиты ВКР выполняются на А1/А2 с пропорциональным масштабированием и маркировкой на обороте; примеры штампа в приложении П.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-9.4", "summary": "Плакаты без рамки; трафареты допускаются; не более шести цветов.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-A1", "summary": "Обязательная форма титульного листа курсовой работы.", "applicability": "coursework-mandatory-form", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-A1"], "test_markers": ["STO-A1"], "notes": "Шаблон воспроизводит структуру формы; устаревшие официальные наименования не копируются без внешнего решения, см. STO-7.1.1."
-    },
-    {
-      "id": "STO-A2", "summary": "Справочный пример заполненного титульного листа курсовой работы.", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Используется для визуального сравнения, но его примерные персональные данные не переносятся."
-    },
-    {
-      "id": "STO-B1", "summary": "Обязательная форма титульного листа ВКР.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-B2", "summary": "Справочный пример заполненного титульного листа ВКР.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-V", "summary": "Рекомендуемая двухстраничная форма задания на курсовую работу.", "applicability": "coursework-selected-form", "mechanism": "programmatic", "status": "specified", "implementation_markers": ["STO-V"], "test_markers": ["STO-V"], "notes": "Само задание обязательно по STO-6 и STO-7.2.1; рекомендуемая форма В выбрана как базовая реализация."
-    },
-    {
-      "id": "STO-G", "summary": "Обязательная форма задания на ВКР.", "applicability": "vkr-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Профиль документа — курсовая работа."
-    },
-    {
-      "id": "STO-D", "summary": "Справочный пример оформления реферата на курсовую работу.", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Для профиля с обязательной аннотацией служит дополнительным ориентиром, но не заменяет STO-7.3.2–STO-7.3.4."
-    },
-    {
-      "id": "STO-E1", "summary": "Справочный пример аннотации на ВКР.", "applicability": "vkr-only-reference", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Не используется как обязательная форма курсовой."
-    },
-    {
-      "id": "STO-E2", "summary": "Справочный пример реферата научно-исследовательской ВКР.", "applicability": "vkr-only-reference", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Не используется как обязательная форма курсовой."
-    },
-    {
-      "id": "STO-ZH", "summary": "Справочный пример оформления оглавления.", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Используется для визуального regression вместе с явными требованиями STO-7.4."
-    },
-    {
-      "id": "STO-I1", "summary": "Справочный пример раздела «Введение».", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Содержательный пример; обязательные критерии заданы STO-7.6."
-    },
-    {
-      "id": "STO-I2", "summary": "Справочный пример раздела «Заключение».", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Содержательный пример; обязательные критерии заданы STO-7.6."
-    },
-    {
-      "id": "STO-K", "summary": "Справочные примеры библиографических описаний.", "applicability": "coursework-reference", "mechanism": "external", "status": "external-evidence-required", "implementation_markers": ["STO-K"], "test_markers": [], "notes": "Примеры проверяются против внешних ГОСТ; пакет biblatex-gost сам по себе не является доказательством полного соответствия редакции 2003 года."
-    },
-    {
-      "id": "STO-L", "summary": "Справочный пример оформления иллюстраций.", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Визуальный regression fixture; нормативные правила содержатся в STO-8.5."
-    },
-    {
-      "id": "STO-M", "summary": "Справочный пример оформления таблиц, включая полную сетку и продолжение.", "applicability": "coursework-reference", "mechanism": "informational", "status": "indexed", "implementation_markers": [], "test_markers": [], "notes": "Визуальный regression fixture; нормативные правила содержатся в STO-8.6."
-    },
-    {
-      "id": "STO-N", "summary": "Обязательный титульный лист альбома иллюстраций к докладу на защите ВКР.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Не относится к курсовой работе."
-    },
-    {
-      "id": "STO-P", "summary": "Рекомендуемые примеры оформления плакатов для защиты ВКР.", "applicability": "vkr-defense-only", "mechanism": "not-applicable", "status": "not-applicable-coursework", "implementation_markers": [], "test_markers": [], "notes": "Не относится к курсовой работе."
+      "id": "STO-1",
+      "source_ref": "STO-1",
+      "disposition": "applicable",
+      "scope": "requires-written-confirmation-for-09.03.02",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-1",
+          "required_evidence": "Официальная методичка, распоряжение или письменное подтверждение кафедры, что СТО ЮУрГУ 21–2008 применяется к курсовой по направлению 09.03.02."
+        }
+      ],
+      "notes": "09.03.02 обычно относится к техническому направлению; нельзя заявлять формальную применимость без решения кафедры/нормоконтролера. СТО используется только как выбранная базовая спецификация."
+    },
+    {
+      "id": "STO-2",
+      "source_ref": "STO-2",
+      "disposition": "applicable",
+      "scope": "all-documents-under-standard",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-2",
+          "required_evidence": "Перечень действующих/заменяющих стандартов и решение, какую редакцию применять при конфликте с СТО 2008 года."
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-2008-CURRENCY",
+          "required_evidence": "Подтверждение кафедры, что СТО ЮУрГУ 21–2008 и его приложения остаются действующим базовым нормоконтролем и не заменены более новой методичкой."
+        }
+      ],
+      "notes": "Полная связанная нормативная совместимость не доказуема по одному PDF СТО; нужны тексты и актуальность ссылочных стандартов."
+    },
+    {
+      "id": "STO-3",
+      "source_ref": "STO-3",
+      "disposition": "formal",
+      "scope": "reference",
+      "verification": [],
+      "notes": "Групповой навигационный пункт; определения зарегистрированы отдельно."
+    },
+    {
+      "id": "STO-3.1",
+      "source_ref": "STO-3.1",
+      "disposition": "formal",
+      "scope": "terminology",
+      "verification": [],
+      "notes": "Определение используется при проверке STO-7.3."
+    },
+    {
+      "id": "STO-3.2",
+      "source_ref": "STO-3.2",
+      "disposition": "formal",
+      "scope": "terminology",
+      "verification": [],
+      "notes": "Терминологическое определение."
+    },
+    {
+      "id": "STO-3.3",
+      "source_ref": "STO-3.3",
+      "disposition": "formal",
+      "scope": "terminology",
+      "verification": [],
+      "notes": "Терминологическое определение."
+    },
+    {
+      "id": "STO-3.4",
+      "source_ref": "STO-3.4",
+      "disposition": "formal",
+      "scope": "terminology",
+      "verification": [],
+      "notes": "Основание fail-closed трактовки обязательных формулировок."
+    },
+    {
+      "id": "STO-3.5",
+      "source_ref": "STO-3.5",
+      "disposition": "formal",
+      "scope": "terminology",
+      "verification": [],
+      "notes": "Определение используется при проверке STO-7.3."
+    },
+    {
+      "id": "STO-4",
+      "source_ref": "STO-4",
+      "disposition": "formal",
+      "scope": "reference",
+      "verification": [],
+      "notes": "Не предписывает автоматически использовать эти сокращения в курсовой работе."
+    },
+    {
+      "id": "STO-5",
+      "source_ref": "STO-5",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Групповой навигационный пункт."
+    },
+    {
+      "id": "STO-5.1",
+      "source_ref": "STO-5.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-5.1",
+          "question": "Требуется подтвердить связь работы с указанной дисциплиной",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-5.1",
+          "required_evidence": "Официальное наименование дисциплины по учебному плану или заданию"
+        }
+      ],
+      "notes": "Название дисциплины является обязательным исходным фактом; пользователь его пока не предоставил. Семантическое соответствие содержания дисциплине дополнительно проверяется ИИ."
+    },
+    {
+      "id": "STO-5.2",
+      "source_ref": "STO-5.2",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-5.3",
+      "source_ref": "STO-5.3",
+      "disposition": "applicable",
+      "scope": "coursework; vkr-paragraph-not-applicable",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-5.3",
+          "required_evidence": "Решение о составе иллюстрационного материала и необязательных структурных элементов курсовой работы."
+        }
+      ],
+      "notes": "Первая часть пункта о составе ВКР не применяется. Пояснительная записка закрывается структурой документа, но необходимость отдельного иллюстративного материала определяют кафедра и руководитель; это решение нельзя вывести из разметки."
+    },
+    {
+      "id": "STO-5.4",
+      "source_ref": "STO-5.4",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-5.4",
+          "question": "Научный язык, точность и единообразие терминологии",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Формат проверяется отдельно; научность и точность терминов требуют контекстной семантической проверки."
+    },
+    {
+      "id": "STO-5.5",
+      "source_ref": "STO-5.5",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-5.5",
+          "question": "Корректная безличная/авторская речь, не только отсутствие токена «я»",
+          "evidence_required": true
+        }
+      ],
+      "notes": "AST-валидатор блокирует отдельное слово «я»; естественность выбранной безличной конструкции остается семантической задачей.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-5.5"
+        ],
+        "test_markers": [
+          "STO-5.5"
+        ]
+      }
+    },
+    {
+      "id": "STO-5.6",
+      "source_ref": "STO-5.6",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Не отменяет возможный кафедральный нормоконтроль курсовой, но данный пункт требует его только для ВКР."
+    },
+    {
+      "id": "STO-6",
+      "source_ref": "STO-6",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-6",
+          "required_evidence": "Задание/указание руководителя о включении или неприменимости обзора литературы, приложений, организационно-экономического раздела и БЖД."
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.required-elements",
+          "parameters": {
+            "elements": [
+              "introduction",
+              "main-matter",
+              "conclusion",
+              "bibliography"
+            ]
+          },
+          "diagnostic": "STO-6/MISSING_REQUIRED_ELEMENT",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "introduction",
+            "then": "main-matter"
+          },
+          "diagnostic": "STO-6/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "main-matter",
+            "then": "conclusion"
+          },
+          "diagnostic": "STO-6/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "introduction",
+            "text": "ВВЕДЕНИЕ",
+            "required": true
+          },
+          "diagnostic": "STO-6/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "conclusion",
+            "text": "ЗАКЛЮЧЕНИЕ",
+            "required": true
+          },
+          "diagnostic": "STO-6/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "contents",
+            "then": "introduction"
+          },
+          "diagnostic": "STO-6/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Обязательность восстановлена по полужирному начертанию оригинального PDF, а не только по плоскому извлеченному тексту.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-6"
+        ],
+        "test_markers": [
+          "STO-6"
+        ]
+      },
+      "diagnostics": {
+        "MISSING_REQUIRED_ELEMENT": {
+          "message": "В документе отсутствует обязательный структурный элемент",
+          "hint": "Добавьте отсутствующий элемент в один из content/*.md или восстановите его в project.yaml: document.content"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Переместите соответствующую главу в project.yaml: document.content или исправьте заголовок элемента"
+        },
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует обязательный видимый элемент",
+          "hint": "Проверьте metadata, шаблон профиля и соответствующий Markdown-раздел"
+        }
+      }
+    },
+    {
+      "id": "STO-7",
+      "source_ref": "STO-7",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Групповой навигационный пункт."
+    },
+    {
+      "id": "STO-7.1",
+      "source_ref": "STO-7.1",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.1.1–STO-7.1.3."
+    },
+    {
+      "id": "STO-7.1.1",
+      "source_ref": "STO-7.1.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.1.1",
+          "required_evidence": "Актуальная утверждённая форма титульного листа либо подтверждение замены Федерального агентства/ГОУ ВПО на текущее официальное название ЮУрГУ, а факультета — на Высшую школу экономики и управления."
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.1.1-document-code",
+          "required_evidence": "Подтверждённые 090302, год, последние три цифры студенческого удостоверения и выбор ПЗ КР либо ПЗ КП."
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "title-page",
+            "text": "ПОЯСНИТЕЛЬНАЯ ЗАПИСКА К КУРСОВОЙ РАБОТЕ",
+            "required": true
+          },
+          "diagnostic": "STO-7.1.1/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "title-page",
+            "then": "assignment"
+          },
+          "diagnostic": "STO-7.1.1/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Шаблон и metadata-gate закрывают структуру; актуальные официальные наименования, ФИО, должности, подписи и даты должны быть подтверждены извне. Указанные в СТО Федеральное агентство и статус ГОУ устарели.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.1.1"
+        ],
+        "test_markers": [
+          "STO-7.1.1"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Проверьте профильный шаблон: титульный лист должен предшествовать заданию"
+        }
+      }
+    },
+    {
+      "id": "STO-7.1.2",
+      "source_ref": "STO-7.1.2",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-7.1.3",
+      "source_ref": "STO-7.1.3",
+      "disposition": "applicable",
+      "scope": "coursework-form-A1-and-example-A2",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Для курсовой реализуется обязательная форма А1; А2 служит визуальным образцом. Б1/Б2 относятся к ВКР.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.1.3"
+        ],
+        "test_markers": [
+          "STO-7.1.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.2",
+      "source_ref": "STO-7.2",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.2.1–STO-7.2.3."
+    },
+    {
+      "id": "STO-7.2.1",
+      "source_ref": "STO-7.2.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.2.1",
+          "required_evidence": "Выданное задание: полное ФИО, группа, дисциплина, тема, срок, вопросы, календарный план, заведующий кафедрой и даты/подписи."
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "assignment",
+            "text": "ЗАДАНИЕ",
+            "required": true
+          },
+          "diagnostic": "STO-7.2.1/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        }
+      ],
+      "notes": "Структура и обязательность полей проверяются; значения, подписи, даты и утверждение являются внешними фактами. Отсутствующая дисциплина блокирует строгий выпуск.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.2.1"
+        ],
+        "test_markers": [
+          "STO-7.2.1"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        }
+      }
+    },
+    {
+      "id": "STO-7.2.2",
+      "source_ref": "STO-7.2.2",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-7.2.3",
+      "source_ref": "STO-7.2.3",
+      "disposition": "formal",
+      "scope": "coursework-reference-to-form-V",
+      "verification": [],
+      "notes": "Самостоятельного правила верстки не добавляет: реализация формы отслеживается STO-V, обязательные реквизиты — STO-7.2.1. Приложение Г не применяется."
+    },
+    {
+      "id": "STO-7.3",
+      "source_ref": "STO-7.3",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.3.1–STO-7.3.5."
+    },
+    {
+      "id": "STO-7.3.1",
+      "source_ref": "STO-7.3.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.3.1",
+          "required_evidence": "Проверка аннотации по применимой редакции ГОСТ 7.9"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "abstract",
+            "text": "АННОТАЦИЯ",
+            "required": true
+          },
+          "diagnostic": "STO-7.3.1/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "assignment",
+            "then": "abstract"
+          },
+          "diagnostic": "STO-7.3.1/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Порядок элементов контролируется программно; полнота соответствия внешнему ГОСТ 7.9–95 учитывается отдельно в STO-2.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.3.1"
+        ],
+        "test_markers": [
+          "STO-7.3.1"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Измените порядок content-файлов в project.yaml или восстановите соответствующий элемент"
+        }
+      }
+    },
+    {
+      "id": "STO-7.3.2",
+      "source_ref": "STO-7.3.2",
+      "disposition": "applicable",
+      "scope": "coursework-annotation",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.3.2",
+          "question": "Полнота и фактическая согласованность аннотации",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Наличие секций можно подсчитать, но достоверность и содержательность проверяются семантически."
+    },
+    {
+      "id": "STO-7.3.3",
+      "source_ref": "STO-7.3.3",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.3.3",
+          "question": "Обоснованность пропусков и сохранение порядка элементов аннотации",
+          "evidence_required": true
+        }
+      ],
+      "notes": "ИИ должен обосновать каждое опущение; нельзя автоматически добавлять вымышленные сведения."
+    },
+    {
+      "id": "STO-7.3.4",
+      "source_ref": "STO-7.3.4",
+      "disposition": "applicable",
+      "scope": "coursework-recommendation",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.3.4",
+          "question": "Содержательная достаточность при ориентире около 500 знаков",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Рекомендация проверяется как предупреждение, а не безусловная ошибка.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.3.4"
+        ],
+        "test_markers": [
+          "STO-7.3.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.3.5",
+      "source_ref": "STO-7.3.5",
+      "disposition": "formal",
+      "scope": "reference",
+      "verification": [],
+      "notes": "Для выбранного профиля релевантно приложение Д как образец; это не подмена требований 7.3.2."
+    },
+    {
+      "id": "STO-7.4",
+      "source_ref": "STO-7.4",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.4.1–STO-7.4.2."
+    },
+    {
+      "id": "STO-7.4.1",
+      "source_ref": "STO-7.4.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "contents",
+            "text": "ОГЛАВЛЕНИЕ",
+            "required": true
+          },
+          "diagnostic": "STO-7.4.1/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "abstract",
+            "then": "contents"
+          },
+          "diagnostic": "STO-7.4.1/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Формируется автоматически из структуры документа; список приложений обязателен, если приложения присутствуют.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.4.1"
+        ],
+        "test_markers": [
+          "STO-7.4.1"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Измените порядок content-файлов в project.yaml или восстановите соответствующий элемент"
+        }
+      }
+    },
+    {
+      "id": "STO-7.4.2",
+      "source_ref": "STO-7.4.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Проверяется стилем и извлеченным текстом PDF.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.4.2"
+        ],
+        "test_markers": [
+          "STO-7.4.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.5",
+      "source_ref": "STO-7.5",
+      "disposition": "formal",
+      "scope": "conditional-grouping",
+      "verification": [],
+      "notes": "Сам элемент условен для курсовой; правила действуют, если он включен или сокращения используются."
+    },
+    {
+      "id": "STO-7.5.1",
+      "source_ref": "STO-7.5.1",
+      "disposition": "conditional",
+      "scope": "conditional-if-list-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.5.1",
+          "question": "Применимо при наличии раздела обозначений и сокращений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Пустой раздел блокируется программно, но полноту перечня относительно всех реально примененных авторских обозначений и сокращений устанавливает semantic review."
+    },
+    {
+      "id": "STO-7.5.2",
+      "source_ref": "STO-7.5.2",
+      "disposition": "conditional",
+      "scope": "conditional-if-list-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.5.2",
+          "question": "Алфавитный порядок и достаточность расшифровок",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Сортировка и непустые поля проверяются программно; корректность и достаточность расшифровок/пояснений требуют semantic review."
+    },
+    {
+      "id": "STO-7.5.3",
+      "source_ref": "STO-7.5.3",
+      "disposition": "conditional",
+      "scope": "conditional-if-abbreviations-used",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.5.3",
+          "question": "Нормативность используемых русских сокращений",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.5.3",
+          "required_evidence": "Проверка сокращений по применимой редакции ГОСТ 7.12"
+        }
+      ],
+      "notes": "Нужен полный текст ГОСТ 7.12–93 или утвержденный словарь допустимых сокращений."
+    },
+    {
+      "id": "STO-7.5.4",
+      "source_ref": "STO-7.5.4",
+      "disposition": "conditional",
+      "scope": "conditional-if-abbreviations-used",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.5.4",
+          "question": "Расшифровка аббревиатур при первом упоминании",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Лексический precheck возможен, но различение общеизвестных имен и авторских аббревиатур требует контекста."
+    },
+    {
+      "id": "STO-7.6",
+      "source_ref": "STO-7.6",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.6",
+          "question": "Содержание введения и заключения, связь цели, задач и результатов",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Структурное наличие введения/заключения проверяет STO-6; достоверность и полнота их содержания — semantic review."
+    },
+    {
+      "id": "STO-7.7",
+      "source_ref": "STO-7.7",
+      "disposition": "conditional",
+      "scope": "vkr-structure; optional-only-by-explicit-agreement-for-coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.7",
+          "question": "Для курсовой применяется только при подтверждённом включении раздела",
+          "evidence_required": true
+        }
+      ],
+      "notes": "В перечне структурных элементов курсовой этот раздел отсутствует; включать только по явному требованию руководителя."
+    },
+    {
+      "id": "STO-7.8",
+      "source_ref": "STO-7.8",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.8.1–STO-7.8.3."
+    },
+    {
+      "id": "STO-7.8.1",
+      "source_ref": "STO-7.8.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.8.1",
+          "question": "Сущность, методика и фактические результаты выполненной работы",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Требуется содержательная оценка, а не поиск ключевых слов."
+    },
+    {
+      "id": "STO-7.8.2",
+      "source_ref": "STO-7.8.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.8.2",
+          "question": "Прослеживаемость задач введения в основной части",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Semantic review строит трассировку «задача → раздел/результат»."
+    },
+    {
+      "id": "STO-7.8.3",
+      "source_ref": "STO-7.8.3",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.8.3",
+          "question": "Полнота направления, обзора, методики, оценки и выводов",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Каждый компонент должен иметь свидетельство в semantic-review; несуществующие результаты запрещено выдумывать."
+    },
+    {
+      "id": "STO-7.9",
+      "source_ref": "STO-7.9",
+      "disposition": "conditional",
+      "scope": "conditional-only-if-assigned",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.9",
+          "question": "Экономический раздел только по решению руководителя",
+          "evidence_required": true
+        }
+      ],
+      "notes": "По умолчанию не включается; факт назначения и требования руководителя должны поступить извне."
+    },
+    {
+      "id": "STO-7.10",
+      "source_ref": "STO-7.10",
+      "disposition": "conditional",
+      "scope": "conditional-only-if-assigned",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.10",
+          "question": "Раздел БЖД только по решению руководителя",
+          "evidence_required": true
+        }
+      ],
+      "notes": "По умолчанию не включается; факт назначения и требования руководителя должны поступить извне."
+    },
+    {
+      "id": "STO-7.11",
+      "source_ref": "STO-7.11",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-7.11.1–STO-7.11.7."
+    },
+    {
+      "id": "STO-7.11.1",
+      "source_ref": "STO-7.11.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.11.1",
+          "question": "В список включены только реально использованные источники",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Программно проверяется цитируемость записей; факт реального использования и качество источника требуют семантической проверки."
+    },
+    {
+      "id": "STO-7.11.2",
+      "source_ref": "STO-7.11.2",
+      "disposition": "applicable",
+      "scope": "coursework-selected-end-list",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "bibliography",
+            "text": "БИБЛИОГРАФИЧЕСКИЙ СПИСОК",
+            "required": true
+          },
+          "diagnostic": "STO-7.11.2/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "conclusion",
+            "then": "bibliography"
+          },
+          "diagnostic": "STO-7.11.2/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Одновременное смешение двух схем не допускается конфигурацией.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.11.2"
+        ],
+        "test_markers": [
+          "STO-7.11.2"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Измените порядок content-файлов в project.yaml или восстановите соответствующий элемент"
+        }
+      }
+    },
+    {
+      "id": "STO-7.11.3",
+      "source_ref": "STO-7.11.3",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-7.11.3",
+          "required_evidence": "Проверка выбранного библиографического стиля и фактических записей по требуемой кафедрой редакции ГОСТ; наличие biblatex-gost само по себе подтверждением не является."
+        }
+      ],
+      "notes": "Нумерация и выбранный порядок контролируются программно. Полное соответствие описаний внешнему ГОСТ 7.1–2003 требует отдельного аудита и учитывается STO-2.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.11.3"
+        ],
+        "test_markers": [
+          "STO-7.11.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.11.4",
+      "source_ref": "STO-7.11.4",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.11.4",
+          "question": "Каждая ссылка содержательно относится к указанному источнику",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Citation processor и AST-проверка обеспечивают двустороннюю целостность ссылок.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.11.4"
+        ],
+        "test_markers": [
+          "STO-7.11.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.11.5",
+      "source_ref": "STO-7.11.5",
+      "disposition": "conditional",
+      "scope": "conditional-if-footnote-scheme-selected",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Текущий профиль выбирает библиографический список, поэтому ветвь сносок не активна; raw footnotes должны быть запрещены либо оформлены отдельным профилем.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.11.5"
+        ],
+        "test_markers": [
+          "STO-7.11.5"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.11.6",
+      "source_ref": "STO-7.11.6",
+      "disposition": "formal",
+      "scope": "optional",
+      "verification": [],
+      "notes": "Разрешение, а не обязательное требование."
+    },
+    {
+      "id": "STO-7.11.7",
+      "source_ref": "STO-7.11.7",
+      "disposition": "applicable",
+      "scope": "reference",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-7.11.7",
+          "required_evidence": "Применимый текст ГОСТ 7.1 и подтверждение актуальности библиографических примеров"
+        }
+      ],
+      "notes": "Примеры не доказывают полное соответствие; нужен исходный ГОСТ и проверка актуальности."
+    },
+    {
+      "id": "STO-7.12",
+      "source_ref": "STO-7.12",
+      "disposition": "formal",
+      "scope": "conditional-grouping",
+      "verification": [],
+      "notes": "Приложения для курсовой условны; если включены, действуют STO-7.12.1–STO-7.12.8."
+    },
+    {
+      "id": "STO-7.12.1",
+      "source_ref": "STO-7.12.1",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.12.1",
+          "question": "Уместность вынесения материала в приложения",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Релевантность и обоснованность вынесения материала — семантические свойства."
+    },
+    {
+      "id": "STO-7.12.2",
+      "source_ref": "STO-7.12.2",
+      "disposition": "conditional",
+      "scope": "conditional-reference",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-7.12.2",
+          "question": "Допустимый и связанный с работой состав приложений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Открытый перечень примеров, не исчерпывающий обязательный список."
+    },
+    {
+      "id": "STO-7.12.3",
+      "source_ref": "STO-7.12.3",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Валидатор запрещает исключенные буквы, стиль оформляет заголовок/продолжение и локальные номера рисунков/таблиц.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.3"
+        ],
+        "test_markers": [
+          "STO-7.12.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.12.4",
+      "source_ref": "STO-7.12.4",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Тип приложения задается атрибутом; отсутствие ссылки блокирует строгую сборку.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.4"
+        ],
+        "test_markers": [
+          "STO-7.12.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.12.5",
+      "source_ref": "STO-7.12.5",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.visible-element",
+          "parameters": {
+            "element": "appendices",
+            "text": "ПРИЛОЖЕНИЕ А",
+            "required": false
+          },
+          "diagnostic": "STO-7.12.5/VISIBLE_ELEMENT_MISSING",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "bibliography",
+            "then": "appendices"
+          },
+          "diagnostic": "STO-7.12.5/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Генерируется автоматически.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.5"
+        ],
+        "test_markers": [
+          "STO-7.12.5"
+        ]
+      },
+      "diagnostics": {
+        "VISIBLE_ELEMENT_MISSING": {
+          "message": "В PDF отсутствует ожидаемый видимый элемент",
+          "hint": "Проверьте профильный шаблон, metadata и наличие соответствующего раздела"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов",
+          "hint": "Измените порядок content-файлов в project.yaml или восстановите соответствующий элемент"
+        }
+      }
+    },
+    {
+      "id": "STO-7.12.6",
+      "source_ref": "STO-7.12.6",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "AST-валидатор сравнивает порядок ссылок и блоков приложений.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.6"
+        ],
+        "test_markers": [
+          "STO-7.12.6"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.12.7",
+      "source_ref": "STO-7.12.7",
+      "disposition": "conditional",
+      "scope": "conditional-if-appendices-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Счетчик страниц не сбрасывается при начале приложения.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.7"
+        ],
+        "test_markers": [
+          "STO-7.12.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.12.8",
+      "source_ref": "STO-7.12.8",
+      "disposition": "conditional",
+      "scope": "conditional-if-structured-appendix",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Локальная нумерация активируется окружением приложения.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-7.12.8"
+        ],
+        "test_markers": [
+          "STO-7.12.8"
+        ]
+      }
+    },
+    {
+      "id": "STO-7.12.9",
+      "source_ref": "STO-7.12.9",
+      "disposition": "not-applicable",
+      "scope": "separate-appendix-album-not-used",
+      "verification": [],
+      "notes": "Текущий профиль включает приложения внутрь единого документа, а отдельный альбом не генерирует."
+    },
+    {
+      "id": "STO-8",
+      "source_ref": "STO-8",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Групповой навигационный пункт."
+    },
+    {
+      "id": "STO-8.1",
+      "source_ref": "STO-8.1",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.1.1–STO-8.1.7."
+    },
+    {
+      "id": "STO-8.1.1",
+      "source_ref": "STO-8.1.1",
+      "disposition": "formal",
+      "scope": "coursework-if-scope-confirmed",
+      "verification": [],
+      "notes": "Мета-требование; полнота покрытия доказывается этим реестром и coverage-gate, но формальная область применения остается заблокированной STO-1."
+    },
+    {
+      "id": "STO-8.1.2",
+      "source_ref": "STO-8.1.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-8.1.2-physical",
+          "required_evidence": "Проверка итоговой печати: белая бумага A4, одна сторона, отсутствие косины, поля/номер страницы, повреждения, помарки и следы исправлений."
+        }
+      ],
+      "notes": "PDF postflight проверяет геометрию каждой страницы; белизна и фактический формат бумаги при печати требуют физической проверки.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.1.2"
+        ],
+        "test_markers": [
+          "STO-8.1.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.1.3",
+      "source_ref": "STO-8.1.3",
+      "disposition": "applicable",
+      "scope": "coursework-with-unconfirmed-department-option",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-8.1.3-backend",
+          "required_evidence": "Подтверждение, что кафедра принимает эквивалентный PDF, подготовленный LuaLaTeX, несмотря на буквальное указание Microsoft Word."
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-8.1.3-spacing",
+          "required_evidence": "Документальное решение кафедры, если используются полуторный интервал и/или абзацный отступ 1,5 см; без него применяются 1,0 и 0,7 см."
+        }
+      ],
+      "notes": "LaTeX конфликтует с буквальным требованием редактора Word. Визуальные параметры воспроизводятся; без документированного решения кафедры профиль обязан использовать 1,0 и 0,7 см. Любое иное значение требует внешнего допуска."
+    },
+    {
+      "id": "STO-8.1.4",
+      "source_ref": "STO-8.1.4",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Геометрия задается стилем и измеряется PDF postflight; номер центрируется по физическому листу.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.1.4"
+        ],
+        "test_markers": [
+          "STO-8.1.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.1.5",
+      "source_ref": "STO-8.1.5",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-8.1.5",
+          "required_evidence": "Визуальная постраничная проверка окончательного PDF после завершения пагинации: в начале каждой страницы отсутствуют висячие неполные строки. Свидетельство должно указывать проверенную версию/хэш PDF, диапазон страниц, дату и проверившего; изменение содержания или вёрстки аннулирует проверку."
+        }
+      ],
+      "notes": "TeX widow/orphan penalties снижают риск, но надежный универсальный postflight не отличает смысловую неполную строку от допустимой короткой строки. Финальный PDF требует визуальной приемки."
+    },
+    {
+      "id": "STO-8.1.6",
+      "source_ref": "STO-8.1.6",
+      "disposition": "conditional",
+      "scope": "conditional-physical-copy",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-8.1.6",
+          "required_evidence": "Результат осмотра напечатанного экземпляра и подтверждение отсутствия неоговорённых ручных исправлений"
+        }
+      ],
+      "notes": "Цифровая сборка не выполняет ручные исправления; состояние напечатанного экземпляра проверяется человеком перед сдачей."
+    },
+    {
+      "id": "STO-8.1.7",
+      "source_ref": "STO-8.1.7",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.1.7",
+          "question": "Имена собственные на языке оригинала или с оригиналом при переводе",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Требует знания оригинального наименования и контекста первого употребления."
+    },
+    {
+      "id": "STO-8.2",
+      "source_ref": "STO-8.2",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.2.1–STO-8.2.11."
+    },
+    {
+      "id": "STO-8.2.1",
+      "source_ref": "STO-8.2.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.2.1",
+          "question": "Логичность и сопоставимость структурного деления",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-8.2.1",
+          "required_evidence": "Подтверждение применимости инструкции ЮУрГУ 2006 года и ГОСТ 2.105 к структуре этой курсовой либо документированное решение об их замене."
+        }
+      ],
+      "notes": "Максимальная глубина проверяется программно, но осмысленность декомпозиции — семантически."
+    },
+    {
+      "id": "STO-8.2.2",
+      "source_ref": "STO-8.2.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "В оригинале OCR распознал «I», но контекст и примеры однозначно указывают арабские 1, 2, 3.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.2"
+        ],
+        "test_markers": [
+          "STO-8.2.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.3",
+      "source_ref": "STO-8.2.3",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Счетчики и шаблоны заголовков формируют номера автоматически.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.3"
+        ],
+        "test_markers": [
+          "STO-8.2.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.4",
+      "source_ref": "STO-8.2.4",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "AST-валидатор блокирует одиночный подраздел, пункт или подпункт.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.4"
+        ],
+        "test_markers": [
+          "STO-8.2.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.5",
+      "source_ref": "STO-8.2.5",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.2.5",
+          "question": "Точность и краткость заголовков, содержательность выводов",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Нумерация, регистр и обязательный ненумерованный вывод проверяются программно; точность/краткость заголовка и качество вывода — семантически."
+    },
+    {
+      "id": "STO-8.2.6",
+      "source_ref": "STO-8.2.6",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Стиль централизованно задает регистр и начертание.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.6"
+        ],
+        "test_markers": [
+          "STO-8.2.6"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.7",
+      "source_ref": "STO-8.2.7",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Оформление контролируется стилем; начальная буква — AST-валидатором.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.7"
+        ],
+        "test_markers": [
+          "STO-8.2.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.8",
+      "source_ref": "STO-8.2.8",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.2.8",
+          "question": "Смысловая цельность многословных заголовков",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Рендерер защищает короткие служебные слова неразрывными пробелами, запрещает переносы и удерживает заголовок с последующим текстом.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.8"
+        ],
+        "test_markers": [
+          "STO-8.2.8"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.9",
+      "source_ref": "STO-8.2.9",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Перед заголовками резервируется место; PDF regression проверяет критические разрывы.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.9"
+        ],
+        "test_markers": [
+          "STO-8.2.9"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.2.10",
+      "source_ref": "STO-8.2.10",
+      "disposition": "applicable",
+      "scope": "coursework-recommendation",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.2.10",
+          "question": "Осмысленность и единообразие пунктов/подпунктов",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Стиль обеспечивает единообразие, но решение о том, является ли фрагмент пунктом/подпунктом внутри параграфа и нужна ли ему нумерация, зависит от структуры смысла."
+    },
+    {
+      "id": "STO-8.2.11",
+      "source_ref": "STO-8.2.11",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.2.11",
+          "question": "Грамматическая и смысловая однородность перечислений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Markdown-списки рендерятся только в разрешенные варианты; пользовательские raw-маркеры запрещены.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.2.11"
+        ],
+        "test_markers": [
+          "STO-8.2.11"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.3",
+      "source_ref": "STO-8.3",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.3.1–STO-8.3.3."
+    },
+    {
+      "id": "STO-8.3.1",
+      "source_ref": "STO-8.3.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Проверяется шаблоном и PDF postflight.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.3.1"
+        ],
+        "test_markers": [
+          "STO-8.3.1"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.3.2",
+      "source_ref": "STO-8.3.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Номер впервые отображается после фронтальной части без сброса счетчика.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.3.2"
+        ],
+        "test_markers": [
+          "STO-8.3.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.3.3",
+      "source_ref": "STO-8.3.3",
+      "disposition": "applicable",
+      "scope": "coursework-recommendation-selected",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Профиль выбирает рекомендуемую схему; физический центр листа проверяется bbox postflight.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.3.3"
+        ],
+        "test_markers": [
+          "STO-8.3.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.4",
+      "source_ref": "STO-8.4",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.4.1–STO-8.4.9."
+    },
+    {
+      "id": "STO-8.4.1",
+      "source_ref": "STO-8.4.1",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.1",
+          "question": "Контекстная допустимость сокращений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Для полной проверки нужен внешний ГОСТ и утвержденный лексикон; известные запрещенные формы могут проверяться локально."
+    },
+    {
+      "id": "STO-8.4.2",
+      "source_ref": "STO-8.4.2",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.2",
+          "question": "Смысловые пары, которые нельзя разрывать переносом",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Известные конструкции рендерятся с неразрывными пробелами, но распознавание всех аббревиатур, фамилий, единиц и обозначений в произвольном тексте требует semantic review и визуальной проверки."
+    },
+    {
+      "id": "STO-8.4.3",
+      "source_ref": "STO-8.4.3",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.3",
+          "question": "Интервалы, допуски и единицы соответствуют смыслу данных",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Разрешенная нотация задается semantic Markdown-контрактом; неоднозначные «от/до» дополнительно оцениваются семантически.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.4.3"
+        ],
+        "test_markers": [
+          "STO-8.4.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.4.4",
+      "source_ref": "STO-8.4.4",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.4",
+          "question": "Падежные наращения порядковых числительных",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Правильное окончание зависит от грамматического контекста; regex может дать только предварительные предупреждения."
+    },
+    {
+      "id": "STO-8.4.5",
+      "source_ref": "STO-8.4.5",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.5",
+          "question": "Корректные смысловые пробелы и неразрывные пары",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Ключевые пары рендерятся с неразрывными пробелами; длинные числа и пунктуация валидируются.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.4.5"
+        ],
+        "test_markers": [
+          "STO-8.4.5"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.4.6",
+      "source_ref": "STO-8.4.6",
+      "disposition": "conditional",
+      "scope": "conditional-if-quotes-or-epigraphs-used",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.6",
+          "question": "Дословность, кавычки и источник цитат/эпиграфов",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Источник и статус фрагмента как цитаты/языковой единицы/эпиграфа требуют контекста; формат ссылок проверяется программно."
+    },
+    {
+      "id": "STO-8.4.7",
+      "source_ref": "STO-8.4.7",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.7",
+          "question": "Контекстная пунктуация и десятичные разделители",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Валидатор закрывает формализуемые шаблоны; орфографический/пунктуационный semantic review остается дополнительным.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.4.7"
+        ],
+        "test_markers": [
+          "STO-8.4.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.4.8",
+      "source_ref": "STO-8.4.8",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.8",
+          "question": "Смысловое различение дефиса и видов тире",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Различение синтаксического тире и диапазона частично контекстно, но запрещенные пробельные шаблоны проверяются.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.4.8"
+        ],
+        "test_markers": [
+          "STO-8.4.8"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.4.9",
+      "source_ref": "STO-8.4.9",
+      "disposition": "applicable",
+      "scope": "coursework",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.4.9",
+          "question": "Формат и достоверность полных дат",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Метаданные дат нормализуются и выводятся неразрывно.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.4.9"
+        ],
+        "test_markers": [
+          "STO-8.4.9"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5",
+      "source_ref": "STO-8.5",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.5.1–STO-8.5.12."
+    },
+    {
+      "id": "STO-8.5.1",
+      "source_ref": "STO-8.5.1",
+      "disposition": "conditional",
+      "scope": "conditional-if-figures-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.1",
+          "question": "Все иллюстрации объявлены рисунками и содержательно оправданы",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Единый semantic figure-блок исключает альтернативные типы подписей.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.1"
+        ],
+        "test_markers": [
+          "STO-8.5.1"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.2",
+      "source_ref": "STO-8.5.2",
+      "disposition": "conditional",
+      "scope": "conditional-if-figures-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Стиль формирует подпись; выбор глобальной схемы при малом числе объектов централизован и не задается в контенте.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.2"
+        ],
+        "test_markers": [
+          "STO-8.5.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.3",
+      "source_ref": "STO-8.5.3",
+      "disposition": "conditional",
+      "scope": "conditional-if-objects-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.3",
+          "question": "Смысловая связь первого упоминания и следующего рисунка/таблицы",
+          "evidence_required": true
+        }
+      ],
+      "notes": "AST-валидатор сравнивает позиции ссылок и объектов; принудительное [H] не позволяет float переместиться до ссылки.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.3"
+        ],
+        "test_markers": [
+          "STO-8.5.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.4",
+      "source_ref": "STO-8.5.4",
+      "disposition": "conditional",
+      "scope": "conditional-if-figures-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.4",
+          "question": "Грамматика и содержательная точность ссылок на рисунки",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Ссылки создаются semantic citation-синтаксисом; контекст перед ссылкой валидируется.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.4"
+        ],
+        "test_markers": [
+          "STO-8.5.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.5",
+      "source_ref": "STO-8.5.5",
+      "disposition": "conditional",
+      "scope": "conditional-if-figures-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.5",
+          "question": "Информативность подписи и расшифровка обозначений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Наличие подписи формализуется; полноту расшифровки обозначений можно установить только с учетом содержания изображения."
+    },
+    {
+      "id": "STO-8.5.6",
+      "source_ref": "STO-8.5.6",
+      "disposition": "conditional",
+      "scope": "conditional-if-graph-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.6",
+          "question": "Для графиков проверены оси, величины, единицы и масштаб",
+          "evidence_required": true
+        }
+      ],
+      "notes": "График обязан иметь semantic-атрибуты осей; честность соответствия атрибутов пикселям изображения дополнительно проверяется AI/человеком.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.6"
+        ],
+        "test_markers": [
+          "STO-8.5.6"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.7",
+      "source_ref": "STO-8.5.7",
+      "disposition": "conditional",
+      "scope": "conditional-if-rotation-requested",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.5.7",
+          "question": "Необходимость и фактическое направление поворота рисунка",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Иные углы и направления блокируются атрибутным контрактом.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.7"
+        ],
+        "test_markers": [
+          "STO-8.5.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.8",
+      "source_ref": "STO-8.5.8",
+      "disposition": "conditional",
+      "scope": "conditional-A3-unsupported-in-v1",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-8.5.8",
+          "required_evidence": "Подтверждение отсутствия A3/foldout либо проверка фальцовки, раскрытия и ориентации на фактическом экземпляре."
+        }
+      ],
+      "notes": "Профиль v1 fail-closed запрещает А3 вместо попытки неверной автоматической верстки; поддержка возможна отдельным протестированным backend-профилем.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.8"
+        ],
+        "test_markers": [
+          "STO-8.5.8"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.9",
+      "source_ref": "STO-8.5.9",
+      "disposition": "conditional",
+      "scope": "conditional-physical-photograph",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-8.5.9",
+          "required_evidence": "Подтверждение отсутствия наклеенных фотоснимков либо физическая проверка формата, полей, приклейки, коробления и отслоения."
+        }
+      ],
+      "notes": "Размер цифрового изображения ограничивается программно; состояние физически наклеенной фотографии проверяется только на печатном экземпляре."
+    },
+    {
+      "id": "STO-8.5.10",
+      "source_ref": "STO-8.5.10",
+      "disposition": "conditional",
+      "scope": "conditional-exactly-one-figure",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Фильтр подсчитывает рисунки до рендера и переключает схему нумерации.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.10"
+        ],
+        "test_markers": [
+          "STO-8.5.10"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.11",
+      "source_ref": "STO-8.5.11",
+      "disposition": "conditional",
+      "scope": "conditional-figure-in-appendix",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Окружение приложения локально перенастраивает счетчик и формат номера.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.5.11"
+        ],
+        "test_markers": [
+          "STO-8.5.11"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.5.12",
+      "source_ref": "STO-8.5.12",
+      "disposition": "formal",
+      "scope": "reference",
+      "verification": [],
+      "notes": "Визуальный образец, не дополнительное самостоятельное требование."
+    },
+    {
+      "id": "STO-8.6",
+      "source_ref": "STO-8.6",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.6.1–STO-8.6.16."
+    },
+    {
+      "id": "STO-8.6.1",
+      "source_ref": "STO-8.6.1",
+      "disposition": "conditional",
+      "scope": "conditional-if-structured-digital-material",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.1",
+          "question": "Цифровой материал представлен в подходящей табличной форме",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Определить, является ли фрагмент цифровым материалом, требующим таблицы, можно только по смыслу."
+    },
+    {
+      "id": "STO-8.6.2",
+      "source_ref": "STO-8.6.2",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "AST контролирует порядок, long table renderer и PDF postflight — дистанцию страницы.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.2"
+        ],
+        "test_markers": [
+          "STO-8.6.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.3",
+      "source_ref": "STO-8.6.3",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Единственная таблица автоматически переключает глобальный номер; таблица приложения сохраняет A.1.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.3"
+        ],
+        "test_markers": [
+          "STO-8.6.3"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.4",
+      "source_ref": "STO-8.6.4",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Текст СТО ошибочно говорит «на этот рисунок», но примеры и контекст однозначно относятся к таблице.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.4"
+        ],
+        "test_markers": [
+          "STO-8.6.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.5",
+      "source_ref": "STO-8.6.5",
+      "disposition": "conditional",
+      "scope": "conditional-if-table-caption-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.5",
+          "question": "Заголовок таблицы краток и полностью отражает содержание",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Позиция и регистр проверяются программно; краткость и соответствие содержанию — semantic review. Пустой заголовок допустим по самому пункту."
+    },
+    {
+      "id": "STO-8.6.6",
+      "source_ref": "STO-8.6.6",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.6",
+          "question": "Грамматика, число и смысл заголовков граф",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Регистр/точка проверяются AST; самостоятельность подзаголовка и грамматическое число требуют языка/контекста."
+    },
+    {
+      "id": "STO-8.6.7",
+      "source_ref": "STO-8.6.7",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Единый renderer использует полную сетку без диагоналей, что соответствует образцу приложения М.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.7"
+        ],
+        "test_markers": [
+          "STO-8.6.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.8",
+      "source_ref": "STO-8.6.8",
+      "disposition": "conditional",
+      "scope": "conditional-if-table-spans-parts",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "longtblr повторяет головку и формирует продолжение/окончание; запрещенный заголовок проверяется.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.8"
+        ],
+        "test_markers": [
+          "STO-8.6.8"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.9",
+      "source_ref": "STO-8.6.9",
+      "disposition": "conditional",
+      "scope": "conditional-if-repeated-or-missing-table-data",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.9",
+          "question": "Повторы, прочерки и отсутствие данных выражены корректно",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Нужно различить повтор, отсутствие данных и допустимый повторяемый символ."
+    },
+    {
+      "id": "STO-8.6.10",
+      "source_ref": "STO-8.6.10",
+      "disposition": "conditional",
+      "scope": "conditional-if-physical-quantities-in-table",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.10",
+          "question": "Единицы величин согласованы с данными и заголовками",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Renderer поддерживает semantic units, но корректная размерность и преобладающая единица требуют предметной проверки."
+    },
+    {
+      "id": "STO-8.6.11",
+      "source_ref": "STO-8.6.11",
+      "disposition": "conditional",
+      "scope": "conditional-if-limit-qualifiers-used",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.11",
+          "question": "Квалификаторы предельных значений расположены по смыслу",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Область действия слов определяется по смыслу таблицы."
+    },
+    {
+      "id": "STO-8.6.12",
+      "source_ref": "STO-8.6.12",
+      "disposition": "conditional",
+      "scope": "conditional-if-numeric-table-columns",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.12",
+          "question": "Точность и количество десятичных знаков обоснованы",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Тип числовой колонки и нормализованные значения задаются атрибутами/AST.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.12"
+        ],
+        "test_markers": [
+          "STO-8.6.12"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.13",
+      "source_ref": "STO-8.6.13",
+      "disposition": "conditional",
+      "scope": "conditional-if-tables-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Тело таблицы централизованно набирается 12 пт; подпись остается основного размера, поскольку пункт разрешает уменьшение именно в таблице.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.13"
+        ],
+        "test_markers": [
+          "STO-8.6.13"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.14",
+      "source_ref": "STO-8.6.14",
+      "disposition": "conditional",
+      "scope": "conditional-if-intervals-in-table",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.14",
+          "question": "Границы интервалов и их включённость выражены точно",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Правильная открытость/закрытость границы зависит от смысла данных."
+    },
+    {
+      "id": "STO-8.6.15",
+      "source_ref": "STO-8.6.15",
+      "disposition": "conditional",
+      "scope": "conditional-if-large-numbers-in-table",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.6.15",
+          "question": "Группировка разрядов не затронула номера и даты",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Нужен semantic тип ячейки number/date/id, чтобы исключения не определялись догадкой.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.6.15"
+        ],
+        "test_markers": [
+          "STO-8.6.15"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.6.16",
+      "source_ref": "STO-8.6.16",
+      "disposition": "formal",
+      "scope": "reference",
+      "verification": [],
+      "notes": "Визуальный образец, не дополнительное самостоятельное требование."
+    },
+    {
+      "id": "STO-8.7",
+      "source_ref": "STO-8.7",
+      "disposition": "formal",
+      "scope": "grouping",
+      "verification": [],
+      "notes": "Детали зарегистрированы в STO-8.7.1–STO-8.7.18."
+    },
+    {
+      "id": "STO-8.7.1",
+      "source_ref": "STO-8.7.1",
+      "disposition": "applicable",
+      "scope": "coursework-recommendation-conflicting-with-latex",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-8.7.1",
+          "required_evidence": "Письменное решение кафедры/нормоконтролёра либо принятый ими контрольный образец, явно разрешающий формулы LuaLaTeX как замену рекомендованному в СТО Microsoft Equation 3.0. Доказательство должно позволять однозначно установить профиль документа, версию образца и лицо, принявшее решение."
+        }
+      ],
+      "notes": "Это рекомендация устаревшего инструмента, а не визуальное требование; LaTeX math является сознательной заменой и должен быть принят в external-acceptance вместе с STO-8.1.3."
+    },
+    {
+      "id": "STO-8.7.2",
+      "source_ref": "STO-8.7.2",
+      "disposition": "conditional",
+      "scope": "conditional-if-display-equations-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Display math renderer централизованно задает интервалы.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.2"
+        ],
+        "test_markers": [
+          "STO-8.7.2"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.3",
+      "source_ref": "STO-8.7.3",
+      "disposition": "conditional",
+      "scope": "conditional-if-equation-wraps",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.3",
+          "question": "Математически корректные места и знаки переноса формул",
+          "evidence_required": true
+        }
+      ],
+      "notes": "TeX не гарантирует правильный смысловой перенос автоматически; автор/ИИ должен использовать разрешенную многострочную нотацию, postflight блокирует переполнение."
+    },
+    {
+      "id": "STO-8.7.4",
+      "source_ref": "STO-8.7.4",
+      "disposition": "conditional",
+      "scope": "conditional-if-new-symbols-in-equation",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.4",
+          "question": "Пояснения символов следуют порядку формулы",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Equation block декларирует symbols и связанный equation-where; порядок сравнивается AST-валидатором.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.4"
+        ],
+        "test_markers": [
+          "STO-8.7.4"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.5",
+      "source_ref": "STO-8.7.5",
+      "disposition": "conditional",
+      "scope": "conditional-if-equations-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Сквозная схема выбрана по умолчанию; единственная формула явно проверяется.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.5"
+        ],
+        "test_markers": [
+          "STO-8.7.5"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.6",
+      "source_ref": "STO-8.7.6",
+      "disposition": "conditional",
+      "scope": "conditional-if-equation-system-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Разрешенное окружение системы центрирует tag относительно группы.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.6"
+        ],
+        "test_markers": [
+          "STO-8.7.6"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.7",
+      "source_ref": "STO-8.7.7",
+      "disposition": "conditional",
+      "scope": "conditional-if-new-symbols-in-equation",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.7",
+          "question": "Полнота, порядок и новизна расшифровок обозначений",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Специальное окружение SUSUWhere генерирует пунктуацию и запрещает ручную имитацию.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.7"
+        ],
+        "test_markers": [
+          "STO-8.7.7"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.8",
+      "source_ref": "STO-8.7.8",
+      "disposition": "conditional",
+      "scope": "conditional-if-multiplication-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.8",
+          "question": "Уместность средней точки как знака умножения",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Разрешенные semantic math-макросы помогают, но выбор знака зависит от математического контекста."
+    },
+    {
+      "id": "STO-8.7.9",
+      "source_ref": "STO-8.7.9",
+      "disposition": "conditional",
+      "scope": "conditional-if-cross-multiplication-context",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.9",
+          "question": "Уместность знака × и отсутствие подмены буквой",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Нужно различать размер, скалярное и векторное произведение."
+    },
+    {
+      "id": "STO-8.7.10",
+      "source_ref": "STO-8.7.10",
+      "disposition": "conditional",
+      "scope": "conditional-equation-in-appendix",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Окружение приложения локально меняет формат equation counter.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.10"
+        ],
+        "test_markers": [
+          "STO-8.7.10"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.11",
+      "source_ref": "STO-8.7.11",
+      "disposition": "conditional",
+      "scope": "conditional-if-equation-referenced",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Renderer использует eqref, raw-ссылки запрещены.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.11"
+        ],
+        "test_markers": [
+          "STO-8.7.11"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.12",
+      "source_ref": "STO-8.7.12",
+      "disposition": "formal",
+      "scope": "optional-alternative-not-selected",
+      "verification": [],
+      "notes": "Профиль выбирает основную сквозную схему STO-8.7.5; разрешенная альтернатива не обязательна."
+    },
+    {
+      "id": "STO-8.7.13",
+      "source_ref": "STO-8.7.13",
+      "disposition": "conditional",
+      "scope": "conditional-if-equations-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Единый equation block не различает формулы и уравнения по оформлению.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.13"
+        ],
+        "test_markers": [
+          "STO-8.7.13"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.14",
+      "source_ref": "STO-8.7.14",
+      "disposition": "formal",
+      "scope": "optional-physical-method-not-selected",
+      "verification": [],
+      "notes": "Разрешение, а не обязанность; цифровой профиль им не пользуется."
+    },
+    {
+      "id": "STO-8.7.15",
+      "source_ref": "STO-8.7.15",
+      "disposition": "conditional",
+      "scope": "conditional-if-math-symbols-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.15",
+          "question": "Типографика скаляров, векторов и произведений соответствует смыслу",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Math font обеспечивает базовое начертание; корректный выбор семантики scalar/vector/product проверяется по смыслу."
+    },
+    {
+      "id": "STO-8.7.16",
+      "source_ref": "STO-8.7.16",
+      "disposition": "conditional",
+      "scope": "conditional-if-compound-abbreviated-index",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.16",
+          "question": "Пунктуация многословных сокращений в индексах",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Нужно знать расшифровку и структуру индекса; визуальный regex ненадежен."
+    },
+    {
+      "id": "STO-8.7.17",
+      "source_ref": "STO-8.7.17",
+      "disposition": "conditional",
+      "scope": "conditional-if-relevant-math-present",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.17",
+          "question": "Прямое начертание цифр, химических элементов, единиц и функций",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-8.7.17",
+          "required_evidence": "Проверка обозначений единиц по применимой редакции ГОСТ 8.417 и профильным нормам дисциплины."
+        }
+      ],
+      "notes": "Semantic macros для units/functions/chemistry дают прямое начертание; raw TeX запрещен, чтобы не обходить контракт.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-8.7.17"
+        ],
+        "test_markers": [
+          "STO-8.7.17"
+        ]
+      }
+    },
+    {
+      "id": "STO-8.7.18",
+      "source_ref": "STO-8.7.18",
+      "disposition": "conditional",
+      "scope": "conditional-if-symbol-crosses-representations",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO-8.7.18",
+          "question": "Единый словарь и начертание обозначений во всех представлениях",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Единый math font закрывает текст/формулы, но обозначения внутри растрового/векторного рисунка требуют визуальной семантической проверки."
+    },
+    {
+      "id": "STO-9",
+      "source_ref": "STO-9",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Групповой раздел полностью вне профиля курсовой работы."
+    },
+    {
+      "id": "STO-9.1",
+      "source_ref": "STO-9.1",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа без комплекта защиты ВКР."
+    },
+    {
+      "id": "STO-9.2",
+      "source_ref": "STO-9.2",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-9.3",
+      "source_ref": "STO-9.3",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-9.4",
+      "source_ref": "STO-9.4",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-A1",
+      "source_ref": "STO-A1",
+      "disposition": "applicable",
+      "scope": "coursework-mandatory-form",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        },
+        {
+          "kind": "external",
+          "review_id": "STO-A1",
+          "required_evidence": "ФИО, группа, должности и ФИО руководителя/нормоконтролёра; подписи и даты вносятся уполномоченными лицами, а не ИИ."
+        }
+      ],
+      "notes": "Шаблон воспроизводит структуру формы; устаревшие официальные наименования не копируются без внешнего решения, см. STO-7.1.1.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-A1"
+        ],
+        "test_markers": [
+          "STO-A1"
+        ]
+      }
+    },
+    {
+      "id": "STO-A2",
+      "source_ref": "STO-A2",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Используется для визуального сравнения, но его примерные персональные данные не переносятся."
+    },
+    {
+      "id": "STO-B1",
+      "source_ref": "STO-B1",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-B2",
+      "source_ref": "STO-B2",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-V",
+      "source_ref": "STO-V",
+      "disposition": "applicable",
+      "scope": "coursework-selected-form",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "profile.handler",
+          "severity": "error"
+        }
+      ],
+      "notes": "Само задание обязательно по STO-6 и STO-7.2.1; рекомендуемая форма В выбрана как базовая реализация.",
+      "coverage": {
+        "implementation_markers": [
+          "STO-V"
+        ],
+        "test_markers": [
+          "STO-V"
+        ]
+      }
+    },
+    {
+      "id": "STO-G",
+      "source_ref": "STO-G",
+      "disposition": "not-applicable",
+      "scope": "vkr-only",
+      "verification": [],
+      "notes": "Профиль документа — курсовая работа."
+    },
+    {
+      "id": "STO-D",
+      "source_ref": "STO-D",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Для профиля с обязательной аннотацией служит дополнительным ориентиром, но не заменяет STO-7.3.2–STO-7.3.4."
+    },
+    {
+      "id": "STO-E1",
+      "source_ref": "STO-E1",
+      "disposition": "not-applicable",
+      "scope": "vkr-only-reference",
+      "verification": [],
+      "notes": "Не используется как обязательная форма курсовой."
+    },
+    {
+      "id": "STO-E2",
+      "source_ref": "STO-E2",
+      "disposition": "not-applicable",
+      "scope": "vkr-only-reference",
+      "verification": [],
+      "notes": "Не используется как обязательная форма курсовой."
+    },
+    {
+      "id": "STO-ZH",
+      "source_ref": "STO-ZH",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Используется для визуального regression вместе с явными требованиями STO-7.4."
+    },
+    {
+      "id": "STO-I1",
+      "source_ref": "STO-I1",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Содержательный пример; обязательные критерии заданы STO-7.6."
+    },
+    {
+      "id": "STO-I2",
+      "source_ref": "STO-I2",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Содержательный пример; обязательные критерии заданы STO-7.6."
+    },
+    {
+      "id": "STO-K",
+      "source_ref": "STO-K",
+      "disposition": "applicable",
+      "scope": "coursework-reference",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO-K",
+          "required_evidence": "Датированный аудит фактического библиографического списка по редакции ГОСТ, принятой кафедрой: для каждого использованного типа источника указаны проверенные записи, применённый норматив/пример приложения К и выявленные отклонения. Наличие biblatex-gost или визуальное сходство с примером не считаются самостоятельным подтверждением."
+        }
+      ],
+      "notes": "Примеры проверяются против внешних ГОСТ; пакет biblatex-gost сам по себе не является доказательством полного соответствия редакции 2003 года."
+    },
+    {
+      "id": "STO-L",
+      "source_ref": "STO-L",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Визуальный regression fixture; нормативные правила содержатся в STO-8.5."
+    },
+    {
+      "id": "STO-M",
+      "source_ref": "STO-M",
+      "disposition": "formal",
+      "scope": "coursework-reference",
+      "verification": [],
+      "notes": "Визуальный regression fixture; нормативные правила содержатся в STO-8.6."
+    },
+    {
+      "id": "STO-N",
+      "source_ref": "STO-N",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Не относится к курсовой работе."
+    },
+    {
+      "id": "STO-P",
+      "source_ref": "STO-P",
+      "disposition": "not-applicable",
+      "scope": "vkr-defense-only",
+      "verification": [],
+      "notes": "Не относится к курсовой работе."
     }
   ]
 }

@@ -129,18 +129,13 @@ function Get-ProfileDigest {
 
     $paths = @(
         $ManifestRelativePath,
-        [string]$Document.compliance.canonical_inventory,
+        [string]$Document.compliance.inventory,
         [string]$Document.compliance.requirements,
-        [string]$Document.compliance.review_inventory,
-        [string]$Document.compliance.semantic_review_template,
-        [string]$Document.compliance.external_acceptance_template,
         [string]$Document.compliance.system_prompt,
         [string]$Document.compliance.research_notes,
         [string]$Document.render.template,
         [string]$Document.render.postflight
-    ) + @($Document.compliance.semantic_paths) +
-        @($Document.compliance.external_paths) +
-        @($Document.render.style_files) +
+    ) + @($Document.render.style_files) +
         @($Document.render.lua_filters)
     $paths = @($paths | ForEach-Object { ([string]$_).Replace('\', '/') } | Sort-Object -Unique)
     $lines = foreach ($path in $paths) {
@@ -193,10 +188,9 @@ function Resolve-AutoNormoKontrolProfile {
         'metadata', 'bibliography', 'asset_manifest'
     )
     Assert-ProfileObjectShape -Object $document.compliance -Location 'compliance' -Required @(
-        'canonical_inventory', 'requirements', 'review_inventory', 'semantic_review',
-        'external_acceptance', 'semantic_review_template', 'external_acceptance_template',
+        'inventory', 'requirements', 'semantic_review', 'external_acceptance',
         'system_prompt', 'format_spec', 'research_notes',
-        'implementation_paths', 'test_paths', 'prompt_paths', 'semantic_paths', 'external_paths'
+        'implementation_paths', 'test_paths', 'prompt_paths'
     )
     Assert-ProfileObjectShape -Object $document.render -Location 'render' -Required @(
         'pandoc_from', 'template', 'style_files', 'lua_filters', 'tex_input_paths', 'postflight'
@@ -213,7 +207,7 @@ function Resolve-AutoNormoKontrolProfile {
         'assignment', 'abstract', 'figures', 'tables', 'equations', 'appendices'
     )
 
-    if ([int]$document.schema_version -ne 1 -or [string]$document.schema_version -ne '1') {
+    if ([int]$document.schema_version -ne 2 -or [string]$document.schema_version -ne '2') {
         throw "Unsupported profile schema_version: $($document.schema_version)"
     }
     Assert-ProfileString $document.profile_id 'profile_id'
@@ -244,11 +238,8 @@ function Resolve-AutoNormoKontrolProfile {
     }
 
     $engineFileFields = @(
-        @('compliance.canonical_inventory', $document.compliance.canonical_inventory),
+        @('compliance.inventory', $document.compliance.inventory),
         @('compliance.requirements', $document.compliance.requirements),
-        @('compliance.review_inventory', $document.compliance.review_inventory),
-        @('compliance.semantic_review_template', $document.compliance.semantic_review_template),
-        @('compliance.external_acceptance_template', $document.compliance.external_acceptance_template),
         @('compliance.system_prompt', $document.compliance.system_prompt),
         @('compliance.research_notes', $document.compliance.research_notes),
         @('render.template', $document.render.template),
@@ -279,8 +270,6 @@ function Resolve-AutoNormoKontrolProfile {
         @('compliance.implementation_paths', $document.compliance.implementation_paths, 'Any'),
         @('compliance.test_paths', $document.compliance.test_paths, 'Any'),
         @('compliance.prompt_paths', $document.compliance.prompt_paths, 'Any'),
-        @('compliance.semantic_paths', $document.compliance.semantic_paths, 'Any'),
-        @('compliance.external_paths', $document.compliance.external_paths, 'Any'),
         @('render.style_files', $document.render.style_files, 'File'),
         @('render.lua_filters', $document.render.lua_filters, 'File')
     )

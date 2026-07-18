@@ -1,30 +1,14 @@
 {
-    "metadata":  {
-                     "standard":  "Экспериментальный профиль статьи по летней практике",
-                     "profile":  "Научная статья",
-                     "mechanism_statuses":  {
-                                                "programmatic":  "specified",
-                                                "ai":  "semantic-review-required",
-                                                "external":  "external-evidence-required",
-                                                "conflict":  "blocked-pending-resolution",
-                                                "informational":  "indexed",
-                                                "not-applicable":  "not-applicable"
-                                            }
-                 },
-    "requirements":  [
-                         {
-                             "id":  "ARTICLE-BASELINE",
-                             "summary":  "Профиль собирает восстановленную научную статью через Pandoc и LuaLaTeX.",
-                             "applicability":  "practice-article",
-                             "mechanism":  "informational",
-                             "status":  "indexed",
-                             "implementation_markers":  [
-
-                                                        ],
-                             "test_markers":  [
-
-                                              ],
-                             "notes":  "Первоначальный восстановленный профиль; формальный набор требований будет расширен после успешной контрольной сборки."
-                         }
-                     ]
+  "schema_version": 2,
+  "profile_id": "susu-practice-article-v1",
+  "requirements": [
+    {
+      "id": "ARTICLE-BASELINE",
+      "source_ref": "ARTICLE-BASELINE",
+      "disposition": "formal",
+      "scope": "practice-article",
+      "verification": [],
+      "notes": "Первоначальный восстановленный профиль; формальный набор требований будет расширен после успешной контрольной сборки."
+    }
+  ]
 }

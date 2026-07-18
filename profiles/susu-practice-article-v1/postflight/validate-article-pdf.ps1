@@ -10,7 +10,9 @@ param(
     [string]$TexPath,
 
     [Parameter(Mandatory = $true)]
-    [string]$ReportPath
+    [string]$ReportPath,
+
+    [string]$ContractPath = ''
 )
 
 $ErrorActionPreference = "Stop"

@@ -38,9 +38,6 @@ Set-Location -LiteralPath $WorkspaceRoot
 $metadataPath = [string]$config.inputs.metadata
 $bibliographyPath = [string]$config.inputs.bibliography
 $assetManifestPath = [string]$config.inputs.asset_manifest
-$reviewInventoryPath = Resolve-ProfileProjectPath -Root $engineRoot `
-    -Path ([string]$config.compliance.review_inventory) `
-    -Location 'compliance.review_inventory' -Kind File
 $semanticReviewPath = [string]$config.compliance.semantic_review
 $externalAcceptancePath = [string]$config.compliance.external_acceptance
 $assetReportPath = [string]$config.assets.report
@@ -50,6 +47,16 @@ $buildReportPath = [string]$config.reports.build_report
 $postflightReportPath = [string]$config.reports.postflight
 $outputTexPath = [string]$config.outputs.tex
 $outputPdfPath = [string]$config.outputs.pdf
+$build = Split-Path -Parent (Join-Path $WorkspaceRoot $outputPdfPath)
+New-Item -ItemType Directory -Force -Path $build | Out-Null
+$requirementContractJsonPath = Join-Path $build 'effective-requirements.json'
+$requirementContractYamlPath = Join-Path $build 'effective-requirements.yaml'
+$requirementContract = Get-AutoNormoKontrolRequirementContract `
+    -Root $engineRoot -Profile $profile
+Write-AutoNormoKontrolRequirementMetadata `
+    -Contract $requirementContract `
+    -JsonPath $requirementContractJsonPath `
+    -YamlPath $requirementContractYamlPath
 
 & (Join-Path $PSScriptRoot 'check-coverage.ps1') `
     -ProfilePath $profile.ManifestPath
@@ -65,7 +72,6 @@ if (-not $?) { exit 1 }
     -ProjectRoot $WorkspaceRoot -ContentPaths $content
 if (-not $?) { exit 1 }
 
-$build = Split-Path -Parent (Join-Path $WorkspaceRoot $outputPdfPath)
 $assetBuild = Join-Path $WorkspaceRoot $assetBuildPath
 $texCache = Join-Path $build 'texmf-var'
 New-Item -ItemType Directory -Force -Path $assetBuild | Out-Null
@@ -136,7 +142,7 @@ try {
         '--number-sections',
         '--top-level-division=section',
         "--metadata-file=$metadataPath",
-        "--metadata-file=$reviewInventoryPath",
+        "--metadata-file=$requirementContractYamlPath",
         "--metadata-file=$semanticReviewPath",
         "--metadata-file=$externalAcceptancePath",
         "--metadata=compliance-mode:$modeValue",
@@ -171,7 +177,7 @@ try {
         -Path ([string]$config.render.postflight) -Location 'render.postflight' -Kind File
     & $postflightScript `
         -ProjectRoot $WorkspaceRoot -PdfPath $outputPdfPath -TexPath $outputTexPath `
-        -ReportPath $postflightReportPath
+        -ReportPath $postflightReportPath -ContractPath $requirementContractJsonPath
     if (-not $?) { exit 1 }
 }
 finally {
@@ -196,6 +202,17 @@ $buildReport = [pscustomobject][ordered]@{
         sha256 = $profile.ManifestSha256
     }
     profile_digest = $profile.ProfileDigest
+    requirements = [pscustomobject][ordered]@{
+        inventory = [pscustomobject][ordered]@{
+            path = $requirementContract.inventory.path
+            sha256 = $requirementContract.inventory.sha256
+        }
+        registry = [pscustomobject][ordered]@{
+            path = $requirementContract.registry.path
+            sha256 = $requirementContract.registry.sha256
+        }
+        effective_contract = 'build/effective-requirements.json'
+    }
     mode = $modeValue
     content_hash = $contentHash
     document_snapshot = $snapshotPath.Replace('\', '/')

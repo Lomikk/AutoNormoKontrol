@@ -8,7 +8,7 @@
 # fail-closed build input. Test manifests live below build/ and cannot become
 # an implicit alternative profile.
 $profileFullPath = Join-Path $root $profileRelativePath
-$profileSchemaPath = Join-Path $root 'schemas/profile-v1.schema.json'
+$profileSchemaPath = Join-Path $root 'schemas/profile-v2.schema.json'
 $profileCatalogSchemaPath = Join-Path $root 'schemas/profile-catalog-v1.schema.json'
 $profileTestEncoding = New-Object System.Text.UTF8Encoding($false)
 
@@ -108,7 +108,7 @@ try {
     $unknownProfileFailed = $false
     try {
         [void](Get-AutoNormoKontrolCatalogProfile `
-            -Root $root -ProfileId 'missing-profile-v1')
+            -Root $root -ProfileId 'missing-profile-v2')
     }
     catch { $unknownProfileFailed = $_.Exception.Message -match 'not registered' }
     if (-not $unknownProfileFailed) {
@@ -185,7 +185,7 @@ catch {
 $missingPointerPath = Join-Path $testBuild 'active-profile-missing.txt'
 [System.IO.File]::WriteAllText(
     $missingPointerPath,
-    'profiles/missing-profile-v1/profile.yaml',
+    'profiles/missing-profile-v2/profile.yaml',
     $profileTestEncoding
 )
 try {
@@ -204,11 +204,7 @@ catch {
 
 $profilePrefix = "profiles/$activeProfileId/"
 $packagedPaths = @(
-    [string]$profileConfig.compliance.canonical_inventory,
     [string]$profileConfig.compliance.requirements,
-    [string]$profileConfig.compliance.review_inventory,
-    [string]$profileConfig.compliance.semantic_review_template,
-    [string]$profileConfig.compliance.external_acceptance_template,
     [string]$profileConfig.compliance.system_prompt,
     [string]$profileConfig.compliance.research_notes,
     [string]$profileConfig.render.template,
@@ -219,6 +215,10 @@ foreach ($packagedPath in $packagedPaths) {
         $profilePrefix, [StringComparison]::Ordinal)) {
         $failures.Add("R3 profile-owned file remains outside the profile package: $packagedPath")
     }
+}
+$inventoryPath = ([string]$profileConfig.compliance.inventory).Replace('\', '/')
+if (-not $inventoryPath.StartsWith('sources/', [StringComparison]::Ordinal)) {
+    $failures.Add("R3 canonical inventory is not source-owned: $inventoryPath")
 }
 foreach ($workspaceEvidencePath in @(
     [string]$profileConfig.compliance.format_spec,
@@ -268,9 +268,9 @@ Assert-ProfileFailure -Name 'unknown-nested-field' -Document $unknownNestedField
     -Expected "contains unknown field 'fallback_pdf'"
 
 $unsupportedVersionProfile = Get-ProfileTestDocument
-$unsupportedVersionProfile.schema_version = 2
+$unsupportedVersionProfile.schema_version = 3
 Assert-ProfileFailure -Name 'unsupported-version' -Document $unsupportedVersionProfile `
-    -Expected 'Unsupported profile schema_version: 2'
+    -Expected 'Unsupported profile schema_version: 3'
 
 $missingTemplateProfile = Get-ProfileTestDocument
 $missingTemplateProfile.render.template = 'build/compliance-tests/missing-template.tex'

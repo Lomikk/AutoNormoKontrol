@@ -142,7 +142,7 @@
 | Создание и разрешение workspace | schema workspace и раздел «Manifest отдельной работы» | `scripts/workspace.ps1`, `resources/workspace-launchers/`, `schemas/workspace-v1.schema.json` | набор `engine-integration` |
 | Загрузка и каталог профилей | `profile.yaml`, profile/catalog schemas; нормативный реестр не нужен, если его смысл не меняется | `scripts/profile.ps1`, `profiles/catalog.json`, `schemas/profile-*.schema.json` | набор `profile-contract` |
 | Общая сборочная оркестрация | manifest тестового профиля и только используемые поля | `scripts/build.ps1`, snapshot/asset helpers | наборы `build-assets` и `engine-integration` |
-| Нормативное правило профиля | конкретный пункт источника, запись requirements и профильный prompt | профильный Lua/TeX/postflight handler | профильный runner и fixture с тем же ID |
+| Нормативное правило профиля | `docs/REQUIREMENTS_V2.md`, source inventory, запись requirements и профильный prompt | `scripts/requirements.ps1`, профильный Lua/TeX/postflight handler | `semantic-validator` и fixture с тем же ID |
 | Quiet-диагностика | контракт R1.4 в roadmap | `scripts/diagnostics.ps1`, quiet-ветка CLI | diagnostic lifecycle fixtures |
 | Публикация и архив | раздел workspace CLI | `scripts/workspace.ps1`, publish-ветки CLI | набор `engine-integration` |
 | Документация пользователя | только документ соответствующей роли ниже | `README.md`, `docs/FAQ.md` | проверка ссылок и полный `check` перед выпуском |

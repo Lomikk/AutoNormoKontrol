@@ -1,8 +1,0 @@
-semantic-review:
-  status: uncertain
-  content-hash: ""
-  reviewed-at: ""
-  reviewer: ""
-  document-type: practice-article
-  allowed-rule-statuses: [pass, fail, uncertain, not-applicable]
-  rules: []

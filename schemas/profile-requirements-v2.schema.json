@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonormokontrol.local/schemas/profile-requirements-v2.schema.json",
+  "title": "AutoNormoKontrol profile requirements v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "requirements"],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "profile_id": { "type": "string", "minLength": 1 },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/requirement" }
+    }
+  },
+  "$defs": {
+    "stringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "disposition",
+        "scope",
+        "verification",
+        "notes"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "origin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "source", "locator"],
+          "properties": {
+            "kind": { "enum": ["profile", "department", "teacher", "user"] },
+            "source": { "type": "string", "minLength": 1 },
+            "locator": { "type": "string", "minLength": 1 }
+          }
+        },
+        "summary": { "type": "string", "minLength": 1 },
+        "disposition": {
+          "enum": ["applicable", "conditional", "formal", "not-applicable"]
+        },
+        "scope": { "type": "string", "minLength": 1 },
+        "verification": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/programmatic" },
+              { "$ref": "#/$defs/semantic" },
+              { "$ref": "#/$defs/external" }
+            ]
+          }
+        },
+        "diagnostics": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["message", "hint"],
+            "properties": {
+              "message": { "type": "string", "minLength": 1 },
+              "hint": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["implementation_markers", "test_markers"],
+          "properties": {
+            "implementation_markers": { "$ref": "#/$defs/stringArray" },
+            "test_markers": { "$ref": "#/$defs/stringArray" }
+          }
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "oneOf": [
+        { "required": ["source_ref"], "not": { "required": ["origin"] } },
+        { "required": ["origin", "summary"], "not": { "required": ["source_ref"] } }
+      ]
+    },
+    "programmatic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "check", "severity"],
+      "properties": {
+        "kind": { "const": "programmatic" },
+        "check": {
+          "enum": [
+            "profile.handler",
+            "document.required-elements",
+            "document.element-order",
+            "document.visible-element"
+          ]
+        },
+        "parameters": { "type": "object" },
+        "diagnostic": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["error", "warning"] }
+      }
+    },
+    "semantic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "review_id", "question", "evidence_required"],
+      "properties": {
+        "kind": { "const": "semantic" },
+        "review_id": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "minLength": 1 },
+        "evidence_required": { "type": "boolean" }
+      }
+    },
+    "external": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "review_id", "required_evidence"],
+      "properties": {
+        "kind": { "const": "external" },
+        "review_id": { "type": "string", "minLength": 1 },
+        "required_evidence": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
