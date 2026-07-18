@@ -55,7 +55,7 @@ function Get-HelpCommandNames {
     param([string]$Text)
     return @([regex]::Matches(
         $Text,
-        '(?m)^\s{2}([a-z][a-z0-9-]*)\s{2,}'
+        '(?m)^\s{2}([a-z][a-z0-9-]*)(?:\s+\[[^]]+\])?\s{2,}'
     ) | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique)
 }
 
@@ -125,14 +125,16 @@ try {
     }
     $localLauncher = Join-Path $workspaceRoot 'AutoNormoKontrol.cmd'
     $geminiLauncher = Join-Path $workspaceRoot 'gemini.cmd'
-    $geminiLauncherText = Get-Content -Raw -Encoding UTF8 -LiteralPath $geminiLauncher
-    Assert-Lifecycle ($geminiLauncherText.Contains('where.exe gemini.cmd') -and
-        $geminiLauncherText.Contains('where.exe gemini.exe') -and
-        $geminiLauncherText.Contains('call "%GEMINI_CLI%" %*') -and
-        $geminiLauncherText.Contains('if /I not "%%~fG"=="%~f0"') -and
-        $geminiLauncherText.Contains('guide\profile-system-prompt.md') -and
-        $geminiLauncherText -notmatch '(?i)api[_-]?key|--model') `
-        'gemini.cmd is not a credential-free, non-recursive workspace launcher'
+    $workspaceLauncherTemplate = Join-Path $engineRoot `
+        'resources/workspace-launchers/AutoNormoKontrol.cmd'
+    $geminiLauncherTemplate = Join-Path $engineRoot `
+        'resources/workspace-launchers/gemini.cmd'
+    Assert-Lifecycle ((Get-OptionalHash $localLauncher) -eq
+        (Get-OptionalHash $workspaceLauncherTemplate)) `
+        'new did not copy the canonical workspace launcher resource'
+    Assert-Lifecycle ((Get-OptionalHash $geminiLauncher) -eq
+        (Get-OptionalHash $geminiLauncherTemplate)) `
+        'new did not copy the canonical Gemini launcher resource'
 
     # R1/workspace-only: a document launcher exposes only the document lifecycle.
     $workspaceHelp = Invoke-LifecycleCli -FilePath $localLauncher `
@@ -223,20 +225,19 @@ try {
         (Get-OptionalHash $workspacePrompt)) `
         'workspace agent prompt is not an exact profile-specific snapshot'
 
+    # R1/agent-contract: the profile provides the initial prompt, while a user
+    # may adapt the local copy for one concrete document.
     $originalPromptBytes = [System.IO.File]::ReadAllBytes($workspacePrompt)
     try {
         [System.IO.File]::AppendAllText(
             $workspacePrompt,
-            "`n<!-- prompt tampering probe -->`n",
+            "`n<!-- workspace-specific instruction -->`n",
             $encoding
         )
-        $failed = $false
-        try {
-            [void](Resolve-AutoNormoKontrolWorkspace `
-                -EngineRoot $engineRoot -WorkspaceRoot $workspaceRoot)
-        }
-        catch { $failed = $_.Exception.Message -match 'agent prompt does not match' }
-        Assert-Lifecycle $failed 'modified workspace agent prompt did not fail closed'
+        $promptOverrideWorkspace = Resolve-AutoNormoKontrolWorkspace `
+            -EngineRoot $engineRoot -WorkspaceRoot $workspaceRoot
+        Assert-Lifecycle ($promptOverrideWorkspace.ProfileId -eq $resolved.ProfileId) `
+            'workspace-specific agent prompt override changed profile resolution'
     }
     finally {
         [System.IO.File]::WriteAllBytes($workspacePrompt, $originalPromptBytes)
@@ -373,6 +374,20 @@ try {
     Assert-Lifecycle ([string]$postflight.status -eq 'pass') 'starter PDF postflight did not pass'
     Assert-Lifecycle ((Get-OptionalHash $builtPdf) -eq ([string]$buildReport.output.sha256)) `
         'built PDF hash differs from build report'
+
+    # R1.4b/quiet-diagnostics: success is intentionally tiny. Full tool output
+    # is retained internally but neither its contents nor its path are offered
+    # to the writing agent.
+    $quietDraft = Invoke-LifecycleCli -FilePath $localLauncher `
+        -Arguments @('draft', '--quiet') -WorkingDirectory $workspaceRoot
+    Assert-Lifecycle ($quietDraft.ExitCode -eq 0 -and
+        $quietDraft.Text.Contains('OK ANK-BUILD-SUCCEEDED') -and
+        $quietDraft.Text.Contains('PDF: build/coursework.pdf') -and
+        $quietDraft.Text -notmatch 'Latexmk|STO coverage|Profile digest|build[/\\]logs') `
+        ("quiet Draft output is not compact:`n" + $quietDraft.Text)
+    Assert-Lifecycle (Test-Path -LiteralPath `
+        (Join-Path $workspaceRoot 'build/logs/build.log') -PathType Leaf) `
+        'quiet Draft did not retain an internal developer log'
 
     $export = Invoke-LifecycleCli -FilePath $localLauncher `
         -Arguments @('export') -WorkingDirectory $engineRoot
@@ -520,6 +535,40 @@ try {
     }
     finally {
         [System.IO.File]::WriteAllText($manifestPath, $originalManifest, $encoding)
+    }
+
+    $diagnosticSource = Join-Path $workspaceRoot ([string]@($project.document.content)[1])
+    $diagnosticOriginal = [System.IO.File]::ReadAllText(
+        $diagnosticSource,
+        [System.Text.Encoding]::UTF8
+    )
+    $diagnosticId = 'fig:quiet-invalid'
+    try {
+        [System.IO.File]::AppendAllText(
+            $diagnosticSource,
+            "`nМатериал приведён на рисунке [@$diagnosticId].`n`n" +
+                "![Контрольная схема](missing-image.pdf){#$diagnosticId rotation=`"clockwise`"}`n",
+            $encoding
+        )
+        $expectedLine = (Get-Content -LiteralPath $diagnosticSource -Encoding UTF8).Count
+        $quietFailure = Invoke-LifecycleCli -FilePath $localLauncher `
+            -Arguments @('draft', '--quiet') -WorkingDirectory $workspaceRoot
+        Assert-Lifecycle ($quietFailure.ExitCode -ne 0 -and
+            $quietFailure.Text.Contains('ERROR STO-8.5.7') -and
+            $quietFailure.Text.Contains(([string]@($project.document.content)[1] + ':' + $expectedLine)) -and
+            $quietFailure.Text -notmatch 'stack traceback|build[/\\]logs') `
+            ("quiet Draft failure is not source-local and compact:`n" + $quietFailure.Text)
+        $diagnostics = Get-Content -Raw -Encoding UTF8 `
+            -LiteralPath (Join-Path $workspaceRoot 'build/diagnostics.json') | ConvertFrom-Json
+        $rotationDiagnostics = @($diagnostics.errors | Where-Object {
+            [string]$_.code -eq 'STO-8.5.7' -and
+            [string]$_.file -eq [string]@($project.document.content)[1]
+        })
+        Assert-Lifecycle ($rotationDiagnostics.Count -eq 1) `
+            'quiet Draft did not retain structured internal diagnostics'
+    }
+    finally {
+        [System.IO.File]::WriteAllText($diagnosticSource, $diagnosticOriginal, $encoding)
     }
 
     Write-Host 'PASS R1 workspace lifecycle: new -> draft -> export -> archive'

@@ -19,6 +19,7 @@ else {
     $null
 }
 . (Join-Path $PSScriptRoot 'utf8-native.ps1')
+. (Join-Path $PSScriptRoot 'diagnostics.ps1')
 . (Join-Path $PSScriptRoot 'profile.ps1')
 . (Join-Path $PSScriptRoot 'workspace.ps1')
 $script:ActiveWorkspace = $null
@@ -216,6 +217,7 @@ function Invoke-ProjectScript {
         [Parameter(Mandatory = $true)]
         [string]$Name,
         [string[]]$Arguments = @(),
+        [switch]$Quiet,
         [Parameter(Mandatory = $true)]
         [ref]$ExitCode
     )
@@ -236,6 +238,65 @@ function Invoke-ProjectScript {
     ) + $Arguments
 
     Set-Location -LiteralPath $engineRoot
+    if ($Quiet) {
+        $quotedScript = "'" + $path.Replace("'", "''") + "'"
+        $commandArguments = @($Arguments | ForEach-Object {
+            $argument = [string]$_
+            if ($argument -match '^-[A-Za-z][A-Za-z0-9-]*$') { $argument }
+            else { "'" + $argument.Replace("'", "''") + "'" }
+        })
+        $quietCommand = @(
+            '[Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)'
+            '$OutputEncoding = [Console]::OutputEncoding'
+            '$ProgressPreference = ''SilentlyContinue'''
+            ('& {0} {1}' -f $quotedScript, ($commandArguments -join ' '))
+            'if ($null -eq $LASTEXITCODE) { if ($?) { exit 0 } else { exit 1 } }'
+            'exit $LASTEXITCODE'
+        ) -join '; '
+        $result = Invoke-Utf8NativeCommand -FilePath $script:PowerShellExecutable `
+            -Arguments @(
+                '-NoLogo', '-NoProfile', '-NonInteractive', '-OutputFormat', 'Text',
+                '-ExecutionPolicy', 'Bypass',
+                '-Command', $quietCommand
+            ) -WorkingDirectory $engineRoot
+        $childExitCode = [int]$result.ExitCode
+        $captured = $result.StandardOutput + $result.StandardError
+        $logDirectory = Join-Path $workspaceRoot 'build/logs'
+        New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
+        [System.IO.File]::WriteAllText(
+            (Join-Path $logDirectory (([IO.Path]::GetFileNameWithoutExtension($Name)) + '.log')),
+            $captured,
+            (New-Object System.Text.UTF8Encoding($false))
+        )
+        $ExitCode.Value = $childExitCode
+        if ($childExitCode -eq 0) {
+            $profile = Get-ActiveProfile
+            Write-Host 'OK ANK-BUILD-SUCCEEDED' -ForegroundColor Green
+            Write-Host ('PDF: {0}' -f ([string]$profile.Data.outputs.pdf).Replace('\', '/'))
+        }
+        else {
+            $workspace = Get-ActiveWorkspace
+            $diagnostics = @(ConvertTo-AutoNormoKontrolDiagnostics `
+                -Text $captured -WorkspaceRoot $workspaceRoot `
+                -ContentPaths $workspace.ContentPaths)
+            $diagnosticsPath = Join-Path $workspaceRoot 'build/diagnostics.json'
+            $document = [pscustomobject][ordered]@{
+                version = 1
+                profile_id = $workspace.Profile.ProfileId
+                command = ([IO.Path]::GetFileNameWithoutExtension($Name))
+                exit_code = $childExitCode
+                errors = $diagnostics
+            }
+            [System.IO.File]::WriteAllText(
+                $diagnosticsPath,
+                ($document | ConvertTo-Json -Depth 8),
+                (New-Object System.Text.UTF8Encoding($false))
+            )
+            Write-AutoNormoKontrolCompactDiagnostics -Diagnostics $diagnostics
+        }
+        return
+    }
+
     # Keep the child attached to the console so users see live build output.
     # Native UTF-8 decoding is handled at each Pandoc invocation.
     & $script:PowerShellExecutable @shellArguments
@@ -524,8 +585,8 @@ function Show-Help {
     Write-Host ''
     Write-Host 'Команды:' -ForegroundColor DarkCyan
     if ($script:IsWorkspaceMode) {
-        Write-Host '  draft    собрать черновой PDF с явными предупреждениями'
-        Write-Host '  strict   строгая fail-closed сборка для выпуска'
+        Write-Host '  draft [--quiet]   собрать черновой PDF; --quiet даёт компактный вывод'
+        Write-Host '  strict [--quiet]  строгая fail-closed сборка; --quiet даёт компактный вывод'
         Write-Host '  status   показать состояние аудита и последней сборки'
         Write-Host '  open     открыть последний собранный PDF'
         Write-Host '  export   опубликовать проверенный PDF как output/document.pdf'
@@ -621,24 +682,40 @@ function Invoke-CliCommand {
             break
         }
         'draft' {
-            Write-Title 'Черновая сборка'
+            $quiet = $Arguments.Count -eq 1 -and [string]$Arguments[0] -ceq '--quiet'
+            if ($Arguments.Count -gt 0 -and -not $quiet) {
+                Write-Failure 'Использование: AutoNormoKontrol.cmd draft [--quiet]'
+                $ExitCode.Value = 2
+                break
+            }
+            if (-not $quiet) { Write-Title 'Черновая сборка' }
             if (-not (Assert-Tools @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext'))) {
                 $ExitCode.Value = 127
                 break
             }
             Invoke-ProjectScript 'build.ps1' `
-                @('-Mode', 'Draft', '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
+                @('-Mode', 'Draft', '-WorkspaceRoot', $workspaceRoot) `
+                -Quiet:$quiet -ExitCode $ExitCode
             break
         }
         'strict' {
-            Write-Title 'Строгая сборка'
-            Write-Host 'Strict завершается ошибкой при любом неподтверждённом требовании.' -ForegroundColor Yellow
+            $quiet = $Arguments.Count -eq 1 -and [string]$Arguments[0] -ceq '--quiet'
+            if ($Arguments.Count -gt 0 -and -not $quiet) {
+                Write-Failure 'Использование: AutoNormoKontrol.cmd strict [--quiet]'
+                $ExitCode.Value = 2
+                break
+            }
+            if (-not $quiet) {
+                Write-Title 'Строгая сборка'
+                Write-Host 'Strict завершается ошибкой при любом неподтверждённом требовании.' -ForegroundColor Yellow
+            }
             if (-not (Assert-Tools @('pandoc', 'latexmk', 'lualatex', 'biber', 'pdfinfo', 'pdffonts', 'pdftotext'))) {
                 $ExitCode.Value = 127
                 break
             }
             Invoke-ProjectScript 'build.ps1' `
-                @('-Mode', 'Strict', '-WorkspaceRoot', $workspaceRoot) -ExitCode $ExitCode
+                @('-Mode', 'Strict', '-WorkspaceRoot', $workspaceRoot) `
+                -Quiet:$quiet -ExitCode $ExitCode
             break
         }
         'check' {
@@ -748,7 +825,10 @@ try {
         Show-InteractiveMenu
     }
     else {
-        if ($CommandArguments.Count -gt 0 -and $Command -notin @('install', 'new', 'archive')) {
+        if ($CommandArguments.Count -gt 0 -and
+            -not ($Command -in @('draft', 'strict') -and
+                $CommandArguments.Count -eq 1 -and $CommandArguments[0] -ceq '--quiet') -and
+            $Command -notin @('install', 'new', 'archive')) {
             Write-Host ("Примечание: дополнительные аргументы пока не используются: {0}" -f
                 ($CommandArguments -join ' ')) -ForegroundColor DarkYellow
         }

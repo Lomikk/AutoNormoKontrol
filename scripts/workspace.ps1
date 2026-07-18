@@ -4,6 +4,8 @@ $script:AutoNormoKontrolExportReport = 'output/export-report.json'
 $script:AutoNormoKontrolArchiveDirectory = 'output/archive'
 $script:AutoNormoKontrolAgentPrompt = 'guide/profile-system-prompt.md'
 $script:AutoNormoKontrolGeminiLauncher = 'gemini.cmd'
+$script:AutoNormoKontrolWorkspaceLauncherTemplate = 'resources/workspace-launchers/AutoNormoKontrol.cmd'
+$script:AutoNormoKontrolGeminiLauncherTemplate = 'resources/workspace-launchers/gemini.cmd'
 
 function Get-AutoNormoKontrolEngineVersion {
     param([Parameter(Mandatory = $true)][string]$EngineRoot)
@@ -144,19 +146,11 @@ function Resolve-AutoNormoKontrolWorkspace {
             $document.document.type, $profile.DocumentType)
     }
 
-    # R1/agent-contract: the writing agent stays inside its workspace, so it
-    # receives an exact snapshot of the selected profile prompt. The immutable
-    # profile remains the source of truth; a missing or modified local copy is
-    # rejected instead of silently weakening the authoring contract.
-    $agentPromptFull = Resolve-WorkspaceOwnedPath `
-        $workspaceFull $script:AutoNormoKontrolAgentPrompt File
-    $profilePromptFull = Resolve-ProfileProjectPath -Root $engineFull `
-        -Path ([string]$profile.Data.compliance.system_prompt) `
-        -Location 'compliance.system_prompt' -Kind File
-    if ((Get-ProfileSha256 $agentPromptFull) -cne (Get-ProfileSha256 $profilePromptFull)) {
-        throw ("Workspace agent prompt does not match the selected profile: {0}" -f
-            $script:AutoNormoKontrolAgentPrompt)
-    }
+    # R1/agent-contract: new copies the profile prompt as a starting point, but
+    # the local file is an intentional workspace-owned override. It must exist
+    # and stay inside the workspace; users may adapt it without editing engine.
+    [void](Resolve-WorkspaceOwnedPath `
+        $workspaceFull $script:AutoNormoKontrolAgentPrompt File)
 
     # The profile only declares these workspace-owned paths. Resolve every
     # concrete input and output here, against the selected project root.
@@ -323,75 +317,17 @@ function New-AutoNormoKontrolWorkspace {
         Copy-Item -LiteralPath $profilePrompt `
             -Destination (Join-Path $staging $script:AutoNormoKontrolAgentPrompt) -Force
 
-        $launcher = @'
-@echo off
-setlocal
-if not exist "%~dp0..\..\AutoNormoKontrol.cmd" (
-  echo ERR AutoNormoKontrol engine was not found two directories above this workspace.
-  echo Keep the project inside AutoNormoKontrol\Workspaces or use the central launcher.
-  exit /b 2
-)
-call "%~dp0..\..\AutoNormoKontrol.cmd" -WorkspaceRoot "%~dp0." %*
-exit /b %ERRORLEVEL%
-'@
-        [System.IO.File]::WriteAllText(
-            (Join-Path $staging 'AutoNormoKontrol.cmd'),
-            $launcher.TrimStart(),
-            (New-Object System.Text.UTF8Encoding($false))
-        )
-
-        # R1/agent-contract: this launcher contains no model, credentials or
-        # prompt text. Gemini discovers the profile-specific GEMINI.md inside
-        # the concrete workspace and receives any optional CLI arguments as-is.
-        $geminiLauncher = @'
-@echo off
-setlocal EnableExtensions DisableDelayedExpansion
-cd /d "%~dp0"
-
-rem Lightweight workspace check only.
-if not exist "%~dp0project.yaml" (
-  echo ERR project.yaml was not found.
-  exit /b 2
-)
-
-if not exist "%~dp0AGENTS.md" (
-  echo ERR AGENTS.md was not found.
-  exit /b 2
-)
-
-if not exist "%~dp0guide\profile-system-prompt.md" (
-  echo ERR guide\profile-system-prompt.md was not found.
-  exit /b 2
-)
-
-rem Find the global Gemini CLI, excluding this launcher.
-set "GEMINI_CLI="
-
-for /f "delims=" %%G in ('where.exe gemini.cmd 2^>nul') do (
-  if /I not "%%~fG"=="%~f0" (
-    if not defined GEMINI_CLI set "GEMINI_CLI=%%~fG"
-  )
-)
-
-if not defined GEMINI_CLI (
-  for /f "delims=" %%G in ('where.exe gemini.exe 2^>nul') do (
-    if not defined GEMINI_CLI set "GEMINI_CLI=%%~fG"
-  )
-)
-
-if not defined GEMINI_CLI (
-  echo ERR Gemini CLI was not found in PATH.
-  exit /b 127
-)
-
-call "%GEMINI_CLI%" %*
-exit /b %ERRORLEVEL%
-'@
-        [System.IO.File]::WriteAllText(
-            (Join-Path $staging $script:AutoNormoKontrolGeminiLauncher),
-            $geminiLauncher.TrimStart(),
-            (New-Object System.Text.UTF8Encoding($false))
-        )
+        # R1/agent-contract: launchers are engine resources, not executable
+        # source embedded in PowerShell or duplicated by every profile starter.
+        foreach ($launcherEntry in @(
+            @($script:AutoNormoKontrolWorkspaceLauncherTemplate, 'AutoNormoKontrol.cmd'),
+            @($script:AutoNormoKontrolGeminiLauncherTemplate, $script:AutoNormoKontrolGeminiLauncher)
+        )) {
+            $launcherSource = Resolve-ProfileProjectPath -Root $engineFull `
+                -Path ([string]$launcherEntry[0]) -Location 'workspace.launcher' -Kind File
+            Copy-Item -LiteralPath $launcherSource `
+                -Destination (Join-Path $staging ([string]$launcherEntry[1])) -Force
+        }
 
         $engineVersion = Get-AutoNormoKontrolEngineVersion -EngineRoot $engineFull
         $contentPaths = @(ConvertTo-ProfileStringArray -Value $profileData.starter.content `
