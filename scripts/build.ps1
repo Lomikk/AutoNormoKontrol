@@ -150,6 +150,17 @@ try {
         "--metadata=content-hash:$contentHash",
         "--template=$templatePath"
     )
+    # R4/shared-requirements: the trusted engine interpreter executes only
+    # declarative structure data compiled from requirements.json. Profiles
+    # cannot supply a script path through document metadata.
+    $gateFilterPath = Resolve-ProfileProjectPath -Root $engineRoot `
+        -Path 'resources/filters/requirements-gates.lua' `
+        -Location 'engine.requirements-gates-filter' -Kind File
+    $structureFilterPath = Resolve-ProfileProjectPath -Root $engineRoot `
+        -Path 'resources/filters/requirements-structure.lua' `
+        -Location 'engine.requirements-structure-filter' -Kind File
+    $pandocArguments += "--lua-filter=$gateFilterPath"
+    $pandocArguments += "--lua-filter=$structureFilterPath"
     foreach ($filter in @($config.render.lua_filters)) {
         $filterPath = Resolve-ProfileProjectPath -Root $engineRoot -Path ([string]$filter) `
             -Location 'render.lua_filters' -Kind File

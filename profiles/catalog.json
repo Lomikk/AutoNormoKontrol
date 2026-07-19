@@ -12,6 +12,12 @@
                          "name":  "ЮУрГУ — научная статья по практике",
                          "manifest":  "profiles/susu-practice-article-v1/profile.yaml",
                          "status":  "experimental"
+                     },
+                     {
+                         "id":  "susu-referat-v1",
+                         "name":  "ЮУрГУ — учебный реферат по СТО 17–2008",
+                         "manifest":  "profiles/susu-referat-v1/profile.yaml",
+                         "status":  "experimental"
                      }
                  ]
 }

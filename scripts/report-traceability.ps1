@@ -150,7 +150,7 @@ try {
         }
         $source = @($contract.inventory.document.entries | Where-Object id -eq $requirement.id)[0]
         $sourceClause = if ($null -ne $source) {
-            [string]$source.source.clause
+            [string]$source.clause
         }
         else { [string]$requirement.origin.locator }
         $summary = if ($null -ne $source) {
@@ -207,12 +207,14 @@ try {
     $markdown.Add('')
     $markdown.Add("Profile: ``$($profile.ProfileId)``.")
     $markdown.Add('')
-    $markdown.Add('| ID | Disposition | Verification | Status |')
-    $markdown.Add('|---|---|---|---|')
+    $markdown.Add('| ID | Source | Disposition | Verification | Status |')
+    $markdown.Add('|---|---|---|---|---|')
     foreach ($item in $results) {
         $kinds = @($item.verification | ForEach-Object kind | Sort-Object -Unique) -join ', '
-        $markdown.Add(('| {0} | {1} | {2} | {3} |' -f
+        $sourceLocation = [string]$item.source_clause
+        $markdown.Add(('| {0} | {1} | {2} | {3} | {4} |' -f
             (Escape-TraceMarkdown $item.id),
+            (Escape-TraceMarkdown $sourceLocation),
             (Escape-TraceMarkdown $item.disposition),
             (Escape-TraceMarkdown $kinds),
             (Escape-TraceMarkdown $item.status)))

@@ -54,6 +54,8 @@ $styleSourcePath = [string]@($profileConfig.render.style_files)[0]
 $postflightSourcePath = [string]$profileConfig.render.postflight
 $validatorPath = Join-Path $root $validatorSourcePath
 $rendererPath = Join-Path $root $rendererSourcePath
+$gateFilterPath = Join-Path $root 'resources/filters/requirements-gates.lua'
+$structureFilterPath = Join-Path $root 'resources/filters/requirements-structure.lua'
 $testBuild = Join-Path $root 'build/compliance-tests'
 New-Item -ItemType Directory -Force -Path $testBuild | Out-Null
 $requirementContract = Get-AutoNormoKontrolRequirementContract `
@@ -83,6 +85,8 @@ function Invoke-Validator {
         '--to=native',
         "--metadata-file=$reviewInventoryPath",
         "--metadata=active-profile-id:$activeProfileId",
+        "--lua-filter=$gateFilterPath",
+        "--lua-filter=$structureFilterPath",
         "--lua-filter=$validatorPath",
         "--output=$OutputPath"
     )
@@ -109,6 +113,8 @@ function Invoke-Renderer {
         '--to=latex',
         "--metadata-file=$reviewInventoryPath",
         "--metadata=active-profile-id:$activeProfileId",
+        "--lua-filter=$gateFilterPath",
+        "--lua-filter=$structureFilterPath",
         "--lua-filter=$validatorPath",
         "--lua-filter=$rendererPath",
         "--output=$OutputPath"

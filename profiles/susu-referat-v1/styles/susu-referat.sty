@@ -1,0 +1,112 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{susu-referat}[2026/07/19 SUSU referat profile]
+
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+\RequirePackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+\newfontfamily\cyrillicfonttt{Courier New}
+
+% STO17-4.3.1.1, STO17-4.3.1.2: base options of the standard are used until
+% a department explicitly selects the permitted 1.5 alternatives.
+\RequirePackage[
+  a4paper,top=20mm,bottom=26mm,left=25mm,right=10mm,
+  headheight=17pt,headsep=0pt,footskip=6mm
+]{geometry}
+\RequirePackage{setspace}
+\singlespacing
+\AtBeginDocument{\fontsize{14pt}{17pt}\selectfont}
+\setlength{\parindent}{0.7cm}
+\setlength{\parskip}{0pt}
+\RequirePackage{microtype}
+\microtypesetup{protrusion=false}
+\setlength{\emergencystretch}{2em}
+
+% STO17-4.3.3.1, STO17-4.3.3.2.
+\RequirePackage{fancyhdr}
+\fancypagestyle{susuReferat}{%
+  \fancyhf{}%
+  \fancyfootoffset[L]{25mm}%
+  \fancyfootoffset[R]{10mm}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+\makeatletter
+\newcommand{\SUSUReferatFrontMatter}{\pagestyle{empty}\let\ps@plain\ps@empty}
+\newcommand{\SUSUReferatMainMatter}{%
+  \clearpage\let\ps@plain\ps@susuReferat\pagestyle{susuReferat}}
+\makeatother
+
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+
+% STO17-4.3.2.2--STO17-4.3.2.9.
+\RequirePackage{titlesec}
+\RequirePackage{needspace}
+\RequirePackage{etoolbox}
+\titleformat{\section}[block]
+  {\normalfont\bfseries\fontsize{14pt}{17pt}\selectfont\hyphenpenalty=10000}
+  {\thesection}{0.6em}{\MakeUppercase}
+\titleformat{name=\section,numberless}[block]
+  {\normalfont\bfseries\filcenter\fontsize{14pt}{17pt}\selectfont\hyphenpenalty=10000}
+  {}{0pt}{\MakeUppercase}
+\titleformat{\subsection}[block]
+  {\normalfont\bfseries\fontsize{14pt}{17pt}\selectfont\hyphenpenalty=10000}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}[block]
+  {\normalfont\itshape\fontsize{14pt}{17pt}\selectfont\hyphenpenalty=10000}
+  {\thesubsubsection}{0.6em}{}
+\titlespacing*{\section}{\parindent}{\baselineskip}{\baselineskip}
+\titlespacing*{\subsection}{\parindent}{\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsubsection}{\parindent}{0.5\baselineskip}{0.25\baselineskip}
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace{8\baselineskip}}{}{}
+\pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\RequirePackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\bfseries\fontsize{14pt}{17pt}\selectfont}
+\renewcommand{\cftaftertoctitle}{}
+\renewcommand{\cftsecfont}{\normalfont}
+\renewcommand{\cftsecpagefont}{\normalfont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforesecskip}{0pt}
+
+\RequirePackage{enumitem}
+\setlist{nosep,leftmargin=\parindent,labelsep=0.5em}
+\setlist[itemize,1]{label=\textendash}
+\setlist[enumerate,1]{label=\arabic*)}
+
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\floatplacement{figure}{H}
+\RequirePackage{caption}
+\captionsetup[figure]{name=Рисунок,labelsep=endash,justification=centering,
+  singlelinecheck=false,position=bottom,font=normalsize}
+\captionsetup[table]{name=Таблица,labelsep=endash,justification=raggedright,
+  singlelinecheck=false,position=top,font=normalsize}
+\RequirePackage{longtable,booktabs,array}
+
+\RequirePackage{amsmath}
+\RequirePackage{unicode-math}
+\setmathfont{Latin Modern Math}
+\setlength{\abovedisplayskip}{\baselineskip}
+\setlength{\belowdisplayskip}{\baselineskip}
+
+% STO17-4.3.13.2--STO17-4.3.13.6: profile-owned appendix wrapper.
+\newenvironment{SUSUReferatAppendix}[3]{%
+  \clearpage
+  \phantomsection
+  \addcontentsline{toc}{section}{ПРИЛОЖЕНИЕ #1. #2}%
+  \begin{center}\textbf{ПРИЛОЖЕНИЕ #1}\\#2\end{center}%
+  \label{#3}%
+}{\par}

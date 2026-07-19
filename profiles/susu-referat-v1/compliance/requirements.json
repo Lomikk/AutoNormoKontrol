@@ -1,0 +1,1924 @@
+{
+  "schema_version": 2,
+  "profile_id": "susu-referat-v1",
+  "requirements": [
+    {
+      "id": "STO17-1",
+      "source_ref": "STO17-1",
+      "disposition": "formal",
+      "scope": "profile-identity",
+      "verification": [],
+      "notes": "Область применения обеспечивается выбором профиля учебного реферата; отдельное внешнее решение не требуется."
+    },
+    {
+      "id": "STO17-2",
+      "source_ref": "STO17-2",
+      "disposition": "formal",
+      "scope": "normative-reference-catalog",
+      "verification": [],
+      "notes": "Перечень нормативных ссылок; конкретные обязанности зарегистрированы в дочерних пунктах."
+    },
+    {
+      "id": "STO17-3",
+      "source_ref": "STO17-3",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.1",
+      "source_ref": "STO17-3.1",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.2",
+      "source_ref": "STO17-3.2",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.3",
+      "source_ref": "STO17-3.3",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.4",
+      "source_ref": "STO17-3.4",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.5",
+      "source_ref": "STO17-3.5",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.6",
+      "source_ref": "STO17-3.6",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.7",
+      "source_ref": "STO17-3.7",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.8",
+      "source_ref": "STO17-3.8",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.9",
+      "source_ref": "STO17-3.9",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.10",
+      "source_ref": "STO17-3.10",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.11",
+      "source_ref": "STO17-3.11",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.12",
+      "source_ref": "STO17-3.12",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-3.13",
+      "source_ref": "STO17-3.13",
+      "disposition": "formal",
+      "scope": "inventory-definition",
+      "verification": [],
+      "notes": "Каноническая запись типа definition; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4",
+      "source_ref": "STO17-4",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.1",
+      "source_ref": "STO17-4.1",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.1.1",
+      "source_ref": "STO17-4.1.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.1",
+          "question": "Подтвердите по всему применимому содержанию: Функции учебного реферата: обобщение информации, представление содержания первичного произведения и предоставление сведений о нём.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Функции реферата требуют содержательной оценки."
+    },
+    {
+      "id": "STO17-4.1.2",
+      "source_ref": "STO17-4.1.2",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.2",
+          "question": "Подтвердите по всему применимому содержанию: Содержание реферата включает информацию из первичного источника, раскрывает тему и сохраняет логическую целостность изложения.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Полнота, раскрытие темы и логика зависят от содержания."
+    },
+    {
+      "id": "STO17-4.1.3",
+      "source_ref": "STO17-4.1.3",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.3",
+          "question": "Подтвердите по всему применимому содержанию: Реферат начинается с существа работы; лишние вводные фразы, несущественные исторические справки и общеизвестные положения не приводятся.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Существенность вводных фраз оценивается по смыслу."
+    },
+    {
+      "id": "STO17-4.1.4",
+      "source_ref": "STO17-4.1.4",
+      "disposition": "conditional",
+      "scope": "when-source-describes-new-or-significant-methods-or-experimental-work",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.4",
+          "question": "Если условие 'when-source-describes-new-or-significant-methods-or-experimental-work' выполняется, подтвердите: Описание методов приводится для новых или особо значимых методов; для экспериментальных работ указываются источники данных и их обработка.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при описании новых или значимых методов и экспериментов."
+    },
+    {
+      "id": "STO17-4.1.5",
+      "source_ref": "STO17-4.1.5",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.5",
+          "question": "Подтвердите по всему применимому содержанию: В реферате приводятся основные результаты и сведения о характере числовых результатов, точности, надёжности и достоверности.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Основные результаты требуются всегда; сведения о числовых результатах оцениваются только когда такие результаты присутствуют."
+    },
+    {
+      "id": "STO17-4.1.6",
+      "source_ref": "STO17-4.1.6",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Разрешение выбрать степень детализации, а не самостоятельная обязанность."
+    },
+    {
+      "id": "STO17-4.1.7",
+      "source_ref": "STO17-4.1.7",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.7",
+          "question": "Подтвердите по всему применимому содержанию: Материал реферата излагается кратко и точно, с синтаксическими конструкциями научных и технических документов.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Краткость и научный язык требуют смыслового аудита."
+    },
+    {
+      "id": "STO17-4.1.8",
+      "source_ref": "STO17-4.1.8",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.1.8",
+          "question": "Подтвердите по всему применимому содержанию: Используется стандартизованная терминология; непривычные термины и символы разъясняются при первом упоминании, сокращения должны быть понятны из контекста.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Терминологическая уместность и понятность контекста семантичны."
+    },
+    {
+      "id": "STO17-4.2",
+      "source_ref": "STO17-4.2",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.2.1",
+      "source_ref": "STO17-4.2.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "programmatic",
+          "check": "document.required-elements",
+          "parameters": {
+        "elements": [
+          "introduction",
+          "main-matter",
+          "conclusion",
+              "bibliography"
+            ]
+          },
+          "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "title-page",
+        "text": "РЕФЕРАТ",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "abstract",
+        "text": "АННОТАЦИЯ",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "contents",
+        "text": "ОГЛАВЛЕНИЕ",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "introduction",
+        "text": "ВВЕДЕНИЕ",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "conclusion",
+        "text": "ЗАКЛЮЧЕНИЕ",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+    {
+      "kind": "programmatic",
+      "check": "document.visible-element",
+      "parameters": {
+        "element": "bibliography",
+        "text": "БИБЛИОГРАФИЧЕСКИЙ СПИСОК",
+        "required": true
+      },
+      "diagnostic": "STO17-4.2.1/MISSING_REQUIRED_ELEMENT",
+      "severity": "error"
+    },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "title-page",
+            "then": "abstract"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "abstract",
+            "then": "contents"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "contents",
+            "then": "introduction"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "introduction",
+            "then": "main-matter"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "main-matter",
+            "then": "conclusion"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "conclusion",
+            "then": "bibliography"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "introduction",
+            "then": "notation"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "notation",
+            "then": "main-matter"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        },
+        {
+          "kind": "programmatic",
+          "check": "document.element-order",
+          "parameters": {
+            "first": "bibliography",
+            "then": "appendices"
+          },
+          "diagnostic": "STO17-4.2.1/ELEMENT_ORDER",
+          "severity": "error"
+        }
+      ],
+      "notes": "Обязательность восстановлена по выделению оригинального стандарта; обозначения/сокращения и приложения остаются необязательными, но их положение проверяется при наличии.",
+      "diagnostics": {
+        "MISSING_REQUIRED_ELEMENT": {
+          "message": "В реферате отсутствует обязательный структурный элемент",
+          "hint": "Добавьте элемент в project.yaml: document.content и соответствующий Markdown-файл либо восстановите генерируемую профильную часть"
+        },
+        "ELEMENT_ORDER": {
+          "message": "Нарушен обязательный порядок структурных элементов реферата",
+          "hint": "Исправьте порядок элементов в project.yaml: document.content; необязательные обозначения размещайте перед основной частью, приложения — после библиографии"
+        }
+      },
+      "coverage": {
+        "implementation_markers": [
+          "STO17-4.2.1"
+        ],
+        "test_markers": [
+          "STO17-4.2.1"
+        ]
+      }
+    },
+    {
+      "id": "STO17-4.2.2",
+      "source_ref": "STO17-4.2.2",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.2.2.1",
+      "source_ref": "STO17-4.2.2.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.1/FIELDS",
+          "question": "Подтвердите по всему применимому содержанию: Титульный лист является первой страницей и содержит сведения об организациях, теме, дисциплине, руководителе, студенте, месте и дате составления.",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO17-4.2.2.1/DATA",
+          "required_evidence": "Подтверждённые пользователем официальные наименования организации, факультета, кафедры, дисциплины, ФИО, группа, место и дата составления реферата."
+        }
+      ],
+      "notes": "Структура титула проверяема, официальные реквизиты и подписи требуют внешнего подтверждения."
+    },
+    {
+      "id": "STO17-4.2.2.2",
+      "source_ref": "STO17-4.2.2.2",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.2",
+          "question": "Подтвердите по всему применимому содержанию: Аннотация содержит сведения об объёме и элементах реферата, исполнителе, цели и задачах, а также краткую характеристику содержания.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Наличие блоков структурно проверяемо, их содержание — семантически."
+    },
+    {
+      "id": "STO17-4.2.2.3",
+      "source_ref": "STO17-4.2.2.3",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.3",
+          "question": "Подтвердите по всему применимому содержанию: Оглавление включает введение, наименования структурных частей, заключение, библиографический список и приложения с начальными номерами страниц.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Состав и страницы оглавления получаются из структуры документа."
+    },
+    {
+      "id": "STO17-4.2.2.4",
+      "source_ref": "STO17-4.2.2.4",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.4",
+          "question": "Подтвердите по всему применимому содержанию: Введение содержит оценку современного состояния вопроса, цели и задачи, обоснование источников, историю вопроса или значимость темы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Содержание введения требует смысловой оценки."
+    },
+    {
+      "id": "STO17-4.2.2.5",
+      "source_ref": "STO17-4.2.2.5",
+      "disposition": "conditional",
+      "scope": "when-document-uses-more-than-five-designations-or-abbreviations",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.5",
+          "question": "Если условие 'when-document-uses-more-than-five-designations-or-abbreviations' выполняется, подтвердите: При значительном количестве обозначений и сокращений приводится соответствующий раздел с алфавитным перечнем и пояснениями.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Условие зависит от числа обозначений и сокращений."
+    },
+    {
+      "id": "STO17-4.2.2.6",
+      "source_ref": "STO17-4.2.2.6",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.6",
+          "question": "Подтвердите по всему применимому содержанию: Основная часть может состоять из тематически связанных разделов с итогами и выводами; в ней приводятся данные по сущности темы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Тематическая связь и выводы оцениваются по содержанию."
+    },
+    {
+      "id": "STO17-4.2.2.7",
+      "source_ref": "STO17-4.2.2.7",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.7",
+          "question": "Подтвердите по всему применимому содержанию: Заключение содержит выводы по теме, оценки полноты решения задач и достижения цели, а также рекомендации по использованию результатов.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Полнота выводов, оценок и рекомендаций семантична."
+    },
+    {
+      "id": "STO17-4.2.2.8",
+      "source_ref": "STO17-4.2.2.8",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.8",
+          "question": "Подтвердите по всему применимому содержанию: Библиографический список содержит использованные источники, включает не менее трёх источников и учитывает современность изданий.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Минимальное число проверяемо, использование и современность источников требуют анализа."
+    },
+    {
+      "id": "STO17-4.2.2.9",
+      "source_ref": "STO17-4.2.2.9",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-included",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.2.2.9",
+          "question": "Если условие 'when-appendices-are-included' выполняется, подтвердите: Приложения включаются при необходимости и могут содержать связанные с темой материалы, не вошедшие в основную часть.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Приложения включаются только при необходимости."
+    },
+    {
+      "id": "STO17-4.3",
+      "source_ref": "STO17-4.3",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.1",
+      "source_ref": "STO17-4.3.1",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.1.1",
+      "source_ref": "STO17-4.3.1.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.1.1",
+          "question": "Подтвердите по всему применимому содержанию: Реферат оформляется по настоящему стандарту на листах белой бумаги формата А4.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Формат листа измерим в PDF."
+    },
+    {
+      "id": "STO17-4.3.1.2",
+      "source_ref": "STO17-4.3.1.2",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.1.2/RENDER",
+          "question": "Подтвердите по всему применимому содержанию: Установлены требования к набору, абзацному отступу, полям, качеству текста, исправлениям, именам собственным, висячим строкам и сокращениям.",
+          "evidence_required": true
+        },
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.1.2/BACKEND",
+          "required_evidence": "Письменное решение кафедры, преподавателя или нормоконтролёра о допустимости PDF, собранного LuaLaTeX, вместо прямо указанного Microsoft Word."
+        }
+      ],
+      "notes": "Геометрия проверяема, визуальное качество и кафедральный выбор интервала требуют иных доказательств."
+    },
+    {
+      "id": "STO17-4.3.2",
+      "source_ref": "STO17-4.3.2",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.2.1",
+      "source_ref": "STO17-4.3.2.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.1",
+          "question": "Подтвердите по всему применимому содержанию: Основная часть работы делится на части, разделы, главы, подразделы, пункты и параграфы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Основная часть обязательна и должна иметь осмысленное деление; фактическая глубина структуры зависит от темы."
+    },
+    {
+      "id": "STO17-4.3.2.2",
+      "source_ref": "STO17-4.3.2.2",
+      "disposition": "conditional",
+      "scope": "when-numbered-structural-elements-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.2",
+          "question": "Если условие 'when-numbered-structural-elements-are-present' выполняется, подтвердите: Разделы, подразделы, пункты и подпункты нумеруются и оформляются арабскими цифрами с абзацного отступа.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при нумеруемых элементах."
+    },
+    {
+      "id": "STO17-4.3.2.3",
+      "source_ref": "STO17-4.3.2.3",
+      "disposition": "conditional",
+      "scope": "when-subsections-points-or-subpoints-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.3",
+          "question": "Если условие 'when-subsections-points-or-subpoints-are-present' выполняется, подтвердите: Установлена составная нумерация подразделов, пунктов и подпунктов; точка после номера не ставится.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при подразделах, пунктах или подпунктах."
+    },
+    {
+      "id": "STO17-4.3.2.4",
+      "source_ref": "STO17-4.3.2.4",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Условие введения дробных структурных уровней, а не обязательный элемент."
+    },
+    {
+      "id": "STO17-4.3.2.5",
+      "source_ref": "STO17-4.3.2.5",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.5",
+          "question": "Подтвердите по всему применимому содержанию: Разделы и подразделы имеют точные и краткие заголовки; установлены правила нумерации и оформления заголовков разделов и выводов.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Наличие и формат заголовков проверяемы, точность отражения содержания — семантична."
+    },
+    {
+      "id": "STO17-4.3.2.6",
+      "source_ref": "STO17-4.3.2.6",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.6",
+          "question": "Подтвердите по всему применимому содержанию: Наименования структурных элементов служат заголовками первого уровня; установлено оформление заголовков разных уровней.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Регистр и стиль уровней задаются рендерером."
+    },
+    {
+      "id": "STO17-4.3.2.7",
+      "source_ref": "STO17-4.3.2.7",
+      "disposition": "conditional",
+      "scope": "when-lower-level-headings-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.7",
+          "question": "Если условие 'when-lower-level-headings-are-present' выполняется, подтвердите: Заголовки подразделов, пунктов и подпунктов печатаются с абзацного отступа и прописной буквы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при наличии соответствующих уровней."
+    },
+    {
+      "id": "STO17-4.3.2.8",
+      "source_ref": "STO17-4.3.2.8",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.8",
+          "question": "Подтвердите по всему применимому содержанию: Установлены правила состава, переноса, знаков препинания и размещения заголовков.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Часть правил проверяема по тексту и PDF, запрет разрыва зависит от вёрстки."
+    },
+    {
+      "id": "STO17-4.3.2.9",
+      "source_ref": "STO17-4.3.2.9",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.9",
+          "question": "Подтвердите по всему применимому содержанию: После заголовка в конце страницы размещается не менее трёх строк текста.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Количество строк после заголовка измеримо в PDF."
+    },
+    {
+      "id": "STO17-4.3.2.10",
+      "source_ref": "STO17-4.3.2.10",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Допустимый способ оформления, а не обязательный выбор."
+    },
+    {
+      "id": "STO17-4.3.2.11",
+      "source_ref": "STO17-4.3.2.11",
+      "disposition": "conditional",
+      "scope": "when-lists-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.2.11",
+          "question": "Если условие 'when-lists-are-present' выполняется, подтвердите: Установлены способы оформления перечислений внутри подразделов, пунктов и подпунктов.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при наличии перечислений."
+    },
+    {
+      "id": "STO17-4.3.3",
+      "source_ref": "STO17-4.3.3",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.3.1",
+      "source_ref": "STO17-4.3.3.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.3.1",
+          "question": "Подтвердите по всему применимому содержанию: Страницы нумеруются арабскими цифрами сквозной нумерацией; номер ставится в центре нижней части листа без точки.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Последовательность и видимость номера страниц проверяемы по PDF."
+    },
+    {
+      "id": "STO17-4.3.3.2",
+      "source_ref": "STO17-4.3.3.2",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.3.2",
+          "question": "Подтвердите по всему применимому содержанию: Титульный лист включается в общую нумерацию страниц реферата.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Включение титула в счётчик проверяемо по рендеру."
+    },
+    {
+      "id": "STO17-4.3.4",
+      "source_ref": "STO17-4.3.4",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.4.1",
+      "source_ref": "STO17-4.3.4.1",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.1",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Иллюстрации располагаются после первого упоминания или на следующей странице; на все иллюстрации даются ссылки.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при иллюстрациях; ссылки и относительный порядок анализируемы по AST."
+    },
+    {
+      "id": "STO17-4.3.4.2",
+      "source_ref": "STO17-4.3.4.2",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.4.2/CONFORMANCE",
+          "required_evidence": "При наличии соответствующих иллюстраций: заключение специалиста или подтверждение проверяющего о соблюдении ссылочных стандартов их оформления."
+        }
+      ],
+      "notes": "Ссылочные ГОСТ для конкретного типа графики требуют внешней предметной оценки."
+    },
+    {
+      "id": "STO17-4.3.4.3",
+      "source_ref": "STO17-4.3.4.3",
+      "disposition": "formal",
+      "scope": "printed-copy-only",
+      "verification": [],
+      "notes": "Пункт относится к физическому монтажу фотоснимков и не является проверкой канонического цифрового PDF."
+    },
+    {
+      "id": "STO17-4.3.4.4",
+      "source_ref": "STO17-4.3.4.4",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.4",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Иллюстрации, кроме приложений, нумеруются арабскими цифрами сквозной нумерацией; установлено размещение слова «Рисунок» и наименования.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при иллюстрациях; нумерация и подпись формализуемы."
+    },
+    {
+      "id": "STO17-4.3.4.5",
+      "source_ref": "STO17-4.3.4.5",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Разрешённая альтернативная схема нумерации."
+    },
+    {
+      "id": "STO17-4.3.4.6",
+      "source_ref": "STO17-4.3.4.6",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.6",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Иллюстрации могут иметь наименование и пояснительные данные; установлено размещение подписи.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при иллюстрациях с наименованием или пояснительными данными."
+    },
+    {
+      "id": "STO17-4.3.4.7",
+      "source_ref": "STO17-4.3.4.7",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.7",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Иллюстрации каждого приложения имеют отдельную нумерацию с обозначением приложения.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при иллюстрациях в приложениях."
+    },
+    {
+      "id": "STO17-4.3.4.8",
+      "source_ref": "STO17-4.3.4.8",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.8",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Установлена форма ссылок на иллюстрации при сквозной и разделовой нумерации.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при ссылках на иллюстрации."
+    },
+    {
+      "id": "STO17-4.3.4.9",
+      "source_ref": "STO17-4.3.4.9",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.4.9/CONFORMANCE",
+          "required_evidence": "При наличии функциональных диаграмм: подтверждение соответствия применимому ссылочному стандарту."
+        }
+      ],
+      "notes": "Действует для указанного типа диаграмм и отсылает к внешнему стандарту."
+    },
+    {
+      "id": "STO17-4.3.4.10",
+      "source_ref": "STO17-4.3.4.10",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.10",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Значения переменных откладываются на осях координат в линейном или нелинейном масштабе.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для диаграмм; выбор масштаба зависит от данных."
+    },
+    {
+      "id": "STO17-4.3.4.11",
+      "source_ref": "STO17-4.3.4.11",
+      "disposition": "conditional",
+      "scope": "when-figures-or-the-specified-illustration-subtype-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.4.11",
+          "question": "Если условие 'when-figures-or-the-specified-illustration-subtype-are-present' выполняется, подтвердите: Установлено направление откладывания величин в прямоугольной и полярной системах координат.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для диаграмм и зависит от типа системы координат."
+    },
+    {
+      "id": "STO17-4.3.5",
+      "source_ref": "STO17-4.3.5",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.5.1",
+      "source_ref": "STO17-4.3.5.1",
+      "disposition": "conditional",
+      "scope": "when-schemes-of-the-specified-type-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.5.1/CONFORMANCE",
+          "required_evidence": "При наличии технических схем: подтверждение соответствия применимому ссылочному стандарту."
+        }
+      ],
+      "notes": "Действует для схем и отсылает к внешнему стандарту."
+    },
+    {
+      "id": "STO17-4.3.5.2",
+      "source_ref": "STO17-4.3.5.2",
+      "disposition": "conditional",
+      "scope": "when-schemes-of-the-specified-type-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.5.2/CONFORMANCE",
+          "required_evidence": "При наличии кинематических схем: подтверждение соответствия применимому ссылочному стандарту."
+        }
+      ],
+      "notes": "Действует для кинематических схем."
+    },
+    {
+      "id": "STO17-4.3.5.3",
+      "source_ref": "STO17-4.3.5.3",
+      "disposition": "conditional",
+      "scope": "when-schemes-of-the-specified-type-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.5.3/CONFORMANCE",
+          "required_evidence": "При наличии гидравлических или пневматических схем: подтверждение соответствия применимому ссылочному стандарту."
+        }
+      ],
+      "notes": "Действует для гидравлических и пневматических схем."
+    },
+    {
+      "id": "STO17-4.3.5.4",
+      "source_ref": "STO17-4.3.5.4",
+      "disposition": "conditional",
+      "scope": "when-schemes-of-the-specified-type-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.5.4/CONFORMANCE",
+          "required_evidence": "При наличии электрических схем: подтверждение соответствия применимому ссылочному стандарту."
+        }
+      ],
+      "notes": "Действует для электрических схем и требует предметного стандарта."
+    },
+    {
+      "id": "STO17-4.3.6",
+      "source_ref": "STO17-4.3.6",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.6.1",
+      "source_ref": "STO17-4.3.6.1",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.1",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Таблицы применяются для наглядности; установлены правила названия и его размещения.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах; формат и смысл названия различаются."
+    },
+    {
+      "id": "STO17-4.3.6.2",
+      "source_ref": "STO17-4.3.6.2",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.2",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Таблица располагается непосредственно после первого упоминания или на следующей странице.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах."
+    },
+    {
+      "id": "STO17-4.3.6.3",
+      "source_ref": "STO17-4.3.6.3",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.3",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: На все таблицы в реферате даются ссылки с указанием номера.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах."
+    },
+    {
+      "id": "STO17-4.3.6.4",
+      "source_ref": "STO17-4.3.6.4",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.4",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Установлены правила переноса таблицы с большим количеством строк.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для переносимой таблицы."
+    },
+    {
+      "id": "STO17-4.3.6.5",
+      "source_ref": "STO17-4.3.6.5",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Формулировка «как правило» не даёт самостоятельного жёсткого критерия."
+    },
+    {
+      "id": "STO17-4.3.6.6",
+      "source_ref": "STO17-4.3.6.6",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.6",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Таблицы, кроме приложений, нумеруются арабскими цифрами сквозной нумерацией; допускается нумерация в пределах раздела.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах; допускает альтернативную разделовую нумерацию."
+    },
+    {
+      "id": "STO17-4.3.6.7",
+      "source_ref": "STO17-4.3.6.7",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.7",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Установлены правила написания заголовков и подзаголовков граф и строк таблицы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах."
+    },
+    {
+      "id": "STO17-4.3.6.8",
+      "source_ref": "STO17-4.3.6.8",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.8",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Установлены правила ограничения таблиц линиями и разделения головки таблицы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при таблицах; часть формулировки допускающая."
+    },
+    {
+      "id": "STO17-4.3.6.9",
+      "source_ref": "STO17-4.3.6.9",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.9",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Установлено размещение единиц измерения и числовых данных в графах таблицы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при числовых данных; смысл единиц зависит от предметной области."
+    },
+    {
+      "id": "STO17-4.3.6.10",
+      "source_ref": "STO17-4.3.6.10",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.10",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Слова, обозначающие пределы значений, помещаются в соответствующей части таблицы по установленным правилам.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при соответствующих словах в таблице."
+    },
+    {
+      "id": "STO17-4.3.6.11",
+      "source_ref": "STO17-4.3.6.11",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.11",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Числовые значения величин в одной графе имеют одинаковое число десятичных знаков при сопоставимой точности.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при сопоставимых числовых данных одной графы."
+    },
+    {
+      "id": "STO17-4.3.6.12",
+      "source_ref": "STO17-4.3.6.12",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Разрешённое уменьшение шрифта, а не обязанность."
+    },
+    {
+      "id": "STO17-4.3.6.13",
+      "source_ref": "STO17-4.3.6.13",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.13",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Установлено указание последовательных интервалов значений величин в таблицах.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при последовательных интервалах значений."
+    },
+    {
+      "id": "STO17-4.3.6.14",
+      "source_ref": "STO17-4.3.6.14",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.6.14",
+          "question": "Если условие 'when-tables-or-the-specified-table-content-are-present' выполняется, подтвердите: Числа в таблицах, содержащие более четырёх знаков, разделяются на классы по три цифры.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при числах более четырёх знаков."
+    },
+    {
+      "id": "STO17-4.3.6.15",
+      "source_ref": "STO17-4.3.6.15",
+      "disposition": "conditional",
+      "scope": "when-tables-or-the-specified-table-content-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.6.15/CONFORMANCE",
+          "required_evidence": "При наличии таблиц: подтверждение соответствия требованиям ссылочных стандартов [3,7], не покрытым собственными правилами СТО 17–2008."
+        }
+      ],
+      "notes": "Действует при таблицах и обобщает требования без собственного измеримого критерия."
+    },
+    {
+      "id": "STO17-4.3.7",
+      "source_ref": "STO17-4.3.7",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.7.1",
+      "source_ref": "STO17-4.3.7.1",
+      "disposition": "conditional",
+      "scope": "when-notes-are-present-or-needed",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.7.1",
+          "question": "Если условие 'when-notes-are-present-or-needed' выполняется, подтвердите: Установлено написание слова «Примечание» и оформление одного или нескольких примечаний.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при примечаниях."
+    },
+    {
+      "id": "STO17-4.3.7.2",
+      "source_ref": "STO17-4.3.7.2",
+      "disposition": "conditional",
+      "scope": "when-notes-are-present-or-needed",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.7.2",
+          "question": "Если условие 'when-notes-are-present-or-needed' выполняется, подтвердите: Примечания приводятся при необходимости пояснений или справочных данных к содержанию текста, таблицы или графического материала.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при примечаниях и зависит от содержания."
+    },
+    {
+      "id": "STO17-4.3.7.3",
+      "source_ref": "STO17-4.3.7.3",
+      "disposition": "conditional",
+      "scope": "when-notes-are-present-or-needed",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.7.3",
+          "question": "Если условие 'when-notes-are-present-or-needed' выполняется, подтвердите: Примечания помещаются непосредственно после текстового, графического материала или таблицы, к которым относятся.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при примечаниях."
+    },
+    {
+      "id": "STO17-4.3.8",
+      "source_ref": "STO17-4.3.8",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.8.1",
+      "source_ref": "STO17-4.3.8.1",
+      "disposition": "formal",
+      "scope": "recommended-equation-editor",
+      "verification": [],
+      "notes": "Microsoft Equation 3.0 указан как рекомендация, а не обязательный backend."
+    },
+    {
+      "id": "STO17-4.3.8.2",
+      "source_ref": "STO17-4.3.8.2",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.2",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Уравнения и формулы выделяются из текста в отдельную строку с необходимыми свободными строками.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при формулах и уравнениях."
+    },
+    {
+      "id": "STO17-4.3.8.3",
+      "source_ref": "STO17-4.3.8.3",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.3",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Длинная формула переносится после знака операции с повторением знака; при переносе на умножении применяется косой крест.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для длинных формул; допустимое место переноса зависит от математики."
+    },
+    {
+      "id": "STO17-4.3.8.4",
+      "source_ref": "STO17-4.3.8.4",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.4",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Пояснения символов и числовых коэффициентов приводятся непосредственно под формулой в порядке их появления.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при пояснениях к формулам."
+    },
+    {
+      "id": "STO17-4.3.8.5",
+      "source_ref": "STO17-4.3.8.5",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.5",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Формулы нумеруются сквозной арабской нумерацией в круглых скобках справа.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при нумеруемых формулах."
+    },
+    {
+      "id": "STO17-4.3.8.6",
+      "source_ref": "STO17-4.3.8.6",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.6",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Номер системы уравнений располагается напротив середины группы формул.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для систем уравнений."
+    },
+    {
+      "id": "STO17-4.3.8.7",
+      "source_ref": "STO17-4.3.8.7",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.7",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Установлены правила расшифровки новых условных обозначений после формулы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при новых обозначениях в формуле."
+    },
+    {
+      "id": "STO17-4.3.8.8",
+      "source_ref": "STO17-4.3.8.8",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.8",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Точка на средней линии является основным знаком умножения в перечисленных случаях.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при умножении; выбор знака зависит от математического контекста."
+    },
+    {
+      "id": "STO17-4.3.8.9",
+      "source_ref": "STO17-4.3.8.9",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.9",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Косой крест как знак умножения применяется в указанных случаях.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для перечисленных контекстов косого креста."
+    },
+    {
+      "id": "STO17-4.3.8.10",
+      "source_ref": "STO17-4.3.8.10",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.10",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Формулы в приложениях нумеруются отдельно в пределах каждого приложения с его обозначением.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для формул в приложениях."
+    },
+    {
+      "id": "STO17-4.3.8.11",
+      "source_ref": "STO17-4.3.8.11",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.11",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Ссылки в тексте на порядковые номера формул приводятся в скобках.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при ссылках на формулы."
+    },
+    {
+      "id": "STO17-4.3.8.12",
+      "source_ref": "STO17-4.3.8.12",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Разрешённая альтернативная нумерация формул."
+    },
+    {
+      "id": "STO17-4.3.8.13",
+      "source_ref": "STO17-4.3.8.13",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.13",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Математические уравнения излагаются по тем же правилам, что и формулы.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при математических уравнениях."
+    },
+    {
+      "id": "STO17-4.3.8.14",
+      "source_ref": "STO17-4.3.8.14",
+      "disposition": "formal",
+      "scope": "reference-or-permitted-alternative",
+      "verification": [],
+      "notes": "Разрешение на рукописное выполнение, а не обязанность цифрового профиля."
+    },
+    {
+      "id": "STO17-4.3.8.15",
+      "source_ref": "STO17-4.3.8.15",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.15",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Установлено начертание латинских, греческих и русских обозначений, а также векторных и скалярных произведений.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при соответствующих математических обозначениях."
+    },
+    {
+      "id": "STO17-4.3.8.16",
+      "source_ref": "STO17-4.3.8.16",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.16",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: В индексах из сокращений двух и более слов после каждого сокращения, кроме последнего, ставятся точка и пробел.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для многословных сокращённых индексов."
+    },
+    {
+      "id": "STO17-4.3.8.17",
+      "source_ref": "STO17-4.3.8.17",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.17",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Цифры, обозначения химических элементов, единицы измерения и математические функции набираются прямым шрифтом.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Базовое начертание формализуемо, классификация обозначений зависит от смысла."
+    },
+    {
+      "id": "STO17-4.3.8.18",
+      "source_ref": "STO17-4.3.8.18",
+      "disposition": "conditional",
+      "scope": "when-formulas-equations-or-the-specified-notation-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.8.18",
+          "question": "Если условие 'when-formulas-equations-or-the-specified-notation-are-present' выполняется, подтвердите: Обозначения в формулах, на рисунках и в основном тексте имеют идентичные начертание и размер.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при повторении обозначений между формулами, рисунками и текстом."
+    },
+    {
+      "id": "STO17-4.3.9",
+      "source_ref": "STO17-4.3.9",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.9.1",
+      "source_ref": "STO17-4.3.9.1",
+      "disposition": "conditional",
+      "scope": "when-citations-of-the-specified-kind-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.9.1",
+          "question": "Если условие 'when-citations-of-the-specified-kind-are-present' выполняется, подтвердите: Допускаются ссылки на документы, которые полностью и однозначно определяют требования и не затрудняют пользование документом.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при внешних ссылках; достаточность документа зависит от контекста."
+    },
+    {
+      "id": "STO17-4.3.9.2",
+      "source_ref": "STO17-4.3.9.2",
+      "disposition": "conditional",
+      "scope": "when-citations-of-the-specified-kind-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.9.2",
+          "question": "Если условие 'when-citations-of-the-specified-kind-are-present' выполняется, подтвердите: Ссылки приводятся на документ в целом, его разделы и приложения; перечислены исключения для подразделов, пунктов, таблиц и иллюстраций.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при ссылках на части документов."
+    },
+    {
+      "id": "STO17-4.3.9.3",
+      "source_ref": "STO17-4.3.9.3",
+      "disposition": "conditional",
+      "scope": "when-citations-of-the-specified-kind-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.9.3",
+          "question": "Если условие 'when-citations-of-the-specified-kind-are-present' выполняется, подтвердите: При ссылках на стандарты и технические условия указывают их обозначение; при определённых условиях год утверждения может не указываться.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при ссылках на стандарты и технические условия."
+    },
+    {
+      "id": "STO17-4.3.9.4",
+      "source_ref": "STO17-4.3.9.4",
+      "disposition": "conditional",
+      "scope": "when-citations-of-the-specified-kind-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.9.4",
+          "question": "Если условие 'when-citations-of-the-specified-kind-are-present' выполняется, подтвердите: Ссылки на использованные источники приводятся в квадратных скобках.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при ссылках на использованные источники."
+    },
+    {
+      "id": "STO17-4.3.10",
+      "source_ref": "STO17-4.3.10",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.10.1",
+      "source_ref": "STO17-4.3.10.1",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.10.1",
+          "question": "Подтвердите по всему применимому содержанию: Титульный лист содержит установленные реквизиты организаций, темы, дисциплины, руководителя, автора, подписей, города и года.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Структура титула проверяема, подписи и персональные реквизиты требуют внешнего подтверждения."
+    },
+    {
+      "id": "STO17-4.3.11",
+      "source_ref": "STO17-4.3.11",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.11.1",
+      "source_ref": "STO17-4.3.11.1",
+      "disposition": "conditional",
+      "scope": "when-designations-or-abbreviations-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.11.1",
+          "question": "Если условие 'when-designations-or-abbreviations-are-present' выполняется, подтвердите: Раздел «Обозначения и сокращения» содержит перечень используемых в реферате обозначений и сокращений.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при наличии раздела обозначений и сокращений."
+    },
+    {
+      "id": "STO17-4.3.11.2",
+      "source_ref": "STO17-4.3.11.2",
+      "disposition": "conditional",
+      "scope": "when-designations-or-abbreviations-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.11.2",
+          "question": "Если условие 'when-designations-or-abbreviations-are-present' выполняется, подтвердите: Обозначения и сокращения записываются в алфавитном порядке с расшифровкой и пояснениями.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при наличии перечня."
+    },
+    {
+      "id": "STO17-4.3.11.3",
+      "source_ref": "STO17-4.3.11.3",
+      "disposition": "conditional",
+      "scope": "when-designations-or-abbreviations-are-present",
+      "verification": [
+        {
+          "kind": "external",
+          "review_id": "STO17-4.3.11.3/CONFORMANCE",
+          "required_evidence": "При наличии русских сокращений: подтверждение их соответствия применимому ссылочному стандарту [5]."
+        }
+      ],
+      "notes": "Действует при сокращениях и отсылает к внешнему стандарту."
+    },
+    {
+      "id": "STO17-4.3.11.4",
+      "source_ref": "STO17-4.3.11.4",
+      "disposition": "conditional",
+      "scope": "when-designations-or-abbreviations-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.11.4",
+          "question": "Если условие 'when-designations-or-abbreviations-are-present' выполняется, подтвердите: Аббревиатуры, используемые непосредственно в тексте, расшифровываются при первом упоминании.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при аббревиатурах; распознавание аббревиатур и расшифровок требует языкового анализа."
+    },
+    {
+      "id": "STO17-4.3.12",
+      "source_ref": "STO17-4.3.12",
+      "disposition": "applicable",
+      "scope": "all-referats",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.12",
+          "question": "Подтвердите по всему применимому содержанию: Библиографический список: источники располагаются в порядке появления ссылок, нумеруются арабскими цифрами без точки и записываются с абзацного отступа.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Пункт задаёт самостоятельные правила порядка, нумерации и отступа библиографического списка."
+    },
+    {
+      "id": "STO17-4.3.13",
+      "source_ref": "STO17-4.3.13",
+      "disposition": "formal",
+      "scope": "inventory-group",
+      "verification": [],
+      "notes": "Каноническая запись типа group; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-4.3.13.1",
+      "source_ref": "STO17-4.3.13.1",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.1",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: На все приложения в тексте реферата даются ссылки; приложения располагаются в порядке ссылок.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при приложениях."
+    },
+    {
+      "id": "STO17-4.3.13.2",
+      "source_ref": "STO17-4.3.13.2",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.2",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: Каждое приложение начинается с новой страницы, имеет слово «ПРИЛОЖЕНИЕ» и заголовок по установленным правилам.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при приложениях."
+    },
+    {
+      "id": "STO17-4.3.13.3",
+      "source_ref": "STO17-4.3.13.3",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.3",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: Установлены правила обозначения приложений буквами русского или латинского алфавита либо цифрами.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при приложениях."
+    },
+    {
+      "id": "STO17-4.3.13.4",
+      "source_ref": "STO17-4.3.13.4",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.4",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: Текст каждого приложения может делиться на элементы с нумерацией в пределах приложения.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при структурированном приложении."
+    },
+    {
+      "id": "STO17-4.3.13.5",
+      "source_ref": "STO17-4.3.13.5",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.5",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: Приложения имеют общую с остальной частью документа сквозную нумерацию страниц; при необходимости приложение может иметь оглавление.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует при приложениях."
+    },
+    {
+      "id": "STO17-4.3.13.6",
+      "source_ref": "STO17-4.3.13.6",
+      "disposition": "conditional",
+      "scope": "when-appendices-are-present",
+      "verification": [
+        {
+          "kind": "semantic",
+          "review_id": "STO17-4.3.13.6",
+          "question": "Если условие 'when-appendices-are-present' выполняется, подтвердите: Приложениям или частям в виде самостоятельного документа присваивается обозначение как части документа с указанием порядкового номера.",
+          "evidence_required": true
+        }
+      ],
+      "notes": "Действует для приложения или части как самостоятельного документа."
+    },
+    {
+      "id": "STO17-A",
+      "source_ref": "STO17-A",
+      "disposition": "formal",
+      "scope": "inventory-example",
+      "verification": [],
+      "notes": "Каноническая запись типа example; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-B",
+      "source_ref": "STO17-B",
+      "disposition": "formal",
+      "scope": "inventory-example",
+      "verification": [],
+      "notes": "Каноническая запись типа example; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-V",
+      "source_ref": "STO17-V",
+      "disposition": "formal",
+      "scope": "inventory-example",
+      "verification": [],
+      "notes": "Каноническая запись типа example; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-G",
+      "source_ref": "STO17-G",
+      "disposition": "formal",
+      "scope": "inventory-form",
+      "verification": [],
+      "notes": "Каноническая запись типа form; отдельной проверки не порождает."
+    },
+    {
+      "id": "STO17-D",
+      "source_ref": "STO17-D",
+      "disposition": "formal",
+      "scope": "inventory-example",
+      "verification": [],
+      "notes": "Каноническая запись типа example; отдельной проверки не порождает."
+    }
+  ]
+}

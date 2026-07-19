@@ -1,0 +1,112 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage{susu-referat}
+\usepackage{hyperref}
+\hypersetup{unicode=true,hidelinks,pdfauthor={$student.name$},pdftitle={$title$}}
+\urlstyle{same}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=gost-numeric,
+  sorting=none,
+  language=auto,
+  autolang=other
+]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+
+\DeclareFieldFormat{labelnumberwidth}{#1}
+\defbibenvironment{bibliography}
+  {\list
+     {\printtext[labelnumberwidth]{\printfield{labelprefix}\printfield{labelnumber}}}
+     {\setlength{\labelwidth}{\labelnumberwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \setlength{\leftmargin}{\parindent}%
+      \addtolength{\leftmargin}{\labelwidth}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+   \renewcommand*{\makelabel}[1]{\hss##1}}
+  {\endlist}
+  {\item}
+
+\newcommand{\SUSUDateLine}{\mbox{\rule{30mm}{0.4pt}\hspace{0.5em}$year$ г.}}
+\newcommand{\SUSUSignLine}[1]{\rule{30mm}{0.4pt}\hspace{0.5em}#1}
+
+\begin{document}
+\pagenumbering{arabic}
+\SUSUReferatFrontMatter
+
+% STO17-4.2.2.1, STO17-G: mandatory title form. Current organization names
+% are profile defaults; personal and approval data remain visible placeholders.
+\thispagestyle{empty}
+\begin{center}
+$parent-organization$
+
+\vspace{0.25\baselineskip}
+$university$
+
+\vspace{0.25\baselineskip}
+$school$
+
+Кафедра «$department$»
+\end{center}
+
+\vfill
+
+\begin{center}
+\textbf{$title$}
+
+\vspace{\baselineskip}
+\textbf{РЕФЕРАТ}
+
+$if(discipline)$
+по дисциплине «$discipline$»
+$else$
+по дисциплине «\rule{75mm}{0.4pt}»
+$endif$
+\end{center}
+
+\vfill
+
+\hfill
+\begin{minipage}[t]{0.53\textwidth}
+Проверил, $supervisor.position$\\
+\SUSUSignLine{$supervisor.name$}\\
+\SUSUDateLine
+
+\vspace{\baselineskip}
+Автор работы\\
+студент группы $student.group$\\
+\SUSUSignLine{$student.name$}\\
+\SUSUDateLine
+
+\vspace{\baselineskip}
+Реферат защищён\\
+с оценкой (прописью, цифрой)\\
+\rule{65mm}{0.4pt}\\
+\SUSUDateLine
+\end{minipage}
+
+\vfill
+\begin{center}
+$city$ $year$
+\end{center}
+\clearpage
+
+% STO17-4.2.2.2.
+\section*{АННОТАЦИЯ}
+$abstract$
+\clearpage
+
+% STO17-4.2.2.3.
+\renewcommand{\contentsname}{\protect\makebox[\linewidth][c]{ОГЛАВЛЕНИЕ}}
+\tableofcontents
+\SUSUReferatMainMatter
+
+$body$
+
+\end{document}

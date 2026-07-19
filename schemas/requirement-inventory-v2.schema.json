@@ -23,23 +23,15 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "kind", "summary", "source"],
+        "required": ["id", "kind", "clause", "summary"],
         "properties": {
           "id": { "type": "string", "minLength": 1 },
           "kind": {
             "enum": ["requirement", "definition", "group", "example", "form"]
           },
+          "clause": { "type": "string", "minLength": 1 },
           "summary": { "type": "string", "minLength": 1 },
-          "source": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["document_id", "clause", "locator"],
-            "properties": {
-              "document_id": { "type": "string", "minLength": 1 },
-              "clause": { "type": "string", "minLength": 1 },
-              "locator": { "type": "string", "minLength": 1 }
-            }
-          }
+          "artifact": { "type": "string", "minLength": 1 }
         }
       }
     }

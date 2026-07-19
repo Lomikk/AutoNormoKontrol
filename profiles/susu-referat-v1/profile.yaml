@@ -1,0 +1,80 @@
+{
+  "schema_version": 2,
+  "profile_id": "susu-referat-v1",
+  "document_type": "referat",
+  "starter": {
+    "directory": "profiles/susu-referat-v1/starter",
+    "content": [
+      "content/00-introduction.md",
+      "content/01-main.md",
+      "content/02-conclusion.md",
+      "content/90-bibliography.md",
+      "content/99-appendix.md"
+    ]
+  },
+  "inputs": {
+    "metadata": "metadata.yaml",
+    "bibliography": "bibliography.bib",
+    "asset_manifest": "assets/manifest.json"
+  },
+  "compliance": {
+    "inventory": "sources/susu/sto-17-2008/inventory.json",
+    "requirements": "profiles/susu-referat-v1/compliance/requirements.json",
+    "semantic_review": "compliance/semantic-review.yaml",
+    "external_acceptance": "compliance/external-acceptance.yaml",
+    "system_prompt": "profiles/susu-referat-v1/starter/guide/profile-system-prompt.md",
+    "format_spec": "format-spec.yaml",
+    "research_notes": "profiles/susu-referat-v1/compliance/research-notes.md",
+    "implementation_paths": [
+      "profiles/susu-referat-v1/filters",
+      "profiles/susu-referat-v1/styles",
+      "profiles/susu-referat-v1/templates",
+      "profiles/susu-referat-v1/postflight",
+      "resources/filters"
+    ],
+    "test_paths": [
+      "profiles/susu-referat-v1/tests"
+    ],
+    "prompt_paths": [
+      "profiles/susu-referat-v1/starter/guide/profile-system-prompt.md"
+    ]
+  },
+  "render": {
+    "pandoc_from": "markdown+smart+fenced_divs+tex_math_dollars+table_captions-raw_tex-raw_html-raw_attribute",
+    "template": "profiles/susu-referat-v1/templates/susu-referat.tex",
+    "style_files": [
+      "profiles/susu-referat-v1/styles/susu-referat.sty"
+    ],
+    "lua_filters": [
+      "profiles/susu-referat-v1/filters/referat-render.lua"
+    ],
+    "tex_input_paths": [
+      ".",
+      "profiles/susu-referat-v1/styles"
+    ],
+    "postflight": "profiles/susu-referat-v1/postflight/validate-pdf.ps1"
+  },
+  "assets": {
+    "report": "build/asset-report.json",
+    "output_directory": "build/assets"
+  },
+  "outputs": {
+    "tex": "build/referat.tex",
+    "pdf": "build/referat.pdf"
+  },
+  "reports": {
+    "document_snapshot": "build/document-snapshot.json",
+    "build_report": "build/build-report.json",
+    "postflight": "build/compliance-report.json",
+    "traceability_json": "build/sto-traceability.json",
+    "traceability_markdown": "build/sto-traceability.md"
+  },
+  "capabilities": {
+    "assignment": "forbidden",
+    "abstract": "required",
+    "figures": "optional",
+    "tables": "optional",
+    "equations": "optional",
+    "appendices": "optional"
+  }
+}

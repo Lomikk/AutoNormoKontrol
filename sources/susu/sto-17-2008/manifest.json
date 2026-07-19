@@ -15,6 +15,13 @@
                                      "text_bytes":  112816
                                  }
                  },
+    "inventory":  {
+                      "role":  "canonical-requirement-inventory",
+                      "file":  "sto-17-2008/inventory.json",
+                      "schema_version":  2,
+                      "entries":  138,
+                      "sha256":  "6919e0be7b9529ec7291c67506a744371bfa83cdebe53b428ffd30474462aaf3"
+                  },
     "attachments":  [
                         {
                             "file":  "sto-17-2008/attachments/original/titul referat.doc",
@@ -51,6 +58,7 @@
     "interpretation_status":  "not-a-profile",
     "notes":  [
                   "This manifest identifies files and reproducible derivatives only.",
-                  "It does not classify normative requirements or determine document-profile applicability."
+                  "The canonical inventory records source clauses and forms without determining document-profile applicability.",
+                  "It does not classify verification methods or determine document-profile applicability."
               ]
 }

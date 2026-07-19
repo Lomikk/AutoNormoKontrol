@@ -29,7 +29,9 @@ function Find-AutoNormoKontrolSourceLocation {
     foreach ($relative in @($ContentPaths)) {
         $full = Join-Path $WorkspaceRoot $relative
         if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
-        $lines = Get-Content -LiteralPath $full -Encoding UTF8
+        # A one-line Markdown file is returned by PowerShell as a scalar
+        # string. Keep an array here so indexing yields a line, not a Char.
+        $lines = @(Get-Content -LiteralPath $full -Encoding UTF8)
         for ($index = 0; $index -lt $lines.Count; $index++) {
             if ($lines[$index].Contains($declarationNeedle)) {
                 $matches += [pscustomobject]@{
@@ -44,7 +46,7 @@ function Find-AutoNormoKontrolSourceLocation {
         foreach ($relative in @($ContentPaths)) {
             $full = Join-Path $WorkspaceRoot $relative
             if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { continue }
-            $lines = Get-Content -LiteralPath $full -Encoding UTF8
+            $lines = @(Get-Content -LiteralPath $full -Encoding UTF8)
             for ($index = 0; $index -lt $lines.Count; $index++) {
                 if ($lines[$index].Contains($needle)) {
                     $matches += [pscustomobject]@{
@@ -73,7 +75,9 @@ function ConvertTo-AutoNormoKontrolDiagnostics {
 
     $events = New-Object System.Collections.Generic.List[object]
     $seen = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
-    $pattern = '(?m)^(?:ERROR\s+)?(?<code>(?:STO-[A-Za-z0-9.-]+|ARTICLE-[A-Z0-9-]+)):\s*(?<message>[^\r\n]+)'
+    # Requirements keep the source namespace in the diagnostic code
+    # (for example STO-8.5.4 and STO17-4.2.1). Do not hard-code one STO.
+    $pattern = '(?m)^(?:ERROR\s+)?(?<code>(?:STO[A-Za-z0-9]*-[A-Za-z0-9._/-]+|ARTICLE-[A-Z0-9-]+)):\s*(?<message>[^\r\n]+)'
     foreach ($match in [regex]::Matches($Text, $pattern)) {
         $code = $match.Groups['code'].Value
         $message = $match.Groups['message'].Value.Trim()

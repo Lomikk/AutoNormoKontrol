@@ -83,6 +83,29 @@ else {
     Write-Host 'PASS requirements v2 exact-set mutation contract'
 }
 
+# R0/requirements-v2: source identity and artifact location are normalized at
+# inventory.source. Entries carry only their stable clause and may not restore
+# the removed per-entry source/document_id/locator duplication.
+$inventorySourcePath = Join-Path $root ([string]$profileConfig.compliance.inventory)
+$legacyInventoryPath = Join-Path $testBuild 'inventory-legacy-source.json'
+$legacyInventory = ([System.IO.File]::ReadAllText(
+    $inventorySourcePath,
+    [System.Text.Encoding]::UTF8
+)) | ConvertFrom-Json
+$legacyInventory.entries[0] | Add-Member -NotePropertyName source -NotePropertyValue `
+    ([pscustomobject]@{ document_id = 'STO-21-2008'; clause = '1'; locator = 'duplicate' })
+[System.IO.File]::WriteAllText(
+    $legacyInventoryPath,
+    ($legacyInventory | ConvertTo-Json -Depth 20),
+    (New-Object System.Text.UTF8Encoding($false))
+)
+$legacyInventoryResult = Invoke-CoverageGate -InventoryPath $legacyInventoryPath
+if ($legacyInventoryResult.ExitCode -eq 0 -or
+    ($legacyInventoryResult.Text -replace '\s+', ' ') -notmatch 'unknown field.*source') {
+    $failures.Add("legacy per-entry source duplication was accepted:`n$($legacyInventoryResult.Text)")
+}
+else { Write-Host 'PASS requirements v2 normalized source entry contract' }
+
 # R0/requirements-v2: an additional profile rule is allowed only with explicit
 # local provenance. It cannot pretend to be another canonical source clause.
 $localRulePath = Join-Path $testBuild 'requirements-local-origin.json'

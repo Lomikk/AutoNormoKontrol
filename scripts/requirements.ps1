@@ -216,6 +216,10 @@ function Get-AutoNormoKontrolRequirementContract {
     Assert-RequirementString $inventory.source.manifest 'inventory.source.manifest'
     Assert-RequirementString $registry.profile_id 'requirements.profile_id'
 
+    [void](Resolve-RequirementInputPath -Root $rootFull `
+        -Path ([string]$inventory.source.manifest) -Location 'inventory.source.manifest'
+    )
+
     if ([int]$inventory.schema_version -ne 2 -or [string]$inventory.schema_version -ne '2') {
         throw "Unsupported requirement inventory schema_version: $($inventory.schema_version)"
     }
@@ -238,20 +242,19 @@ function Get-AutoNormoKontrolRequirementContract {
     foreach ($entry in @($inventory.entries)) {
         $id = [string]$entry.id
         Assert-RequirementObjectFields -Object $entry -Location 'inventory.entries[]' `
-            -Allowed @('id', 'kind', 'summary', 'source') `
-            -Required @('id', 'kind', 'summary', 'source')
+            -Allowed @('id', 'kind', 'clause', 'summary', 'artifact') `
+            -Required @('id', 'kind', 'clause', 'summary')
         Assert-RequirementString -Value $id -Location 'inventory.entries[].id'
         if ($inventoryById.ContainsKey($id)) { throw "Duplicate inventory id: $id" }
+        Assert-RequirementString -Value $entry.clause -Location "$id.clause"
         Assert-RequirementString -Value $entry.summary -Location "$id.summary"
         if ([string]$entry.kind -notin @('requirement', 'definition', 'group', 'example', 'form')) {
             throw "$id.kind has unsupported value '$($entry.kind)'."
         }
-        Assert-RequirementObjectFields -Object $entry.source -Location "$id.source" `
-            -Allowed @('document_id', 'clause', 'locator') `
-            -Required @('document_id', 'clause', 'locator')
-        Assert-RequirementString -Value $entry.source.document_id -Location "$id.source.document_id"
-        Assert-RequirementString -Value $entry.source.clause -Location "$id.source.clause"
-        Assert-RequirementString -Value $entry.source.locator -Location "$id.source.locator"
+        $artifactProperty = Get-RequirementProperty -Object $entry -Name 'artifact'
+        if ($null -ne $artifactProperty) {
+            Assert-RequirementString -Value $artifactProperty.Value -Location "$id.artifact"
+        }
         $inventoryById[$id] = $entry
     }
 
@@ -259,7 +262,8 @@ function Get-AutoNormoKontrolRequirementContract {
     $semanticItems = New-Object System.Collections.Generic.List[object]
     $externalItems = New-Object System.Collections.Generic.List[object]
     $diagnostics = [ordered]@{}
-    $requiredElements = [ordered]@{}
+    $requiredElements = New-Object System.Collections.Generic.List[object]
+    $requiredElementKeys = @{}
     $orderEdges = New-Object System.Collections.Generic.List[object]
     $visibleElements = New-Object System.Collections.Generic.List[object]
     $semanticIds = @{}
@@ -359,12 +363,14 @@ function Get-AutoNormoKontrolRequirementContract {
                                 if ($element -notmatch '^[a-z][a-z0-9-]*$') {
                                     throw "$id declares invalid document element '$element'."
                                 }
-                                if (-not $requiredElements.Contains($element)) {
-                                    $requiredElements[$element] = [pscustomobject][ordered]@{
+                                $elementKey = $id + [char]0 + $element
+                                if (-not $requiredElementKeys.ContainsKey($elementKey)) {
+                                    $requiredElementKeys[$elementKey] = $true
+                                    $requiredElements.Add([pscustomobject][ordered]@{
                                         id = $element
                                         requirement_id = $id
                                         diagnostic = $diagnostic
-                                    }
+                                    })
                                 }
                             }
                         }
@@ -498,7 +504,7 @@ function Get-AutoNormoKontrolRequirementContract {
         external_items = $externalItems.ToArray()
         diagnostics = [pscustomobject]$diagnostics
         structure = [pscustomobject][ordered]@{
-            required_elements = @($requiredElements.Values)
+            required_elements = $requiredElements.ToArray()
             order = $orderEdges.ToArray()
             visible_elements = $visibleElements.ToArray()
         }

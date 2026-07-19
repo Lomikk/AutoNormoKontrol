@@ -3,8 +3,6 @@
 
 local errors = {}
 local warnings = {}
-local profile_diagnostics = {}
-local profile_structure = {}
 
 local function add_error(clause, message)
   errors[#errors + 1] = clause .. ': ' .. message
@@ -28,30 +26,6 @@ local function text(value)
     return ''
   end
   return pandoc.utils.stringify(value)
-end
-
-local function load_profile_contract(doc)
-  profile_structure = doc.meta['profile-structure'] or {}
-  profile_diagnostics = {}
-  for _, diagnostic in ipairs(doc.meta['profile-diagnostics'] or {}) do
-    local code = text(diagnostic.code)
-    if code ~= '' then
-      profile_diagnostics[code] = {
-        message = text(diagnostic.message),
-        hint = text(diagnostic.hint),
-      }
-    end
-  end
-end
-
-local function add_contract_error(code, detail)
-  local diagnostic = profile_diagnostics[code]
-  if diagnostic == nil then
-    add_error(code, detail)
-    return
-  end
-  add_error(code, diagnostic.message .. ': ' .. detail ..
-    '. Подсказка: ' .. diagnostic.hint)
 end
 
 local function trim(value)
@@ -109,51 +83,10 @@ local function meta_bool(value)
   return normalized == 'true' or normalized == 'yes' or normalized == '1'
 end
 
-local function profile_inventory_set(clause, label, values)
-  local result = {}
-  local count = 0
-  for _, value in ipairs(values or {}) do
-    local identifier = text(value)
-    if identifier == '' then
-      add_error(clause, label .. ': empty id in profile inventory')
-    elseif result[identifier] then
-      add_error(clause, label .. ': duplicate profile id ' .. identifier)
-    else
-      result[identifier] = true
-      count = count + 1
-    end
-  end
-  if count == 0 then
-    add_error(clause, label .. ': profile inventory is missing or empty')
-  end
-  return result
-end
-
 local function table_has_value(value)
   if value == nil then return false end
   for _, _ in pairs(value) do return true end
   return false
-end
-
-local function validate_exact_record_set(clause, label, records, expected)
-  local seen = {}
-  for _, record in ipairs(records or {}) do
-    local identifier = text(record.id)
-    if identifier == '' then
-      add_error(clause, label .. ': запись без id')
-    elseif not expected[identifier] then
-      add_error(clause, label .. ': неизвестный id ' .. identifier)
-    elseif seen[identifier] then
-      add_error(clause, label .. ': дублирующий id ' .. identifier)
-    else
-      seen[identifier] = true
-    end
-  end
-  for identifier, _ in pairs(expected) do
-    if not seen[identifier] then
-      add_error(clause, label .. ': отсутствует обязательная запись ' .. identifier)
-    end
-  end
 end
 
 local function validate_attribute_names(clause, element, allowed)
@@ -452,21 +385,6 @@ end
 local function validate_metadata(doc, mode)
   -- R0/requirements-v2: exact review sets, structural obligations and
   -- diagnostic wording are compiled from inventory.json + requirements.json.
-  load_profile_contract(doc)
-  -- STO-AI-GATE, STO-EXT-GATE: exact review inventories are profile data,
-  -- never hard-coded renderer state and never inferred from mutable journals.
-  local profile_inventory = doc.meta['profile-inventory'] or {}
-  local inventory_profile_id = text(profile_inventory['profile-id'])
-  if inventory_profile_id == '' then
-    add_error('STO-AI-GATE', 'profile inventory has no profile-id')
-  elseif inventory_profile_id ~= text(doc.meta['active-profile-id']) then
-    add_error('STO-AI-GATE', 'profile inventory belongs to another active profile')
-  end
-  local required_semantic_rule_ids = profile_inventory_set(
-    'STO-AI-GATE', 'semantic-rule-ids', profile_inventory['semantic-rule-ids'])
-  local required_external_item_ids = profile_inventory_set(
-    'STO-EXT-GATE', 'external-item-ids', profile_inventory['external-item-ids'])
-
   local function required(clause, label, value)
     if is_placeholder(value) then
       if mode == 'strict' then
@@ -538,55 +456,6 @@ local function validate_metadata(doc, mode)
     add_warning('STO-7.3.4', 'объём аннотации ' .. length .. ' знаков; ориентир СТО — 500')
   end
 
-  if mode == 'strict' then
-    -- STO-AI-GATE: semantic rules are release-blocking and bound to the
-    -- exact content hash so a changed document cannot reuse an old review.
-    local review = doc.meta['semantic-review'] or {}
-    validate_exact_record_set('STO-AI-GATE', 'semantic-review.rules',
-      review.rules, required_semantic_rule_ids)
-    if text(review.status) ~= 'pass' then
-      add_error('STO-AI-GATE', 'семантический аудит отсутствует либо имеет status != pass')
-    end
-    if text(review['content-hash']) ~= text(doc.meta['content-hash']) then
-      add_error('STO-AI-GATE', 'семантический аудит относится к другой версии содержания')
-    end
-    required('STO-AI-GATE', 'рецензент семантического аудита', text(review.reviewer))
-    required('STO-AI-GATE', 'дата семантического аудита', text(review['reviewed-at']))
-    for _, rule in ipairs(review.rules or {}) do
-      local rule_id = text(rule.id)
-      local status = lower(text(rule.status))
-      if status ~= 'pass' and status ~= 'not-applicable' then
-        add_error('STO-AI-GATE', rule_id .. ': status должен быть pass или обоснованным not-applicable')
-      end
-      if is_placeholder(text(rule.evidence)) then
-        add_error('STO-AI-GATE', rule_id .. ': отсутствует проверяемое evidence')
-      end
-      if status == 'not-applicable' and is_placeholder(text(rule.note)) then
-        add_error('STO-AI-GATE', rule_id .. ': неприменимость не обоснована')
-      end
-    end
-    local external = doc.meta['external-acceptance'] or {}
-    validate_exact_record_set('STO-EXT-GATE', 'external-acceptance.items',
-      external.items, required_external_item_ids)
-    if text(external['profile-id']) ~= inventory_profile_id then
-      add_error('STO-EXT-GATE', 'external acceptance belongs to another profile')
-    end
-    if text(external.status) ~= 'accepted' then
-      add_error('STO-EXT-GATE', 'внешние реквизиты/исключения не подтверждены')
-    end
-    required('STO-EXT-GATE', 'лицо, принявшее внешние решения', text(external['accepted-by']))
-    required('STO-EXT-GATE', 'дата принятия внешних решений', text(external['accepted-at']))
-    for _, item in ipairs(external.items or {}) do
-      local item_id = text(item.id)
-      local item_status = lower(text(item.status))
-      if item_status ~= 'accepted' and item_status ~= 'not-applicable' then
-        add_error('STO-EXT-GATE', item_id .. ': внешнее решение не закрыто')
-      end
-      if is_placeholder(text(item.evidence)) or is_placeholder(text(item.decision)) then
-        add_error('STO-EXT-GATE', item_id .. ': отсутствует evidence/decision')
-      end
-    end
-  end
 end
 
 local function validate_headers()
@@ -620,39 +489,6 @@ local function validate_headers()
       if header.level == 1 and not unnumbered then
         numbered_sections[#numbered_sections + 1] = header
       end
-    end
-  end
-
-  -- STO-6, STO-7.11.2; R0/requirements-v2: the profile declares required
-  -- content elements and before/after edges. The handler only maps semantic
-  -- AST objects to stable element IDs and executes the generic constraints.
-  local positions = {
-    introduction = introduction and {first = introduction, last = introduction} or nil,
-    ['main-matter'] = #numbered_sections > 0 and {
-      first = numbered_sections[1].block,
-      last = numbered_sections[#numbered_sections].block,
-    } or nil,
-    conclusion = conclusion and {first = conclusion, last = conclusion} or nil,
-    bibliography = state.bibliography_block and {
-      first = state.bibliography_block,
-      last = state.bibliography_block,
-    } or nil,
-  }
-  for _, required in ipairs(profile_structure['required-elements'] or {}) do
-    local element_id = text(required.id)
-    if positions[element_id] == nil then
-      add_contract_error(text(required.diagnostic),
-        'отсутствует элемент «' .. element_id .. '»')
-    end
-  end
-  for _, edge in ipairs(profile_structure['element-order'] or {}) do
-    local first = text(edge.first)
-    local then_element = text(edge['then'])
-    local first_position = positions[first]
-    local then_position = positions[then_element]
-    if first_position and then_position and first_position.last > then_position.first then
-      add_contract_error(text(edge.diagnostic),
-        '«' .. first .. '» должно находиться перед «' .. then_element .. '»')
     end
   end
 

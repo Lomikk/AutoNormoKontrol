@@ -31,6 +31,7 @@
       "profiles/susu-hsem-ceit-coursework-v1/styles",
       "profiles/susu-hsem-ceit-coursework-v1/templates",
       "profiles/susu-hsem-ceit-coursework-v1/postflight",
+      "resources/filters",
       "scripts/build.ps1",
       "scripts/lint-content.ps1"
     ],
